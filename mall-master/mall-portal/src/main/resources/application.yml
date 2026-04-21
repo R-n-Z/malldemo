@@ -1,0 +1,236 @@
+spring:
+  application:
+    name: mall-portal
+  profiles:
+    active: dev #默认为开发环境
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: pay-consumer-group
+      auto-offset-reset: earliest
+    producer:
+      acks: all
+      retries: 3
+  # 数据库连接池配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 连接池配置
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 连接获取超时时间（毫秒）
+      max-wait: 60000
+      # 连接有效性检测
+      validation-query: SELECT 1
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      # 连接最小生存时间（毫秒）
+      min-evictable-idle-time-millis: 300000
+      # 连接最大生存时间（毫秒）
+      max-evictable-idle-time-millis: 600000
+      # 监控统计
+      filters: stat,wall,slf4j
+      # 慢SQL记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=3000
+      # Web监控
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin123
+        reset-enable: false
+# application.yml
+rocketmq:
+  name-server: localhost:9876
+  producer:
+    group: order-timeout-producer-group
+
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: mall-portal-secret #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24*7)
+  tokenHead: 'Bearer '  #JWT负载中拿到开头
+
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /swagger-ui/
+      - /swagger-resources/**
+      - /**/v2/api-docs
+      - /**/*.html
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.map
+      - /favicon.ico
+      - /druid/**
+      - /actuator/**
+      - /sso/**
+      - /home/**
+      - /product/**
+      - /brand/**
+      - /alipay/**
+
+# 自定义redis key
+redis:
+  database: mall
+  key:
+    authCode: 'ums:authCode'
+    orderId: 'oms:orderId'
+    member: 'ums:member'
+  expire:
+    authCode: 90 # 验证码超期时间
+    common: 86400 # 24小时
+  # Redis集群配置
+  cluster:
+    nodes: 192.168.1.1:7001,192.168.1.1:7002,192.168.1.1:7003,192.168.1.1:7004,192.168.1.1:7005,192.168.1.1:7006
+    max-redirects: 3
+    timeout: 6000
+    pool:
+      max-active: 20
+      max-idle: 10
+      min-idle: 5
+      max-wait: 3000
+
+mongo:
+  insert:
+    sqlEnable: true # 用于控制是否通过数据库数据来插入mongo
+
+# 消息队列定义
+rabbitmq:
+  queue:
+    name:
+      cancelOrder: cancelOrderQueue
+
+# 秒杀配置
+seckill:
+  preheat-enabled: true  # 是否启用预热
+  preheat-minutes: 30    # 提前多少分钟预热
+  stock-key: "seckill:stock:"  # 库存key前缀
+  token-key: "seckill:token:"  # 令牌key前缀
+  order-key: "seckill:order:"  # 订单key前缀
+
+# 本地缓存配置
+cache:
+  local:
+    product:
+      max-size: 5000
+      expire-seconds: 300
+    category:
+      max-size: 1000
+      expire-seconds: 600
+    hot-data:
+      max-size: 10000
+      expire-seconds: 3600
+
+# 告警通知配置
+alert:
+  notification:
+    enabled: true
+    channels: console,dingtalk  # 通知渠道: console, email, dingtalk, sms
+  # 邮件告警配置
+  email:
+    enabled: false
+    host: smtp.example.com
+    port: 465
+    username: alert@example.com
+    password: your-password
+    from: alert@example.com
+    to: admin@example.com
+    subject-prefix: [告警通知]
+  # 钉钉告警配置
+  dingtalk:
+    enabled: true
+    webhook: https://oapi.dingtalk.com/robot/send?access_token=your-token
+    secret: your-secret-key
+    mobile: 13800138000
+  # 短信告警配置
+  sms:
+    enabled: false
+    provider: aliyun  # aliyun, tencent
+    access-key: your-access-key
+    secret-key: your-secret-key
+    sign-name: 您的签名
+    template-code: SMS_123456789
+    phone-numbers: 13800138000
+    region-id: cn-hangzhou
+
+# 限流配置
+ratelimit:
+  enabled: true
+  default:
+    limit: 100  # 默认限流阈值
+    window-seconds: 1  # 默认时间窗口（秒）
+    type: token_bucket  # 默认限流算法: fixed_window, sliding_window, token_bucket, leaky_bucket
+  # API特定限流配置
+  apis:
+    /product/detail:
+      limit: 50
+      window-seconds: 1
+      type: token_bucket
+    /cart/add:
+      limit: 20
+      window-seconds: 1
+      type: token_bucket
+    /order/create:
+      limit: 10
+      window-seconds: 1
+      type: token_bucket
+    /seckill/do:
+      limit: 100
+      window-seconds: 1
+      type: token_bucket
+
+# 熔断器配置
+circuitbreaker:
+  enabled: true
+  default:
+    strategy: error_ratio  # 熔断策略: slow_request_ratio, error_ratio, error_count
+    slow-request-threshold: 1000  # 慢调用阈值（毫秒）
+    slow-ratio-threshold: 0.5  # 慢调用比例阈值
+    error-ratio-threshold: 0.5  # 异常比例阈值
+    error-count-threshold: 10  # 异常数量阈值
+    min-request-amount: 10  # 最小请求数
+    retry-attempts: 3  # 半开状态重试次数
+    wait-duration: 30  # 熔断持续时间（秒）
+  # 特定熔断器配置
+  breakers:
+    product-service:
+      strategy: slow_request_ratio
+      slow-request-threshold: 2000
+      slow-ratio-threshold: 0.3
+    order-service:
+      strategy: error_ratio
+      error-ratio-threshold: 0.3
+      min-request-amount: 5
+
+# 监控配置
+monitor:
+  enabled: true
+  metrics:
+    collection-interval: 10000  # 指标收集间隔（毫秒）
+    retention-minutes: 30  # 指标保留时间（分钟）
+  alert:
+    check-interval: 10000  # 告警检测间隔（毫秒）
+    qps-threshold: 1000  # QPS告警阈值
+    error-rate-threshold: 5.0  # 错误率告警阈值（%）
+    response-time-threshold: 1000  # 响应时间告警阈值（毫秒）
+    rate-limit-threshold: 100  # 限流次数告警阈值
+

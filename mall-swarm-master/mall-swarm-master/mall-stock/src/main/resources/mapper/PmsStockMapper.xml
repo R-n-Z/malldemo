@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.stock.mapper.PmsStockMapper">
+
+    <resultMap id="BaseResultMap" type="com.macro.mall.stock.domain.PmsStock">
+        <id column="id" property="id"/>
+        <result column="product_id" property="productId"/>
+        <result column="stock" property="stock"/>
+        <result column="lock_stock" property="lockStock"/>
+        <result column="low_stock" property="lowStock"/>
+        <result column="delete_status" property="deleteStatus"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, product_id, stock, lock_stock, low_stock, delete_status
+    </sql>
+
+    <select id="selectByProductId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM pms_stock
+        WHERE product_id = #{productId} AND delete_status = 0
+    </select>
+
+    <update id="deductStock">
+        UPDATE pms_stock
+        SET stock = stock - #{count}
+        WHERE product_id = #{productId} AND stock >= #{count} AND delete_status = 0
+    </update>
+
+    <update id="rollbackStock">
+        UPDATE pms_stock
+        SET stock = stock + #{count}
+        WHERE product_id = #{productId} AND delete_status = 0
+    </update>
+
+    <update id="updateStock">
+        UPDATE pms_stock
+        SET stock = #{stock}
+        WHERE product_id = #{productId} AND delete_status = 0
+    </update>
+
+</mapper>
