@@ -13,8 +13,29 @@ COPY mall-master/mall-admin mall-admin
 COPY mall-master/mall-search mall-search
 COPY mall-master/mall-portal mall-portal
 
-# 构建应用
-RUN mvn clean package -DskipTests -pl mall-admin
+# 构建应用：编译所有模块，确保依赖被正确解析
+RUN mvn clean package -DskipTests
+
+# 运行阶段
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# 复制构建好的 JAR
+COPY --from=builder /build/mall-admin/target/mall-admin-*.jar app.jar
+
+# 暴露端口
+EXPOSE 8080
+
+# 启动应用
+ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY mall-master/mall-demo mall-demo
+COPY mall-master/mall-admin mall-admin
+COPY mall-master/mall-search mall-search
+COPY mall-master/mall-portal mall-portal
+
+# 构建应用：编译所有模块，确保依赖被正确解析
+RUN mvn clean package -DskipTests
 
 # 运行阶段
 FROM eclipse-temurin:17-jre-alpine

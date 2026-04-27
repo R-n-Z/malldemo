@@ -10,7 +10,28 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/admin': {
+        target: process.env.API_URL || 'http://localhost:8888',
+        changeOrigin: true,
+        pathRewrite: {}
+      },
+      '/minio': {
+        target: process.env.API_URL || 'http://localhost:8888',
+        changeOrigin: true,
+        pathRewrite: {}
+      },
+      '/swagger-ui': {
+        target: process.env.API_URL || 'http://localhost:8888',
+        changeOrigin: true,
+        pathRewrite: {}
+      },
+      '/v2': {
+        target: process.env.API_URL || 'http://localhost:8888',
+        changeOrigin: true,
+        pathRewrite: {}
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

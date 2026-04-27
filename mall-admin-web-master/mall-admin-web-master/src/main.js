@@ -16,6 +16,11 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+// 配置 API 基地址
+const API_BASE_URL = process.env.API_URL || 'http://localhost:8080'
+Vue.prototype.$apiUrl = API_BASE_URL
+window.API_BASE_URL = API_BASE_URL
+
 Vue.use(ElementUI, { locale })
 Vue.use(VCharts)
 

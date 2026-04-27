@@ -65,7 +65,7 @@
         dialogVisible: false,
         useOss:false, //使用oss->true;使用MinIO->false
         ossUploadUrl:'http://macro-oss.oss-cn-shenzhen.aliyuncs.com',
-        minioUploadUrl:'http://localhost:8080/minio/upload',
+        minioUploadUrl: window.API_BASE_URL + '/minio/upload' || 'http://localhost:8080/minio/upload',
       };
     },
     methods: {

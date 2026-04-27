@@ -1,18 +1,18 @@
+server:
+  port: 8201
+
 spring:
   application:
     name: mall-admin
-  profiles:
-    active: docker #Docker环境配置
   servlet:
     multipart:
-      enabled: true #开启文件上传
-      max-file-size: 10MB #限制文件上传大小为10M
+      enabled: true
+      max-file-size: 10MB
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  # 从环境变量读取数据库配置
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:root}
     druid:
@@ -38,7 +38,7 @@ mybatis:
 
 jwt:
   tokenHeader: Authorization
-  secret: mall-admin-secret
+  secret: 'mall-admin-secret-key-is-longer-now-256bits'
   expiration: 604800
   tokenHead: 'Bearer '
 
