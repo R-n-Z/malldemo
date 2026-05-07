@@ -60,11 +60,9 @@ services:
     networks:
       - mall-network
 
-  # 后端应用 (可选：仅在使用 docker-compose up 时启用)
+  # 后端应用
   mall-admin:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: mall-admin:test
     container_name: mall-admin
     environment:
       SPRING_PROFILES_ACTIVE: dev

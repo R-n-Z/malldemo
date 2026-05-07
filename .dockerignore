@@ -1,0 +1,28 @@
+# IDE and config
+.idea/
+.claude/
+.git/
+*.md
+!Dockerfile
+
+# Frontend app (not needed for backend build)
+mall-admin-web-master/
+mall-app-web-master/
+
+# Learning and swarm modules
+mall-learning-master/
+mall-swarm-master/
+
+# Pre-built targets
+mall-master/*/target/
+mall-master/target/
+
+# Node
+node_modules/
+**/node_modules/
+
+# Shell scripts
+start.sh
+
+# SQL dump (used by docker-compose but not by build)
+mall.sql

@@ -38,7 +38,32 @@
       "Bash(npm run *)",
       "Bash(pkill -f \"webpack-dev-server\")",
       "Bash(pkill -9 node)",
-      "Bash(curl -s http://localhost:8090)"
+      "Bash(curl -s http://localhost:8090)",
+      "Bash(docker info *)",
+      "Bash(docker version *)",
+      "Bash(wsl *)",
+      "Bash(chcp 65001)",
+      "Bash(docker --version)",
+      "Bash(docker-compose --version)",
+      "Bash(mvn compile *)",
+      "Bash(docker build *)",
+      "Bash(docker compose *)",
+      "Bash(curl *)",
+      "Bash(./mvnw spring-boot:run -pl mall-admin)",
+      "Bash(./mvnw spring-boot:run -pl mall-admin -am -DskipTests)",
+      "Bash(./mvnw install *)",
+      "Bash(./mvnw spring-boot:run -pl mall-admin -Dspring-boot.run.profiles=dev)",
+      "Bash(gh --version)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git remote *)",
+      "Bash(git fetch *)",
+      "Bash(GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no\" git fetch origin)",
+      "Read(//c/Users/JD-MY/.ssh/**)",
+      "Bash(git config *)",
+      "Bash(ssh *)",
+      "Bash(git rebase *)",
+      "Bash(git checkout *)"
     ]
   }
 }
