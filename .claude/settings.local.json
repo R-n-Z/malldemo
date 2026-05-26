@@ -195,7 +195,15 @@
       "Bash('/d/Program Files/HBuilderX/plugins/node/node.exe' -e ' *)",
       "WebFetch(domain:localhost)",
       "Bash(git commit *)",
-      "Bash(docker exec ec4d49b39d22_mall-mysql *)"
+      "Bash(docker exec ec4d49b39d22_mall-mysql *)",
+      "Bash(java -jar target/super-biz-agent-1.0-SNAPSHOT.jar)",
+      "Bash(python scripts/generate_faq.py)",
+      "Bash(pip list *)",
+      "Bash(\"/d/Program Files/Python313/python\" -m pip install pymysql)",
+      "Bash(/d/Program Files/Python313/python *)",
+      "Bash(\"/d/Program Files/Python313/python\" -m pip install pymysql -q)",
+      "Bash(\"/d/Program Files/Python313/python\" \"D:/DownLoad/malldemo-main/super-biz-agent/scripts/generate_faq.py\")",
+      "Bash(\"/d/Program Files/Python313/python\" -c \"import json; faq=json.load\\(open\\('D:/DownLoad/malldemo-main/super-biz-agent/faq/product_faq.json','r',encoding='utf-8'\\)\\); print\\(f'Total: {len\\(faq\\)} FAQs'\\)\")"
     ]
   },
   "enabledMcpjsonServers": [

@@ -135,6 +135,10 @@
 				<text class="yticon icon-shoucang"></text>
 				<text>收藏</text>
 			</view>
+			<view class="p-b-btn" @click="toChat">
+				<text class="yticon icon-xiaoxizhongxin"></text>
+				<text>客服</text>
+			</view>
 
 			<view class="action-btn-group">
 				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
@@ -453,6 +457,14 @@
 						this.favorite = !this.favorite;
 					});
 				}
+			},
+			toChat() {
+				if (!this.checkForLogin()) {
+					return;
+				}
+				uni.navigateTo({
+					url: '/pages/chat/chat?productId=' + this.product.id + '&productName=' + encodeURIComponent(this.product.name) + '&productPic=' + encodeURIComponent(this.product.pic)
+				});
 			},
 			buy() {
 				uni.showToast({

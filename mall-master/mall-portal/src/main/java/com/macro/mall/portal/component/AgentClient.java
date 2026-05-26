@@ -29,14 +29,18 @@ public class AgentClient {
      * 向 AI Agent 提问
      * @param sessionId 会话ID
      * @param question 用户问题
+     * @param productName 关联商品名称（可为null）
      * @return Agent 回复，如果返回 NEED_HUMAN 前缀则表示需要人工处理
      */
-    public String ask(String sessionId, String question) {
+    public String ask(String sessionId, String question, String productName) {
         try {
             Map<String, String> body = new HashMap<>();
             body.put("Id", sessionId);
             body.put("Question", question);
             body.put("question", question);
+            if (productName != null && !productName.isEmpty()) {
+                body.put("productName", productName);
+            }
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);

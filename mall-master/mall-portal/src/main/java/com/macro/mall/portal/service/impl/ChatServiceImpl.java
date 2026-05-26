@@ -83,7 +83,8 @@ public class ChatServiceImpl implements ChatService {
             CompletableFuture.runAsync(() -> {
                 try {
                     ChatSession session = chatDao.getSessionById(sessionId);
-                    String answer = agentClient.ask("chat_" + sessionId, content);
+                    String productName = session != null ? session.getProductName() : null;
+                    String answer = agentClient.ask("chat_" + sessionId, content, productName);
                     if (answer != null && !answer.startsWith("NEED_HUMAN")) {
                         ChatMessage reply = new ChatMessage();
                         reply.setSessionId(sessionId);
@@ -96,9 +97,40 @@ public class ChatServiceImpl implements ChatService {
                                 answer.length() > 50 ? answer.substring(0, 50) + "..." : answer);
                         messagingTemplate.convertAndSend("/topic/chat/" + sessionId, reply);
                         log.info("Agent自动回复: sessionId={}", sessionId);
+                    } else if (answer != null && answer.startsWith("NEED_HUMAN")) {
+                        // FAQ未匹配到，提示转人工
+                        String humanMsg = answer.substring("NEED_HUMAN:".length()).trim();
+                        if (humanMsg.isEmpty()) {
+                            humanMsg = "您的问题已转接人工客服，请稍候。";
+                        }
+                        ChatMessage reply = new ChatMessage();
+                        reply.setSessionId(sessionId);
+                        reply.setSenderType(2);
+                        reply.setSenderId(0L);
+                        reply.setSenderName("AI客服");
+                        reply.setContent(humanMsg);
+                        chatDao.insertMessage(reply);
+                        chatDao.updateSessionLastMsg(sessionId, humanMsg.length() > 50
+                                ? humanMsg.substring(0, 50) + "..." : humanMsg);
+                        messagingTemplate.convertAndSend("/topic/chat/" + sessionId, reply);
+                        log.info("Agent转人工: sessionId={}", sessionId);
                     }
                 } catch (Exception e) {
                     log.warn("Agent自动回复异常: sessionId={}", sessionId, e);
+                    // 降级：发送转人工提示
+                    try {
+                        ChatMessage fallback = new ChatMessage();
+                        fallback.setSessionId(sessionId);
+                        fallback.setSenderType(2);
+                        fallback.setSenderId(0L);
+                        fallback.setSenderName("AI客服");
+                        fallback.setContent("抱歉，客服系统暂时繁忙，您的问题已转接人工客服，请稍候。");
+                        chatDao.insertMessage(fallback);
+                        chatDao.updateSessionLastMsg(sessionId, "抱歉，客服系统繁忙，已转人工");
+                        messagingTemplate.convertAndSend("/topic/chat/" + sessionId, fallback);
+                    } catch (Exception ex) {
+                        log.error("转人工提示发送失败", ex);
+                    }
                 }
             });
         }
