@@ -16,7 +16,7 @@ import java.util.Map;
  * JWT Token工具类
  */
 @Slf4j
-@Component
+@Component("portalJwtTokenUtil")
 public class JwtTokenUtil {
 
     @Value("${jwt.secret:mall-portal-secret}")
@@ -47,19 +47,19 @@ public class JwtTokenUtil {
         claims.put("memberId", memberId);
         claims.put("username", username);
         
-        return createToken(claims, memberId.toString());
+        return createToken(claims, username);
     }
 
     /**
      * 创建Token
      */
-    private String createToken(Map<String, Object> claims, String subject) {
+    private String createToken(Map<String, Object> claims, String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration * 1000);
 
         return Jwts.builder()
                 .claims(claims)
-                .subject(subject)
+                .subject(username)
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(getSecretKey())

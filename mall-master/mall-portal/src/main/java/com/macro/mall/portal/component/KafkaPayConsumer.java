@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "kafka.enabled", havingValue = "true")
 public class KafkaPayConsumer {
 
     private static final String PAY_LOCK_KEY = "pay:lock:";

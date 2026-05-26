@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * RocketMQ配置 - 订单超时取消
  */
 @Configuration
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "rocketmq.enabled", havingValue = "true")
 public class RocketMQOrderTimeoutConfig {
 
     @Value("${rocketmq.name-server:localhost:9876}")

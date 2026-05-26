@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -26,28 +27,35 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
     @Value("${jwt.tokenHead:Bearer }")
     private String tokenHead;
 
-    // 白名单路径
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    // 白名单路径 (Ant格式)
     private static final String[] IGNORE_PATHS = {
+            "/ws/**",
             "/sso/login",
             "/sso/register",
             "/sso/getAuthCode",
+            "/sso/refreshToken",
             "/home/**",
             "/product/**",
             "/brand/**",
             "/alipay/**",
             "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/v2/api-docs/**",
             "/v3/api-docs/**",
             "/doc.html",
             "/webjars/**",
-            "/favicon.ico"
+            "/favicon.ico",
+            "/error"
     };
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 1. 检查是否在白名单
         String path = request.getRequestURI();
-        for (String ignorePath : IGNORE_PATHS) {
-            if (path.startsWith(ignorePath.replace("**", ""))) {
+        for (String pattern : IGNORE_PATHS) {
+            if (pathMatcher.match(pattern, path)) {
                 return true;
             }
         }

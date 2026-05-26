@@ -50,6 +50,9 @@ public class HotDataPreheater {
     @Autowired
     private CacheService cacheService;
 
+    @Autowired
+    private BloomFilter bloomFilter;
+
     // 预热缓存Key前缀
     private static final String SECKILL_PRODUCT_KEY = "seckill:product:";
     private static final String SECKILL_STOCK_KEY = "seckill:stock:";
@@ -69,10 +72,24 @@ public class HotDataPreheater {
      */
     @PostConstruct
     public void init() {
+        warmUpBloomFilters();
         if (preheatEnabled) {
             log.info("系统启动，开始预热热点数据...");
             preheatAllSeckillProducts();
         }
+    }
+
+    private void warmUpBloomFilters() {
+        log.info("开始预热布隆过滤器...");
+        // 预热产品ID
+        PmsProductExample example = new PmsProductExample();
+        example.createCriteria().andDeleteStatusEqualTo(0);
+        List<PmsProduct> products = productMapper.selectByExample(example);
+        List<String> productIds = products.stream()
+                .map(p -> p.getId().toString())
+                .collect(Collectors.toList());
+        bloomFilter.warmUp("product", productIds);
+        log.info("产品布隆过滤器预热完成: count={}", productIds.size());
     }
 
     // ==================== 1. 秒杀商品预热 ====================

@@ -28,6 +28,7 @@ import java.util.List;
  */
 @Slf4j
 @Configuration
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "rocketmq.enabled", havingValue = "true")
 public class RocketMQCancelOrderConsumer {
 
     private static final String ORDER_TIMEOUT_TOPIC = "order-timeout-topic";

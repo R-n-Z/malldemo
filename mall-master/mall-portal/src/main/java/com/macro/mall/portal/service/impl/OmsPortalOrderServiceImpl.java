@@ -69,9 +69,9 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
     private OmsOrderSettingMapper orderSettingMapper;
     @Autowired
     private OmsOrderItemMapper orderItemMapper;
-    @Autowired
+    @Autowired(required = false)
     private CancelOrderSender cancelOrderSender;
-    @Autowired
+    @Autowired(required = false)
     private RocketMQCancelOrderSender rocketMQCancelOrderSender;
 
     @Override

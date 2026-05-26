@@ -15,6 +15,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  */
 @Slf4j
 @Component
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "kafka.enabled", havingValue = "true")
 public class KafkaPayMessageSender {
 
     private static final String PAY_SUCCESS_TOPIC = "mall-pay-success";

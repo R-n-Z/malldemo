@@ -2,9 +2,9 @@ package com.macro.mall.portal.controller;
 
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
-import com.macro.mall.portal.aspect.RateLimitAspect.Algorithm;
-import com.macro.mall.portal.aspect.RateLimitAspect.LimitType;
-import com.macro.mall.portal.aspect.RateLimitAspect.RateLimit;
+import com.macro.mall.portal.annotation.RateLimit;
+import com.macro.mall.portal.annotation.RateLimit.Algorithm;
+import com.macro.mall.portal.annotation.RateLimit.LimitType;
 import com.macro.mall.portal.component.OrderIdempotentChecker;
 import com.macro.mall.portal.domain.ConfirmOrderResult;
 import com.macro.mall.portal.domain.OmsOrderDetail;
