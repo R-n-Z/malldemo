@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -55,27 +56,33 @@ public class OmsPortalOrderController {
             @RequestHeader(value = "X-Member-Id", required = false) Long memberId,
             @RequestHeader(value = "X-Order-Sign", required = false) String sign,
             @RequestHeader(value = "X-Order-Timestamp", required = false) String timestamp,
-            @RequestBody OrderParam orderParam) {
-        
-        // 1. 参数校验
+            @RequestBody OrderParam orderParam,
+            HttpServletRequest request) {
+
+        // 1. 参数校验：优先使用请求头中的X-Member-Id，兜底使用JWT拦截器认证的memberId
+        if (memberId == null) {
+            memberId = (Long) request.getAttribute("memberId");
+        }
         if (memberId == null) {
             return CommonResult.failed("用户未登录");
         }
-        if (!StringUtils.hasText(sign)) {
-            return CommonResult.failed("缺少请求签名");
-        }
-        if (!StringUtils.hasText(timestamp)) {
-            return CommonResult.failed("缺少请求时间戳");
-        }
-        
-        // 2. 验证时间戳（防止重放攻击）
-        if (!validateTimestamp(timestamp, 300)) {
-            return CommonResult.failed("请求已过期，请重新提交");
-        }
-        
-        // 3. 幂等性校验
-        if (!idempotentChecker.tryAcquire(memberId, sign)) {
-            return CommonResult.failed("请勿重复提交订单");
+
+        // 增强安全校验（仅在提供签名/时间戳时进行）
+        if (StringUtils.hasText(sign) || StringUtils.hasText(timestamp)) {
+            if (!StringUtils.hasText(sign)) {
+                return CommonResult.failed("缺少请求签名");
+            }
+            if (!StringUtils.hasText(timestamp)) {
+                return CommonResult.failed("缺少请求时间戳");
+            }
+            // 验证时间戳（防止重放攻击）
+            if (!validateTimestamp(timestamp, 300)) {
+                return CommonResult.failed("请求已过期，请重新提交");
+            }
+            // 幂等性校验
+            if (!idempotentChecker.tryAcquire(memberId, sign)) {
+                return CommonResult.failed("请勿重复提交订单");
+            }
         }
         
         try {

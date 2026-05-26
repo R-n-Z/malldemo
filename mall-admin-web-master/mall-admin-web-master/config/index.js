@@ -26,6 +26,11 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {}
       },
+      '/order': {
+        target: process.env.API_URL || 'http://localhost:8080',
+        changeOrigin: true,
+        pathRewrite: {}
+      },
       '/swagger-ui': {
         target: process.env.API_URL || 'http://localhost:8080',
         changeOrigin: true,

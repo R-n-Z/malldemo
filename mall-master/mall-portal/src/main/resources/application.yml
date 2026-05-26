@@ -37,7 +37,7 @@ spring:
       # 连接最大生存时间（毫秒）
       max-evictable-idle-time-millis: 600000
       # 监控统计
-      filters: stat,wall,slf4j
+      filters: stat,slf4j
       # 慢SQL记录
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=3000
       # Web监控

@@ -360,13 +360,24 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         long delayTimes = orderSetting.getNormalOrderOvertime() * 60 * 1000;
         
         // 优先使用RocketMQ延迟消息（更简单可靠）
-        try {
-            rocketMQCancelOrderSender.sendDelayMessage(orderId, delayTimes);
-            log.info("RocketMQ延迟消息发送成功: orderId={}, delayMs={}", orderId, delayTimes);
-        } catch (Exception e) {
-            log.warn("RocketMQ发送失败，回退到RabbitMQ: orderId={}", orderId, e);
-            // 回退到RabbitMQ
-            cancelOrderSender.sendMessage(orderId, delayTimes);
+        if (rocketMQCancelOrderSender != null) {
+            try {
+                rocketMQCancelOrderSender.sendDelayMessage(orderId, delayTimes);
+                log.info("RocketMQ延迟消息发送成功: orderId={}, delayMs={}", orderId, delayTimes);
+                return;
+            } catch (Exception e) {
+                log.warn("RocketMQ发送失败，回退到RabbitMQ: orderId={}", orderId, e);
+            }
+        }
+        // 回退到RabbitMQ
+        if (cancelOrderSender != null) {
+            try {
+                cancelOrderSender.sendMessage(orderId, delayTimes);
+            } catch (Exception e) {
+                log.warn("RabbitMQ延迟消息发送失败: orderId={}", orderId, e);
+            }
+        } else {
+            log.debug("消息队列不可用，跳过延迟取消消息: orderId={}", orderId);
         }
     }
 

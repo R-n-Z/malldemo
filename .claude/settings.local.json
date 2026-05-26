@@ -193,7 +193,9 @@
       "Bash(echo \"exit: $?\")",
       "Bash(git ls-tree *)",
       "Bash('/d/Program Files/HBuilderX/plugins/node/node.exe' -e ' *)",
-      "WebFetch(domain:localhost)"
+      "WebFetch(domain:localhost)",
+      "Bash(git commit *)",
+      "Bash(docker exec ec4d49b39d22_mall-mysql *)"
     ]
   },
   "enabledMcpjsonServers": [
