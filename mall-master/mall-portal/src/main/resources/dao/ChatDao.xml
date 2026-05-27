@@ -26,6 +26,7 @@
         <result column="content" property="content"/>
         <result column="msg_type" property="msgType"/>
         <result column="is_read" property="isRead"/>
+        <result column="status" property="status"/>
         <result column="create_time" property="createTime"/>
     </resultMap>
 
@@ -59,9 +60,15 @@
     </select>
 
     <insert id="insertMessage" parameterType="com.macro.mall.portal.domain.ChatMessage" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO chat_message (session_id, sender_type, sender_id, sender_name, content, msg_type, is_read, create_time)
-        VALUES (#{sessionId}, #{senderType}, #{senderId}, #{senderName}, #{content}, 1, 0, NOW())
+        INSERT INTO chat_message (session_id, sender_type, sender_id, sender_name, content, msg_type, is_read, status, create_time)
+        VALUES (#{sessionId}, #{senderType}, #{senderId}, #{senderName}, #{content}, 1, 0, 1, NOW())
     </insert>
+
+    <update id="recallMessage">
+        UPDATE chat_message SET status = 2, content = '消息已撤回'
+        WHERE id = #{id} AND sender_type = #{senderType} AND status = 1
+        AND create_time >= DATE_SUB(NOW(), INTERVAL 2 MINUTE)
+    </update>
 
     <select id="getMessages" resultMap="chatMessageMap">
         SELECT * FROM chat_message WHERE session_id = #{sessionId} ORDER BY create_time ASC
@@ -70,6 +77,10 @@
     <update id="markRead">
         UPDATE chat_message SET is_read = 1 WHERE session_id = #{sessionId} AND sender_type != #{senderType} AND is_read = 0
     </update>
+
+    <select id="getRecentMessages" resultMap="chatMessageMap">
+        SELECT * FROM chat_message WHERE session_id = #{sessionId} ORDER BY create_time DESC LIMIT #{limit}
+    </select>
 
     <update id="takeSession">
         UPDATE chat_session SET admin_id = #{adminId}, admin_name = #{adminName} WHERE id = #{id} AND admin_id IS NULL

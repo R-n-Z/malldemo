@@ -13,4 +13,6 @@ public interface ChatAdminDao {
     int closeSession(@Param("id") Long id);
     int markRead(@Param("sessionId") Long sessionId, @Param("senderType") Integer senderType);
     int updateLastMsg(@Param("id") Long id, @Param("msg") String msg);
+
+    int recallMessage(@Param("id") Long id, @Param("senderType") Integer senderType);
 }

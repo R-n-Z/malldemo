@@ -272,10 +272,7 @@
 						productRealPrice: selectedProduct.productPrice,
 						reason: this.selectedReason ? this.selectedReason.name : '',
 						description: this.description,
-						proofPics: this.proofImages.join(','),
-						returnName: '',
-						returnPhone: '',
-						memberUsername: ''
+						proofPics: this.proofImages.join(',')
 					};
 					await createReturnApply(param);
 					this.submitting = false;

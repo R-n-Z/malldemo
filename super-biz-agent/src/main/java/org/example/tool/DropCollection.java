@@ -27,8 +27,8 @@ public class DropCollection {
             );
             System.out.println("✓ 连接成功");
             
-            String collectionName = "biz";
-            
+            String[] collections = {"biz", "faq"};
+            for (String collectionName : collections) {
             // 检查 Collection 是否存在
             R<Boolean> hasResponse = client.hasCollection(
                 HasCollectionParam.newBuilder()
@@ -57,6 +57,7 @@ public class DropCollection {
                 System.out.println("Collection '" + collectionName + "' 不存在");
             }
             
+            }
         } catch (Exception e) {
             System.err.println("错误: " + e.getMessage());
             e.printStackTrace();

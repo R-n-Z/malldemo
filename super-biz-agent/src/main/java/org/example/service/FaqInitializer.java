@@ -39,17 +39,26 @@ public class FaqInitializer {
     @PostConstruct
     public void init() {
         try {
-            if (collectionExists()) {
-                logger.info("FAQ collection 已存在，释放后重建以加载最新商品数据");
-                milvusClient.dropCollection(
-                    io.milvus.param.collection.DropCollectionParam.newBuilder()
-                        .withCollectionName(FAQ_COLLECTION).build());
+            boolean existed = collectionExists();
+            if (!existed) {
+                createCollection();
+                insertFaqData();
+                createIndex();
+                loadCollection();
+                logger.info("FAQ 知识库初始化完成（新建）");
+            } else {
+                // 集合已存在，检查是否已加载到内存
+                try {
+                    R<RpcStatus> loadResp = milvusClient.loadCollection(
+                        LoadCollectionParam.newBuilder()
+                            .withCollectionName(FAQ_COLLECTION).build());
+                    if (loadResp.getStatus() == 0) {
+                        logger.info("FAQ collection 已存在且加载成功");
+                    }
+                } catch (Exception e) {
+                    logger.warn("FAQ 加载警告: {}", e.getMessage());
+                }
             }
-            createCollection();
-            insertFaqData();
-            createIndex();
-            loadCollection();
-            logger.info("FAQ 知识库初始化完成");
         } catch (Exception e) {
             logger.error("FAQ 初始化失败（不影响其他功能）", e);
         }

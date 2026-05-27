@@ -253,7 +253,13 @@
       "Bash(sed -i 's/org.example.agent.tool.return.ReturnOrderTools/org.example.agent.tool.audit.ReturnOrderTools/' ReturnAgentService.java)",
       "Bash(sed -i 's/org.example.agent.tool.return.ReturnRuleKnowledgeTools/org.example.agent.tool.audit.ReturnRuleKnowledgeTools/' ReturnAgentService.java)",
       "Bash(unzip -p \"/d/DownLoad/malldemo-main/super-biz-agent/target/super-biz-agent-1.0-SNAPSHOT.jar\" \"BOOT-INF/lib/*.jar\")",
-      "Bash(../mall-master/mvnw clean *)"
+      "Bash(../mall-master/mvnw clean *)",
+      "Bash(../mall-master/mvnw dependency:build-classpath -q -DincludeScope=runtime -Dmdep.outputFile=/dev/stdout)",
+      "Bash(java -cp \"target/super-biz-agent-1.0-SNAPSHOT.jar;$\\(../mall-master/mvnw dependency:build-classpath -q -DincludeScope=runtime -Dmdep.outputFile=/dev/stdout 2>/dev/null\\)\" org.example.tool.DropCollection faq)",
+      "Bash(java -cp \"target/super-biz-agent-1.0-SNAPSHOT.jar;target/super-biz-agent-1.0-SNAPSHOT.jar!/BOOT-INF/lib/*\" -Dloader.main=org.example.tool.DropCollection org.springframework.boot.loader.PropertiesLauncher)",
+      "Bash(./mvnw -pl ../super-biz-agent exec:java -Dexec.mainClass=\"org.example.tool.DropCollection\" -Dexec.args=\"faq\" -q)",
+      "Bash(java -cp \"target/super-biz-agent-1.0-SNAPSHOT.jar\" -Dloader.path=\"BOOT-INF/lib\" org.springframework.boot.loader.JarLauncher --drop-collection=faq)",
+      "Bash(jar xf *)"
     ]
   },
   "enabledMcpjsonServers": [

@@ -100,6 +100,14 @@
         <el-table-column label="订单状态" width="120" align="center">
           <template slot-scope="scope">{{scope.row.status | formatStatus}}</template>
         </el-table-column>
+        <el-table-column label="退货状态" width="100" align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.returnStatus!=null" :type="returnTagType(scope.row.returnStatus)" size="small">
+              {{scope.row.returnStatus | formatReturnStatus}}
+            </el-tag>
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button
@@ -180,6 +188,7 @@
 </template>
 <script>
   import {fetchList,closeOrder,deleteOrder} from '@/api/order'
+  import {getByOrderId} from '@/api/returnApply'
   import {formatDate} from '@/utils/date';
   import LogisticsDialog from '@/views/oms/order/components/logisticsDialog';
   const defaultListQuery = {
@@ -306,8 +315,19 @@
           return '待付款';
         }
       },
+      formatReturnStatus(status) {
+        const map = {0:'待处理',1:'退货中',2:'已完成',3:'已拒绝'};
+        return map[status] || '';
+      },
     },
     methods: {
+      returnTagType(status) {
+        if (status===0) return 'warning';
+        if (status===1) return '';
+        if (status===2) return 'success';
+        if (status===3) return 'danger';
+        return '';
+      },
       handleResetSearch() {
         this.listQuery = Object.assign({}, defaultListQuery);
       },
@@ -417,6 +437,16 @@
           this.listLoading = false;
           this.list = response.data.list;
           this.total = response.data.total;
+          this.loadReturnStatuses();
+        });
+      },
+      loadReturnStatuses() {
+        this.list.forEach(order => {
+          getByOrderId(order.id).then(res => {
+            if (res.data) {
+              this.$set(order, 'returnStatus', res.data.status);
+            }
+          }).catch(() => {});
         });
       },
       deleteOrder(ids){

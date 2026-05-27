@@ -32,8 +32,16 @@
         </div>
         <div class="chat-messages" ref="msgBox">
           <div v-for="(m, i) in messages" :key="i" class="msg" :class="m.senderType === 1 ? 'msg-user' : 'msg-admin'">
-            <div class="msg-bubble">{{ m.content }}</div>
-            <div class="msg-info">{{ m.sender_name }} · {{ m.create_time }}</div>
+            <div class="msg-bubble" :class="{ recalled: m.status === 2 }">
+              {{ m.status === 2 ? '消息已撤回' : m.content }}
+            </div>
+            <div class="msg-info">
+              {{ m.sender_name }} · {{ m.create_time }}
+              <span class="msg-actions" v-if="m.status !== 2">
+                <i class="el-icon-document-copy" title="复制" @click="copyMsg(m)"></i>
+                <i class="el-icon-refresh-left" title="撤回" v-if="m.senderType === 2" @click="recallMsg(m)"></i>
+              </span>
+            </div>
           </div>
         </div>
         <div class="chat-input">
@@ -46,7 +54,7 @@
 </template>
 
 <script>
-import { getChatSessions, getChatMessages, sendChatMessage, takeChatSession, closeChatSession } from '@/api/chat'
+import { getChatSessions, getChatMessages, sendChatMessage, takeChatSession, closeChatSession, recallChatMessage } from '@/api/chat'
 
 export default {
   data() {
@@ -118,6 +126,26 @@ export default {
         this.messages = []
         await this.loadSessions()
       } catch (e) {}
+    },
+    copyMsg(m) {
+      navigator.clipboard.writeText(m.content).then(() => {
+        this.$message.success('已复制')
+      }).catch(() => {
+        this.$message.error('复制失败')
+      })
+    },
+    async recallMsg(m) {
+      try {
+        const res = await recallChatMessage(m.id)
+        if (res.code === 200) {
+          this.$message.success('消息已撤回')
+          await this.loadMessages()
+        } else {
+          this.$message.error(res.message || '撤回失败')
+        }
+      } catch (e) {
+        this.$message.error('撤回失败')
+      }
     }
   }
 }
@@ -148,6 +176,10 @@ export default {
 .msg-user .msg-bubble { background: #409EFF; color: #fff; display: inline-block; }
 .msg-admin .msg-bubble { background: #f0f0f0; color: #333; display: inline-block; }
 .msg-bubble { max-width: 60%; padding: 10px 16px; border-radius: 8px; font-size: 14px; word-break: break-all; }
-.msg-info { font-size: 12px; color: #999; margin-top: 4px; }
+.msg-bubble.recalled { background: #e0e0e0 !important; color: #999 !important; font-style: italic; }
+.msg-info { font-size: 12px; color: #999; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+.msg-actions { margin-left: 8px; display: inline-flex; gap: 6px; }
+.msg-actions i { cursor: pointer; font-size: 14px; color: #999; }
+.msg-actions i:hover { color: #409EFF; }
 .chat-input { padding: 12px 20px; border-top: 1px solid #eee; display: flex; gap: 10px; }
 </style>

@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Api(tags = "ChatAdminController")
 @Controller
@@ -19,6 +23,11 @@ public class ChatAdminController {
 
     @Autowired
     private ChatAdminDao chatAdminDao;
+
+    @Value("${agent.url:http://localhost:9900/api/chat}")
+    private String agentUrl;
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @ApiOperation("获取所有待处理会话列表")
     @GetMapping("/sessions")
@@ -63,6 +72,22 @@ public class ChatAdminController {
         String summary = content.length() > 50 ? content.substring(0, 50) + "..." : content;
         chatAdminDao.updateLastMsg(sessionId, summary);
 
+        // 异步通知 agent 同步上下文（商家回复后 agent 需要知道对话进展）
+        CompletableFuture.runAsync(() -> {
+            try {
+                Map<String, Object> syncBody = new HashMap<>();
+                syncBody.put("sessionId", "chat_" + sessionId);
+                syncBody.put("action", "admin_reply");
+                Map<String, String> adminMsg = new HashMap<>();
+                adminMsg.put("role", "assistant");
+                adminMsg.put("content", content);
+                syncBody.put("message", adminMsg);
+                restTemplate.postForEntity(agentUrl + "/context/sync", syncBody, String.class);
+            } catch (Exception ignored) {
+                // agent 不可用时静默忽略
+            }
+        });
+
         return CommonResult.success(msg);
     }
 
@@ -72,5 +97,16 @@ public class ChatAdminController {
     public CommonResult<String> closeSession(@PathVariable Long sessionId) {
         chatAdminDao.closeSession(sessionId);
         return CommonResult.success("会话已关闭");
+    }
+
+    @ApiOperation("撤回消息")
+    @PostMapping("/recall/{messageId}")
+    @ResponseBody
+    public CommonResult<String> recallMessage(@PathVariable Long messageId) {
+        int rows = chatAdminDao.recallMessage(messageId, 2); // 2=客服端撤回
+        if (rows > 0) {
+            return CommonResult.success("消息已撤回");
+        }
+        return CommonResult.failed("撤回失败，超过2分钟的消息无法撤回");
     }
 }

@@ -23,4 +23,9 @@ public interface ChatService {
     void takeSession(Long sessionId, Long adminId, String adminName);
 
     void closeSession(Long sessionId);
+
+    /**
+     * @return 1=成功 0=超时或无权
+     */
+    int recallMessage(Long messageId, Integer senderType);
 }

@@ -95,4 +95,13 @@ public class OmsOrderReturnApplyServiceImpl implements OmsOrderReturnApplyServic
         }
         return returnApplyMapper.selectByExample(example);
     }
+
+    @Override
+    public OmsOrderReturnApply getByOrderId(Long orderId) {
+        OmsOrderReturnApplyExample example = new OmsOrderReturnApplyExample();
+        example.createCriteria().andOrderIdEqualTo(orderId);
+        example.setOrderByClause("create_time DESC");
+        List<OmsOrderReturnApply> list = returnApplyMapper.selectByExample(example);
+        return list.isEmpty() ? null : list.get(0);
+    }
 }

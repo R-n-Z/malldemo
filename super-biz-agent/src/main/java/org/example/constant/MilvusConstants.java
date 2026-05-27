@@ -8,9 +8,14 @@ public class MilvusConstants {
     public static final String MILVUS_DB_NAME = "default";
     
     /**
-     * Milvus 集合名称
+     * Milvus 集合名称（业务文档）
      */
     public static final String MILVUS_COLLECTION_NAME = "biz";
+
+    /**
+     * 规则关键词向量集合名称（退货审核 RAG 召回）
+     */
+    public static final String RULE_KEYWORDS_COLLECTION = "rule_keywords";
     
     /**
      * 向量维度（豆包 embedding 模型的维度）

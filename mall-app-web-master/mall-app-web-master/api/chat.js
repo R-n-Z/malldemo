@@ -29,3 +29,10 @@ export function closeChatSession(sessionId) {
 		url: '/chat/session/close/' + sessionId
 	})
 }
+
+export function recallChatMessage(messageId) {
+	return request({
+		method: 'POST',
+		url: '/chat/recall/' + messageId
+	})
+}

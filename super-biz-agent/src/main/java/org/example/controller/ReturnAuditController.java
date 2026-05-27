@@ -186,7 +186,30 @@ public class ReturnAuditController {
         boolean needHuman = lowerReport.contains("人工介入") || lowerReport.contains("转人工")
                 || lowerReport.contains("needhumansupport");
 
-        String reason = "";
+        String memberUsername = extractMemberUsername(report);
+        int rejectCount = memberUsername != null ? returnAgentService.getRejectionCount(memberUsername) : 0;
+
+        // === 硬门禁：连续拒绝 ≥3 次，禁止自动通过，强制转人工 ===
+        if (rejectCount >= 3) {
+            logger.warn("用户 {} 连续拒绝已达 {} 次，强制转人工处理, applyId={}",
+                    memberUsername, rejectCount, applyId);
+            if (memberUsername != null) returnAgentService.updateRejectionCount(memberUsername, false);
+            return ReturnAuditResponse.rejected(applyId,
+                    "该用户连续 " + rejectCount + " 次退货申请被拒绝，已自动转人工客服跟进处置",
+                    true, rejectCount, report);
+        }
+
+        // === 硬门禁：当前被拒后累计达到3次，也转人工 ===
+        if (!passed && rejectCount + 1 >= 3) {
+            logger.warn("用户 {} 本次拒绝后累计将达 {} 次，强制转人工处理, applyId={}",
+                    memberUsername, rejectCount + 1, applyId);
+            if (memberUsername != null) returnAgentService.updateRejectionCount(memberUsername, false);
+            return ReturnAuditResponse.rejected(applyId,
+                    "该用户已连续 " + (rejectCount + 1) + " 次退货申请被拒绝，已自动转人工客服跟进处置",
+                    true, rejectCount + 1, report);
+        }
+
+        String reason;
         if (passed) {
             reason = "退货申请审核通过";
         } else if (needHuman) {
@@ -195,15 +218,13 @@ public class ReturnAuditController {
             reason = "退货申请审核未通过";
         }
 
-        String memberUsername = extractMemberUsername(report);
-
         if (passed) {
             if (memberUsername != null) returnAgentService.updateRejectionCount(memberUsername, true);
             return ReturnAuditResponse.passed(applyId, reason, report);
         } else {
             if (memberUsername != null) returnAgentService.updateRejectionCount(memberUsername, false);
-            int rejectCount = memberUsername != null ? returnAgentService.getRejectionCount(memberUsername) : 0;
-            return ReturnAuditResponse.rejected(applyId, reason, needHuman, rejectCount, report);
+            int updatedCount = memberUsername != null ? returnAgentService.getRejectionCount(memberUsername) : 0;
+            return ReturnAuditResponse.rejected(applyId, reason, needHuman, updatedCount, report);
         }
     }
 

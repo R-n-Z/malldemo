@@ -69,4 +69,18 @@ public class ChatController {
         chatService.closeSession(sessionId);
         return CommonResult.success("会话已关闭");
     }
+
+    @Operation(summary = "撤回消息")
+    @PostMapping("/recall/{messageId}")
+    public CommonResult<String> recallMessage(@PathVariable Long messageId) {
+        UmsMember member = memberService.getCurrentMember();
+        if (member == null) {
+            return CommonResult.unauthorized(null);
+        }
+        int rows = chatService.recallMessage(messageId, 1); // 1=用户端撤回
+        if (rows > 0) {
+            return CommonResult.success("消息已撤回");
+        }
+        return CommonResult.failed("撤回失败，超过2分钟的消息无法撤回");
+    }
 }

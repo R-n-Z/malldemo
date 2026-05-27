@@ -29,4 +29,8 @@ public interface ChatDao {
     ChatSession getSessionById(@Param("id") Long id);
 
     int takeSession(@Param("id") Long id, @Param("adminId") Long adminId, @Param("adminName") String adminName);
+
+    int recallMessage(@Param("id") Long id, @Param("senderType") Integer senderType);
+
+    List<ChatMessage> getRecentMessages(@Param("sessionId") Long sessionId, @Param("limit") int limit);
 }

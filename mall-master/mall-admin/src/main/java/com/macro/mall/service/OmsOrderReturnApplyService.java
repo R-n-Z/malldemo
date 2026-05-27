@@ -42,4 +42,6 @@ public interface OmsOrderReturnApplyService {
      * Agent调用-获取用户历史退货申请
      */
     List<OmsOrderReturnApply> getHistoryForAudit(String memberUsername, int limit);
+
+    OmsOrderReturnApply getByOrderId(Long orderId);
 }

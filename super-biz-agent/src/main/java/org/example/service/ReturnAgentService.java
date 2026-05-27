@@ -41,6 +41,9 @@ public class ReturnAgentService {
     @Autowired
     private ReturnRuleKnowledgeTools returnRuleKnowledgeTools;
 
+    @Autowired
+    private ReturnRuleAgentService returnRuleAgentService;
+
     /** 用户连续拒绝次数缓存 */
     private final ConcurrentHashMap<String, Integer> rejectionCountCache = new ConcurrentHashMap<>();
 
@@ -54,24 +57,24 @@ public class ReturnAgentService {
 
         ReactAgent plannerAgent = buildAuditPlannerAgent(chatModel, toolCallbacks);
         ReactAgent executorAgent = buildAuditExecutorAgent(chatModel, toolCallbacks);
+        ReactAgent ruleJudgeAgent = returnRuleAgentService.buildReturnRuleAgent(chatModel, toolCallbacks);
 
         SupervisorAgent supervisorAgent = SupervisorAgent.builder()
                 .name("return_audit_supervisor")
-                .description("负责调度退货审核 Planner 与 Executor 的多 Agent 控制器")
+                .description("负责调度退货审核 Planner、Executor 与 RuleJudge 的多 Agent 控制器")
                 .model(chatModel)
                 .systemPrompt(buildSupervisorSystemPrompt())
-                .subAgents(List.of(plannerAgent, executorAgent))
+                .subAgents(List.of(plannerAgent, executorAgent, ruleJudgeAgent))
                 .build();
 
         String taskPrompt = String.format(
                 "请对退货申请 #%d 进行审核。严格按以下顺序执行："
-                + "1. 调用 getReturnApplyDetail 获取申请详情。"
-                + "2. 立即调用 checkEscalationKeywords 扫描 reason 和 description 中的敏感词，命中则直接转人工。"
-                + "3. 调用 queryStrictRejectRules 检查商品是否命中严格拒绝类目（生鲜/数字商品/内衣/定制等）。"
-                + "4. 调用 getOrderReceiveTime + calculateReceiveDays 计算收货时长。"
-                + "5. 调用 queryAutoApproveRules + queryReceiptThresholds 匹配自动通过条件。"
-                + "6. 调用 getUserRejectionCount 获取用户连续拒绝次数。"
-                + "7. 汇总所有证据，按模板输出《退货审核报告》。"
+                + "1. 首先调用 getReturnApplyDetail 获取申请详情。"
+                + "2. 将 reason+description 传给 rule_judge_agent 执行混合检索规则判定。"
+                + "3. 调用 getOrderReceiveTime + calculateReceiveDays 计算收货时长。"
+                + "4. 调用 queryAutoApproveRules + queryReceiptThresholds 匹配自动通过条件。"
+                + "5. 调用 getUserRejectionCount 获取用户连续拒绝次数。"
+                + "6. 汇总 rule_judge_agent 判定结果 + 时间维度 + 历史维度，按模板输出《退货审核报告》。"
                 + "禁止编造数据，所有结论必须基于工具返回的真实数据。",
                 applyId);
 
@@ -211,23 +214,24 @@ public class ReturnAgentService {
 
     private String buildSupervisorSystemPrompt() {
         return """
-                你是退货审核 Supervisor，负责调度 audit_planner 与 audit_executor：
-                1. 当需要拆解任务或重新规划时，调用 audit_planner。
-                2. 当 audit_planner 输出 decision=EXECUTE 时，调用 audit_executor 执行第一步。
-                3. 根据 audit_executor 的反馈，决定是否再次调用 audit_planner，直到 decision=FINISH。
-                4. FINISH 后，输出完整的《退货审核报告》。
+                你是退货审核 Supervisor，负责调度 audit_planner、audit_executor 与 rule_judge_agent：
+                1. **第一步**：调用 rule_judge_agent 做规则判定（语义检索 + 精确匹配 → 语境推理）。
+                2. 当需要拆解任务或重新规划时，调用 audit_planner。
+                3. 当 audit_planner 输出 decision=EXECUTE 时，调用 audit_executor 执行第一步。
+                4. 根据 audit_executor 的反馈，决定是否再次调用 audit_planner，直到 decision=FINISH。
+                5. FINISH 后，输出完整的《退货审核报告》。
 
                 审核铁律（必须遵守，按优先级排序）：
-                1. 命中投诉/12315/消协/律师/起诉等 CRITICAL/HIGH 关键词 → 立即转人工
-                2. 命中严格拒绝规则中 autoReject=true 且无有效例外凭证 → 拒绝
+                1. rule_judge_agent 判定 escalation 触发 → 立即转人工
+                2. rule_judge_agent 判定 strict_reject 触发且无有效例外凭证 → 拒绝
                 3. 商品属性与订单记录不一致 → 拒绝
                 4. 七天无理由退货超过7天 → 拒绝
                 5. 收货超过30天一律拒绝（法律另有规定除外）
                 6. 质量问题/描述不符无凭证 → 拒绝
                 7. 用户连续3次被拒绝 → 自动转人工，标记 needHumanSupport=true
-                8. 只有同时满足：未命中严格拒绝规则 + 收货≤7天 + 原因匹配自动通过规则 → 自动通过
+                8. 只有同时满足：rule_judge_agent 判定无问题 + 收货≤7天 + 原因匹配自动通过规则 → 自动通过
 
-                只允许在 audit_planner、audit_executor 与 FINISH 之间做出选择。
+                只允许在 rule_judge_agent、audit_planner、audit_executor 与 FINISH 之间做出选择。
                 """;
     }
 }

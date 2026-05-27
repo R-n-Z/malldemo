@@ -90,4 +90,12 @@ public class OmsOrderReturnApplyController {
         return CommonResult.success(history);
     }
 
+    @ApiOperation("根据订单ID查询关联的退货申请")
+    @RequestMapping(value = "/order/{orderId}", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<OmsOrderReturnApply> getByOrderId(@PathVariable Long orderId) {
+        OmsOrderReturnApply apply = returnApplyService.getByOrderId(orderId);
+        return CommonResult.success(apply);
+    }
+
 }

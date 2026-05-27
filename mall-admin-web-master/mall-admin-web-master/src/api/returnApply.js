@@ -36,3 +36,10 @@ export function auditApply(applyId) {
     data: { applyId }
   })
 }
+
+export function getByOrderId(orderId) {
+  return request({
+    url:'/returnApply/order/'+orderId,
+    method:'get'
+  })
+}

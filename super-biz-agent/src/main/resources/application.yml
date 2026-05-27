@@ -90,3 +90,16 @@ return:
     receipt:
       unconditional-days: 7   # 七天无理由退货
       conditional-days: 15    # 超15天一般不允许
+
+# 规则 RAG 混合检索配置
+rule:
+  rag:
+    enabled: true
+    hybrid:
+      vector-top-k: 5         # 向量路返回 top 5
+      vector-threshold: 0.4    # L2 距离小于此值视为语义命中
+      keyword-weight: 1.0      # 精确路得分权重
+      vector-weight: 0.8       # 向量路得分权重
+    fuzzy:
+      max-edit-distance: 2     # 编辑距离上限
+      max-word-length: 4       # 仅对 ≤4 字的词做模糊匹配

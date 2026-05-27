@@ -13,5 +13,6 @@ public class ChatMessage {
     private String content;
     private Integer msgType;     // 1=文字
     private Integer isRead;
+    private Integer status;      // 1=正常 2=已撤回
     private Date createTime;
 }

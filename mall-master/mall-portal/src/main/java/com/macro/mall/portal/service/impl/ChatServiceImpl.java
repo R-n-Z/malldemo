@@ -10,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -78,13 +79,22 @@ public class ChatServiceImpl implements ChatService {
 
         messagingTemplate.convertAndSend("/topic/chat/" + sessionId, message);
 
-        // 如果是用户消息，异步调用 Agent 自动回复
+        // 如果是用户消息，异步调用 Agent 自动回复（携带完整上下文）
         if (senderType == 1 && agentClient != null) {
             CompletableFuture.runAsync(() -> {
                 try {
                     ChatSession session = chatDao.getSessionById(sessionId);
                     String productName = session != null ? session.getProductName() : null;
-                    String answer = agentClient.ask("chat_" + sessionId, content, productName);
+                    String productPic = session != null ? session.getProductPic() : null;
+                    Long productId = session != null ? session.getProductId() : 0L;
+                    Long memberId = session != null ? session.getMemberId() : 0L;
+                    String memberName = session != null ? session.getMemberName() : null;
+
+                    // 加载 DB 中的历史消息，构建 history 数组
+                    List<Map<String, String>> history = buildHistory(sessionId);
+
+                    String answer = agentClient.ask(sessionId, content,
+                            memberId, memberName, productId, productName, productPic, history);
                     if (answer != null && !answer.startsWith("NEED_HUMAN")) {
                         ChatMessage reply = new ChatMessage();
                         reply.setSessionId(sessionId);
@@ -155,5 +165,37 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void closeSession(Long sessionId) {
         chatDao.updateSessionStatus(sessionId, 2);
+    }
+
+    /** 从 DB 加载最近消息，构建 Agent 可用的历史数组 */
+    private List<Map<String, String>> buildHistory(Long sessionId) {
+        try {
+            List<ChatMessage> recent = chatDao.getRecentMessages(sessionId, 20);
+            if (recent == null || recent.isEmpty()) return Collections.emptyList();
+            // 反转：SQL 是 DESC，需要按时间正序
+            Collections.reverse(recent);
+            // 最多取 6 对（12 条）
+            if (recent.size() > 12) {
+                recent = recent.subList(recent.size() - 12, recent.size());
+            }
+            return recent.stream().map(m -> {
+                Map<String, String> entry = new HashMap<>();
+                entry.put("role", m.getSenderType() == 1 ? "user" : "assistant");
+                entry.put("content", m.getContent());
+                return entry;
+            }).collect(Collectors.toList());
+        } catch (Exception e) {
+            log.warn("加载会话历史失败: sessionId={}", sessionId, e);
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public int recallMessage(Long messageId, Integer senderType) {
+        int rows = chatDao.recallMessage(messageId, senderType);
+        if (rows > 0) {
+            log.info("消息撤回成功: id={}, senderType={}", messageId, senderType);
+        }
+        return rows;
     }
 }

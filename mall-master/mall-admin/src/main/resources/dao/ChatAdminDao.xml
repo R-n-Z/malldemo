@@ -11,9 +11,15 @@
     </select>
 
     <insert id="insertMessage">
-        INSERT INTO chat_message (session_id, sender_type, sender_id, sender_name, content, msg_type, is_read, create_time)
-        VALUES (#{sessionId}, #{senderType}, #{senderId}, #{senderName}, #{content}, 1, 0, NOW())
+        INSERT INTO chat_message (session_id, sender_type, sender_id, sender_name, content, msg_type, is_read, status, create_time)
+        VALUES (#{sessionId}, #{senderType}, #{senderId}, #{senderName}, #{content}, 1, 0, 1, NOW())
     </insert>
+
+    <update id="recallMessage">
+        UPDATE chat_message SET status = 2, content = '消息已撤回'
+        WHERE id = #{id} AND sender_type = #{senderType} AND status = 1
+        AND create_time >= DATE_SUB(NOW(), INTERVAL 2 MINUTE)
+    </update>
 
     <update id="takeSession">
         UPDATE chat_session SET admin_id = #{adminId}, admin_name = #{adminName} WHERE id = #{id} AND admin_id IS NULL

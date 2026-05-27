@@ -13,8 +13,14 @@
 		<scroll-view class="msg-list" :scroll-top="scrollTop" scroll-y @scrolltolower="onScroll">
 			<view class="msg-item" v-for="(m, i) in messages" :key="i"
 				:class="m.senderType === 1 ? 'msg-self' : 'msg-agent'">
-				<view class="msg-bubble" v-if="m.senderType === 1">{{m.content}}</view>
-				<view class="msg-bubble agent-bubble" v-else>{{m.content}}</view>
+				<view class="msg-bubble" :class="{ 'recalled': m.status === 2 }"
+					v-if="m.senderType === 1" @longpress="onLongPress(m)">
+					{{m.status === 2 ? '消息已撤回' : m.content}}
+				</view>
+				<view class="msg-bubble agent-bubble" :class="{ 'recalled': m.status === 2 }"
+					v-else @longpress="onLongPress(m)">
+					{{m.status === 2 ? '消息已撤回' : m.content}}
+				</view>
 				<text class="msg-time">{{m.senderType === 2 ? 'AI客服' : '我'}} · {{m.createTime}}</text>
 			</view>
 			<view class="loading-msg" v-if="waiting">
@@ -40,7 +46,7 @@
 </template>
 
 <script>
-	import { createChatSession, getChatMessages, sendChatMessage } from '@/api/chat.js';
+	import { createChatSession, getChatMessages, sendChatMessage, recallChatMessage } from '@/api/chat.js';
 
 	export default {
 		data() {
@@ -131,7 +137,32 @@
 					this.scrollTop = 99999;
 				});
 			},
-			onScroll() {}
+			onScroll() {},
+			onLongPress(msg) {
+				if (msg.status === 2) return; // 已撤回的消息不再操作
+				const items = ['复制'];
+				if (msg.senderType === 1) items.push('撤回');
+				uni.showActionSheet({
+					itemList: items,
+					success: async (res) => {
+						if (items[res.tapIndex] === '复制') {
+							uni.setClipboardData({ data: msg.content });
+							uni.showToast({ title: '已复制', icon: 'none' });
+						} else if (items[res.tapIndex] === '撤回') {
+							try {
+								const resp = await recallChatMessage(msg.id);
+								if (resp.code === 200) {
+									await this.loadMessages();
+								} else {
+									uni.showToast({ title: resp.message || '撤回失败', icon: 'none' });
+								}
+							} catch (e) {
+								uni.showToast({ title: '撤回失败', icon: 'none' });
+							}
+						}
+					}
+				});
+			}
 		}
 	}
 </script>
@@ -182,6 +213,7 @@
 		border: 1px solid #e0e0e0;
 
 		.msg-self & { background: #007aff; color: #fff; border: none; }
+			&.recalled { background: #e0e0e0 !important; color: #999 !important; font-style: italic; border: none !important; }
 	}
 
 	.msg-time {

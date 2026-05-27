@@ -9,6 +9,7 @@ import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.flow.agent.SupervisorAgent;
 import com.alibaba.cloud.ai.graph.streaming.OutputType;
 import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.service.AiOpsService;
@@ -30,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 /**
  * 统一 API 控制器
@@ -63,41 +65,84 @@ public class ChatController {
      * 与 /chat_react 逻辑一致，但直接返回完整结果而非流式输出
      */
     @PostMapping("/chat")
-    public ResponseEntity<ApiResponse<ChatResponse>> chat(@RequestBody ChatRequest request) {
+    public ResponseEntity<ApiResponse<ChatResponse>> chat(@RequestBody String body) {
         try {
-            logger.info("收到对话请求 - SessionId: {}, Question: {}", request.getId(), request.getQuestion());
+            // 手动解析 JSON（兼容 ContextEnvelope 和旧 ChatRequest 两种格式）
+            ObjectMapper localMapper = new ObjectMapper();
+            Map<String, Object> raw = localMapper.readValue(body, Map.class);
 
-            // 参数校验
-            if (request.getQuestion() == null || request.getQuestion().trim().isEmpty()) {
+            String sessionId;
+            String question;
+            String productName;
+            List<Map<String, String>> history;
+            String contextSummary = "";
+
+            if (raw.containsKey("user") || raw.containsKey("message")) {
+                // === ContextEnvelope 格式 ===
+                @SuppressWarnings("unchecked")
+                Map<String, Object> userMap = raw.get("user") instanceof Map
+                        ? (Map<String, Object>) raw.get("user") : Collections.emptyMap();
+                @SuppressWarnings("unchecked")
+                Map<String, Object> productMap = raw.get("product") instanceof Map
+                        ? (Map<String, Object>) raw.get("product") : Collections.emptyMap();
+                @SuppressWarnings("unchecked")
+                Map<String, Object> msgMap = raw.get("message") instanceof Map
+                        ? (Map<String, Object>) raw.get("message") : Collections.emptyMap();
+
+                sessionId = str(raw.get("sessionId"), str(raw.get("Id"), "unknown"));
+                question = str(msgMap.get("content"), str(raw.get("Question"), ""));
+                productName = str(productMap.get("productName"), str(raw.get("productName"), null));
+                history = parseHistory(raw.get("history"));
+
+                Long userId = lng(userMap.get("userId"));
+                String username = str(userMap.get("username"), null);
+                Long productId = lng(productMap.get("productId"));
+                contextSummary = String.format("用户ID=%d(%s) 商品ID=%d(%s)",
+                        userId, username, productId, productName);
+
+                logger.info("收到 ContextEnvelope 请求 - SessionId: {}, Question: {}, Context: {}",
+                        sessionId, question, contextSummary);
+            } else {
+                // === 旧 ChatRequest 格式 ===
+                sessionId = str(raw.get("Id"), "unknown");
+                question = str(raw.get("Question"), "");
+                productName = str(raw.get("productName"), null);
+                history = null;
+            }
+
+            if (question == null || question.trim().isEmpty()) {
                 logger.warn("问题内容为空");
                 return ResponseEntity.ok(ApiResponse.success(ChatResponse.error("问题内容不能为空")));
             }
 
             // 获取或创建会话
-            SessionInfo session = getOrCreateSession(request.getId());
-            
-            // 获取历史消息
-            List<Map<String, String>> history = session.getHistory();
-            logger.info("会话历史消息对数: {}", history.size() / 2);
+            SessionInfo session = getOrCreateSession(sessionId);
 
-            // 创建 DashScope API 和 ChatModel
+            // 优先用请求中的 history（来自DB），否则用内存中的
+            if (history != null && !history.isEmpty()) {
+                session.replaceHistory(history);
+                logger.info("使用请求中的DB历史, 共 {} 条", history.size());
+            }
+            List<Map<String, String>> effectiveHistory = session.getHistory();
+            logger.info("会话历史消息对数: {}", effectiveHistory.size() / 2);
+
             DashScopeApi dashScopeApi = chatService.createDashScopeApi();
             DashScopeChatModel chatModel = chatService.createStandardChatModel(dashScopeApi);
 
             logger.info("开始 SupervisorAgent 多智能体对话");
 
-            // 创建 SupervisorAgent（含4个子Agent：售前/售后/升级/闲聊）
+            // 创建 SupervisorAgent（传入完整上下文）
             SupervisorAgent supervisor = chatService.createSupervisorAgent(
-                chatModel, request.getProductName(), history);
+                chatModel, productName, contextSummary, effectiveHistory);
 
-            // 执行对话：Supervisor自动路由到合适的子Agent
-            String fullAnswer = chatService.executeSupervisor(supervisor, request.getQuestion());
-            
+            // 执行对话
+            String fullAnswer = chatService.executeSupervisor(supervisor, question);
+
             // 更新会话历史
-            session.addMessage(request.getQuestion(), fullAnswer);
-            logger.info("已更新会话历史 - SessionId: {}, 当前消息对数: {}", 
-                request.getId(), session.getMessagePairCount());
-            
+            session.addMessage(question, fullAnswer);
+            logger.info("已更新会话历史 - SessionId: {}, 当前消息对数: {}",
+                sessionId, session.getMessagePairCount());
+
             return ResponseEntity.ok(ApiResponse.success(ChatResponse.success(fullAnswer)));
 
         } catch (Exception e) {
@@ -174,7 +219,7 @@ public class ChatController {
 
                 // 创建 SupervisorAgent
                 SupervisorAgent supervisor = chatService.createSupervisorAgent(
-                    chatModel, request.getProductName(), history);
+                    chatModel, request.getProductName(), null, history);
 
                 // 用于累积完整答案
                 StringBuilder fullAnswerBuilder = new StringBuilder();
@@ -315,6 +360,35 @@ public class ChatController {
     /**
      * 获取会话信息
      */
+    /**
+     * 商家端回复后同步上下文（保持 agent 会话视图与 DB 一致）
+     */
+    @PostMapping("/chat/context/sync")
+    public ResponseEntity<ApiResponse<String>> syncContext(@RequestBody Map<String, Object> body) {
+        try {
+            String sessionId = body.get("sessionId") != null ? body.get("sessionId").toString() : null;
+            if (sessionId == null) {
+                return ResponseEntity.ok(ApiResponse.error("sessionId required"));
+            }
+            SessionInfo session = sessions.get(sessionId);
+            if (session != null) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> msg = body.get("message") instanceof Map
+                        ? (Map<String, Object>) body.get("message") : null;
+                if (msg != null) {
+                    String role = msg.get("role") != null ? msg.get("role").toString() : "assistant";
+                    String content = msg.get("content") != null ? msg.get("content").toString() : "";
+                    session.appendSingle(role, content);
+                    logger.info("商家回复已同步到 agent 会话: sessionId={}", sessionId);
+                }
+            }
+            return ResponseEntity.ok(ApiResponse.success("ok"));
+        } catch (Exception e) {
+            logger.warn("同步上下文失败: {}", e.getMessage());
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+
     @GetMapping("/chat/session/{sessionId}")
     public ResponseEntity<ApiResponse<SessionInfoResponse>> getSessionInfo(@PathVariable String sessionId) {
         try {
@@ -338,6 +412,34 @@ public class ChatController {
     }
 
     // ==================== 辅助方法 ====================
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> safeMap(Object obj) {
+        return obj instanceof Map ? (Map<String, Object>) obj : Collections.emptyMap();
+    }
+
+    private String str(Object obj, String defaultVal) {
+        return obj != null ? obj.toString() : defaultVal;
+    }
+
+    private Long lng(Object obj) {
+        if (obj == null) return 0L;
+        if (obj instanceof Number) return ((Number) obj).longValue();
+        try { return Long.parseLong(obj.toString()); } catch (NumberFormatException e) { return 0L; }
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Map<String, String>> parseHistory(Object historyObj) {
+        if (!(historyObj instanceof List)) return null;
+        List<?> rawList = (List<?>) historyObj;
+        return rawList.stream().filter(Map.class::isInstance).map(item -> {
+            Map<String, String> entry = new HashMap<>();
+            Map<?, ?> m = (Map<?, ?>) item;
+            entry.put("role", str(m.get("role"), "user"));
+            entry.put("content", str(m.get("content"), ""));
+            return entry;
+        }).collect(Collectors.toList());
+    }
 
     private SessionInfo getOrCreateSession(String sessionId) {
         if (sessionId == null || sessionId.isEmpty()) {
@@ -425,6 +527,36 @@ public class ChatController {
             try {
                 messageHistory.clear();
                 logger.info("会话 {} 历史消息已清空", sessionId);
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /** 用 DB 中的历史替换内存历史（agent 重启后恢复上下文） */
+        public void replaceHistory(List<Map<String, String>> dbHistory) {
+            lock.lock();
+            try {
+                messageHistory.clear();
+                messageHistory.addAll(dbHistory);
+                logger.info("会话 {} 替换为DB历史, 共 {} 条", sessionId, dbHistory.size());
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /** 追加单条消息（商家回复时同步） */
+        public void appendSingle(String role, String content) {
+            lock.lock();
+            try {
+                Map<String, String> msg = new HashMap<>();
+                msg.put("role", role);
+                msg.put("content", content);
+                messageHistory.add(msg);
+                // 保持窗口大小
+                int maxMessages = MAX_WINDOW_SIZE * 2;
+                while (messageHistory.size() > maxMessages) {
+                    messageHistory.remove(0);
+                }
             } finally {
                 lock.unlock();
             }

@@ -10,6 +10,8 @@ import com.alibaba.cloud.ai.graph.agent.flow.agent.SupervisorAgent;
 import com.alibaba.cloud.ai.graph.exception.GraphRunnerException;
 import org.example.agent.tool.DateTimeTools;
 import org.example.agent.tool.FaqTools;
+import org.example.agent.tool.audit.DateTimeCalculateTools;
+import org.example.agent.tool.audit.ReturnRuleKnowledgeTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.ToolCallback;
@@ -39,6 +41,12 @@ public class ChatService {
 
     @Autowired
     private DateTimeTools dateTimeTools;
+
+    @Autowired
+    private ReturnRuleKnowledgeTools returnRuleKnowledgeTools;
+
+    @Autowired
+    private DateTimeCalculateTools dateTimeCalculateTools;
 
     @Autowired
     private ToolCallbackProvider tools;
@@ -77,9 +85,12 @@ public class ChatService {
     // ==================== 4 个子 Agent ====================
 
     /** 售前咨询 Agent — 商品信息、价格、对比、推荐 */
-    public ReactAgent buildPreSalesAgent(DashScopeChatModel model, String productName) {
+    public ReactAgent buildPreSalesAgent(DashScopeChatModel model, String productName, String contextSummary) {
         StringBuilder prompt = new StringBuilder();
         prompt.append("你是售前咨询专家。你的职责是回答商品相关问题：价格、优惠、库存、型号对比、品牌推荐、适用人群、规格选配、功能特点。\n");
+        if (contextSummary != null && !contextSummary.isEmpty()) {
+            prompt.append("当前会话信息：").append(contextSummary).append("\n");
+        }
         prompt.append("规则：\n");
         prompt.append("1. 优先使用 searchFaq 查询知识库，返回匹配答案后加 '[自动回复]'。\n");
         prompt.append("2. 如果 searchFaq 返回多个结果，优先回复与用户问的商品最相关的那个。\n");
@@ -98,24 +109,44 @@ public class ChatService {
     }
 
     /** 售后支持 Agent — 退换货、物流、支付、保修 */
-    public ReactAgent buildPostSalesAgent(DashScopeChatModel model) {
+    public ReactAgent buildPostSalesAgent(DashScopeChatModel model, String contextSummary) {
         StringBuilder prompt = new StringBuilder();
-        prompt.append("你是售后支持专家。你的职责是回答售后服务问题：退换货流程、退款时效、物流查询、支付方式、发票、保修、订单修改/取消。\n");
+        prompt.append("你是售后支持专家。你的职责是回答售后服务问题，特别是退货/退款/换货相关咨询。\n");
+        if (contextSummary != null && !contextSummary.isEmpty()) {
+            prompt.append("当前会话信息：").append(contextSummary).append("\n");
+        }
+        prompt.append("\n");
+        prompt.append("你有以下工具可用：\n");
+        prompt.append("- searchFaq：查询商品FAQ知识库（退换货流程、退款时效、保修政策等）\n");
+        prompt.append("- queryAutoApproveRules：查询自动通过退货的规则（7天无理由、质量问题等条件）\n");
+        prompt.append("- queryStrictRejectRules：查询严格不允许退货的商品品类（生鲜/数字商品/内衣/定制等）\n");
+        prompt.append("- queryReceiptThresholds：查询收货天数阈值（7天/15天/30天的退货窗口）\n");
+        prompt.append("- calculateReceiveDays：计算收货到现在的天数，判断处于哪个退货窗口\n");
+        prompt.append("- checkEscalationKeywords：检查用户描述中是否包含投诉/律师/12315等敏感词\n\n");
         prompt.append("规则：\n");
-        prompt.append("1. 优先使用 searchFaq 查询知识库，返回匹配答案后加 '[自动回复]'。\n");
-        prompt.append("2. 知识库无匹配时，回复 'NEED_HUMAN: 您的问题已转接人工客服，我们的客服人员将尽快为您处理'。\n");
-        prompt.append("3. 涉及具体订单时，提醒用户提供订单号以便客服查询。\n");
+        prompt.append("1. 用户问退货流程/政策/条件时，优先用 searchFaq 查知识库，答案后加 '[自动回复]'。\n");
+        prompt.append("2. 用户问「我买的东西能不能退」时：\n");
+        prompt.append("   a) 先调用 queryStrictRejectRules 检查该商品是否属于不可退货品类 → 如果是，告知用户该品类不支持退货\n");
+        prompt.append("   b) 如果不是严格拒绝品类，调用 queryAutoApproveRules + queryReceiptThresholds 获取退货条件\n");
+        prompt.append("   c) 如果用户提供了收货时间，调用 calculateReceiveDays 判断在哪个窗口\n");
+        prompt.append("   d) 综合上述信息，明确告诉用户：能不能退、为什么、下一步怎么做\n");
+        prompt.append("3. 用户提到投诉/12315/律师/起诉等词时，立即调用 checkEscalationKeywords，命中则回复 'NEED_HUMAN: ' + 安抚说明。\n");
+        prompt.append("4. 知识库和规则都无法匹配时，回复 'NEED_HUMAN: 您的问题已转接人工客服，我们的客服人员将尽快为您处理'。\n");
+        prompt.append("5. 涉及具体订单状态查询时，提醒用户提供订单号以便客服查询。\n");
+        prompt.append("6. 工具返回的是JSON格式数据，你需要提取关键信息，用通俗易懂的中文回复用户，不要直接输出JSON。\n");
         return ReactAgent.builder()
                 .name("post_sales_agent")
                 .description("售后支持：退换货、物流、支付、保修、订单")
                 .model(model).systemPrompt(prompt.toString())
-                .methodTools(new Object[]{faqTools})
+                .methodTools(new Object[]{faqTools, returnRuleKnowledgeTools, dateTimeCalculateTools})
                 .outputKey("post_sales_answer").build();
     }
 
     /** 人工升级 Agent — 投诉、复杂问题、用户要求人工 */
-    public ReactAgent buildEscalationAgent(DashScopeChatModel model) {
+    public ReactAgent buildEscalationAgent(DashScopeChatModel model, String contextSummary) {
         String prompt = "你是客服升级专员。当用户的问题无法通过自动客服解决时，你将问题升级到人工客服。\n"
+            + (contextSummary != null && !contextSummary.isEmpty()
+                ? "当前会话信息：" + contextSummary + "\n" : "")
             + "规则：\n"
             + "1. 对于投诉、复杂纠纷、用户明确要求人工、法律/合规问题，回复 'NEED_HUMAN: ' 后跟简短的安抚+转接说明。\n"
             + "2. 安抚用户情绪，告知预计响应时间（工作时间9:00-21:00，通常30分钟内响应）。\n"
@@ -129,8 +160,10 @@ public class ChatService {
     }
 
     /** 闲聊处理 Agent — 问候、感谢、范围外话题 */
-    public ReactAgent buildChitchatAgent(DashScopeChatModel model) {
+    public ReactAgent buildChitchatAgent(DashScopeChatModel model, String contextSummary) {
         String prompt = "你是电商客服的接待助手。你的职责是处理闲聊和简单问候。\n"
+            + (contextSummary != null && !contextSummary.isEmpty()
+                ? "当前会话信息：" + contextSummary + "\n" : "")
             + "规则：\n"
             + "1. 对「你好」「早上好」「谢谢」「再见」等礼貌用语给予简短友好的回复。\n"
             + "2. 如果用户问与电商完全无关的话题，友好引导回商品咨询。\n"
@@ -148,13 +181,13 @@ public class ChatService {
     // ==================== SupervisorAgent ====================
 
     public SupervisorAgent createSupervisorAgent(DashScopeChatModel model,
-            String productName, List<Map<String, String>> history) {
-        ReactAgent preSales = buildPreSalesAgent(model, productName);
-        ReactAgent postSales = buildPostSalesAgent(model);
-        ReactAgent escalation = buildEscalationAgent(model);
-        ReactAgent chitchat = buildChitchatAgent(model);
+            String productName, String contextSummary, List<Map<String, String>> history) {
+        ReactAgent preSales = buildPreSalesAgent(model, productName, contextSummary);
+        ReactAgent postSales = buildPostSalesAgent(model, contextSummary);
+        ReactAgent escalation = buildEscalationAgent(model, contextSummary);
+        ReactAgent chitchat = buildChitchatAgent(model, contextSummary);
 
-        String supervisorPrompt = buildSupervisorPrompt(productName, history);
+        String supervisorPrompt = buildSupervisorPrompt(productName, contextSummary, history);
 
         return SupervisorAgent.builder()
                 .name("agent_router")
@@ -168,12 +201,16 @@ public class ChatService {
 
     // ==================== Supervisor Prompt ====================
 
-    private String buildSupervisorPrompt(String productName, List<Map<String, String>> history) {
+    private String buildSupervisorPrompt(String productName, String contextSummary,
+                                          List<Map<String, String>> history) {
         StringBuilder sb = new StringBuilder();
         sb.append("你是一个智能客服路由系统。你的任务是根据用户问题，将请求路由到最合适的专业Agent处理。\n\n");
+        if (contextSummary != null && !contextSummary.isEmpty()) {
+            sb.append("**当前会话信息**：").append(contextSummary).append("\n\n");
+        }
         sb.append("## 可用的子Agent：\n");
         sb.append("- pre_sales_agent：售前咨询 → 商品信息、价格、优惠、库存、型号对比、品牌推荐、适用人群、规格选配、功能特点\n");
-        sb.append("- post_sales_agent：售后支持 → 退换货、退款、物流、支付方式、发票、保修、订单修改/取消\n");
+        sb.append("- post_sales_agent：售后支持 → 退换货/退款政策咨询、退货资格判断（可查规则库+计算天数）、物流、支付、发票、保修、订单修改/取消\n");
         sb.append("- escalation_agent：人工升级 → 投诉、复杂纠纷、用户要求人工、法律合规、Agent无法回答的问题\n");
         sb.append("- chitchat_agent：闲聊处理 → 问候、感谢、告别、与电商无关的话题\n\n");
         sb.append("## 路由规则：\n");
