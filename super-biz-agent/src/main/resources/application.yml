@@ -76,3 +76,17 @@ prometheus:
 # CLS 云日志服务配置
 cls:
   mock-enabled: false  # 是否启用 Mock 模式（用于测试，设为 true 返回与告警关联的模拟日志数据）
+
+# mall-admin 服务地址（Agent 工具调用用）
+mall:
+  admin:
+    base-url: http://localhost:8080
+
+# 退货审核配置
+return:
+  audit:
+    rejection:
+      max-consecutive: 3  # 连续拒绝次数上限
+    receipt:
+      unconditional-days: 7   # 七天无理由退货
+      conditional-days: 15    # 超15天一般不允许

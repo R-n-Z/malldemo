@@ -69,6 +69,7 @@ secure:
       - /admin/info
       - /admin/logout
       - /minio/upload
+      - /returnApply/audit/**
 
 minio:
   endpoint: ${MINIO_ENDPOINT:http://minio:9000}

@@ -1,0 +1,214 @@
+{
+  "version": "1.0",
+  "description": "退货审核规则知识库 - 供 ReturnRuleKnowledgeTools 加载使用",
+
+  "autoApproveRules": [
+    {
+      "ruleId": "AA-001",
+      "condition": "七天无理由退货且在有效期内",
+      "receiptDaysMax": 7,
+      "allowedReasons": ["七天无理由", "不想要了", "买错了", "拍错了", "多拍", "不需要了", "不喜欢"],
+      "requirements": [
+        "商品未经使用，保持原状",
+        "配件、赠品、包装完整",
+        "不属于严格拒绝类商品"
+      ]
+    },
+    {
+      "ruleId": "AA-002",
+      "condition": "商品质量问题且有凭证",
+      "receiptDaysMax": 15,
+      "allowedReasons": ["质量问题", "有瑕疵", "破损", "坏了", "不能用了", "功能异常", "外观缺陷"],
+      "requirements": [
+        "提供清晰的商品问题照片或视频",
+        "问题非人为损坏"
+      ]
+    },
+    {
+      "ruleId": "AA-003",
+      "condition": "商品与描述不符",
+      "receiptDaysMax": 15,
+      "allowedReasons": ["与描述不符", "颜色不对", "尺寸不对", "规格不对", "发错货", "少件", "漏发"],
+      "requirements": [
+        "提供商品实物照片与页面描述对比",
+        "型号/规格/颜色与订单记录不一致"
+      ]
+    },
+    {
+      "ruleId": "AA-004",
+      "condition": "物流损坏",
+      "receiptDaysMax": 3,
+      "allowedReasons": ["物流损坏", "快递破损", "包装破损", "运输损坏"],
+      "requirements": [
+        "提供开箱视频或快递面单+破损照片",
+        "在签收后3天内反馈"
+      ]
+    }
+  ],
+
+  "escalationKeywords": [
+    {
+      "keyword": "投诉",
+      "category": "官方投诉",
+      "priority": "HIGH",
+      "action": "立即转人工客服",
+      "note": "用户明确提出投诉意图"
+    },
+    {
+      "keyword": "12315",
+      "category": "监管投诉",
+      "priority": "CRITICAL",
+      "action": "立即转人工客服主管",
+      "note": "用户引用消费者投诉热线"
+    },
+    {
+      "keyword": "消协",
+      "category": "监管投诉",
+      "priority": "CRITICAL",
+      "action": "立即转人工客服主管",
+      "note": "用户提到消费者协会"
+    },
+    {
+      "keyword": "律师",
+      "category": "法律威胁",
+      "priority": "CRITICAL",
+      "action": "立即转人工客服主管+法务",
+      "note": "用户涉及法律层面"
+    },
+    {
+      "keyword": "起诉",
+      "category": "法律威胁",
+      "priority": "CRITICAL",
+      "action": "立即转人工客服主管+法务",
+      "note": "用户威胁法律诉讼"
+    },
+    {
+      "keyword": "假货",
+      "category": "严重质量问题",
+      "priority": "HIGH",
+      "action": "立即转人工客服",
+      "note": "用户质疑商品真实性"
+    },
+    {
+      "keyword": "欺诈",
+      "category": "严重投诉",
+      "priority": "HIGH",
+      "action": "立即转人工客服",
+      "note": "用户指控欺诈行为"
+    },
+    {
+      "keyword": "过敏",
+      "category": "人身安全",
+      "priority": "HIGH",
+      "action": "立即转人工客服",
+      "note": "涉及人身伤害/健康问题"
+    },
+    {
+      "keyword": "受伤",
+      "category": "人身安全",
+      "priority": "HIGH",
+      "action": "立即转人工客服",
+      "note": "涉及人身安全问题"
+    },
+    {
+      "keyword": "工商",
+      "category": "行政投诉",
+      "priority": "HIGH",
+      "action": "立即转人工客服",
+      "note": "用户提到工商部门"
+    },
+    {
+      "keyword": "媒体",
+      "category": "舆情风险",
+      "priority": "MEDIUM",
+      "action": "转人工客服",
+      "note": "用户可能联系媒体曝光"
+    },
+    {
+      "keyword": "曝光",
+      "category": "舆情风险",
+      "priority": "MEDIUM",
+      "action": "转人工客服",
+      "note": "用户威胁曝光"
+    },
+    {
+      "keyword": "退款",
+      "category": "金额敏感",
+      "priority": "LOW",
+      "action": "标记关注，正常审核流程",
+      "note": "金额超过500元时升级人工复核"
+    }
+  ],
+
+  "strictRejectRules": [
+    {
+      "ruleId": "SR-001",
+      "category": "生鲜易腐商品",
+      "productKeywords": ["生鲜", "水果", "蔬菜", "肉类", "海鲜", "水产", "冷冻", "冷藏", "鲜奶", "酸奶", "蛋糕", "熟食"],
+      "reason": "根据《消费者权益保护法》，鲜活易腐商品不适用七天无理由退货",
+      "exception": "收到时已损坏、腐烂或变质，需提供开箱视频/照片作为凭证，走'质量问题'通道",
+      "autoReject": true
+    },
+    {
+      "ruleId": "SR-002",
+      "category": "数字化商品",
+      "productKeywords": ["激活码", "序列号", "充值卡", "点卡", "兑换码", "电子券", "虚拟商品", "会员", "课程", "电子书"],
+      "reason": "数字化商品一经交付即视为消费完成，不支持退货",
+      "exception": "激活码/序列号未使用且可验证未激活状态",
+      "autoReject": true
+    },
+    {
+      "ruleId": "SR-003",
+      "category": "个人卫生用品",
+      "productKeywords": ["内衣", "内裤", "文胸", "袜子", "口罩", "耳塞", "牙刷", "剃须刀", "私密护理"],
+      "reason": "个人卫生用品拆封后不予退货，保障消费者健康安全",
+      "exception": "商品未拆封、包装完好，且不属于质量问题",
+      "autoReject": true
+    },
+    {
+      "ruleId": "SR-004",
+      "category": "定制类商品",
+      "productKeywords": ["定制", "订制", "刻字", "DIY", "个性化", "定制款", "来图", "专属"],
+      "reason": "定制类商品具有唯一性，无法二次销售，不支持退货",
+      "exception": "商品本身存在质量问题或与定制要求不符",
+      "autoReject": true
+    },
+    {
+      "ruleId": "SR-005",
+      "category": "已使用的消耗品",
+      "productKeywords": ["化妆品", "护肤品", "香水", "精油", "保健品", "食品", "茶叶", "咖啡", "耗材", "墨盒", "硒鼓", "胶卷"],
+      "reason": "消耗品一经使用即影响二次销售，不支持退货",
+      "exception": "未拆封、未使用，且签收后7天内",
+      "autoReject": false,
+      "condition": "需人工判断拆封状态"
+    },
+    {
+      "ruleId": "SR-006",
+      "category": "限时/抢购商品",
+      "productKeywords": ["秒杀", "限时", "闪购", "特价", "清仓", "尾货", "样机"],
+      "reason": "明确标注'不支持退货'的限时促销商品不予退货",
+      "exception": "商品存在质量问题",
+      "autoReject": false,
+      "condition": "需检查商品详情页是否标注'不支持七天无理由退货'"
+    }
+  ],
+
+  "receiptDayThresholds": {
+    "unconditional": {
+      "days": 7,
+      "description": "七天无理由退货期，符合条件自动通过"
+    },
+    "conditional": {
+      "days": 15,
+      "description": "7-15天仅接受质量问题/描述不符类退货"
+    },
+    "strict": {
+      "days": 30,
+      "description": "15-30天需严格审查，仅重大质量问题可能通过"
+    },
+    "reject": {
+      "days": 999,
+      "description": "超过30天一律拒绝（除非法律另有规定）"
+    }
+  }
+}

@@ -5,6 +5,7 @@ import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.dto.OmsOrderReturnApplyResult;
 import com.macro.mall.dto.OmsReturnApplyQueryParam;
 import com.macro.mall.dto.OmsUpdateStatusParam;
+import com.macro.mall.model.OmsOrder;
 import com.macro.mall.model.OmsOrderReturnApply;
 import com.macro.mall.service.OmsOrderReturnApplyService;
 import io.swagger.annotations.Api;
@@ -66,6 +67,27 @@ public class OmsOrderReturnApplyController {
             return CommonResult.success(count);
         }
         return CommonResult.failed();
+    }
+
+    @ApiOperation("Agent调用-获取订单信息用于退货审核")
+    @RequestMapping(value = "/audit/order/{orderId}", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<OmsOrder> getOrderInfoForAudit(@PathVariable Long orderId) {
+        OmsOrder order = returnApplyService.getOrderForAudit(orderId);
+        if (order != null) {
+            return CommonResult.success(order);
+        }
+        return CommonResult.failed("订单不存在");
+    }
+
+    @ApiOperation("Agent调用-获取用户历史退货申请")
+    @RequestMapping(value = "/audit/history", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<List<OmsOrderReturnApply>> getHistoryForAudit(
+            @RequestParam String memberUsername,
+            @RequestParam(defaultValue = "10") int limit) {
+        List<OmsOrderReturnApply> history = returnApplyService.getHistoryForAudit(memberUsername, limit);
+        return CommonResult.success(history);
     }
 
 }

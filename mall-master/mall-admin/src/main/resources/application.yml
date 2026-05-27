@@ -50,6 +50,7 @@ secure:
       - /chat/**
       - /admin/logout
       - /minio/upload
+      - /returnApply/audit/**
 
 aliyun:
   oss:

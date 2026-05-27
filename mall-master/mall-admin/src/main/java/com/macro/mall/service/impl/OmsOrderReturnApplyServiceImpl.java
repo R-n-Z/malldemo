@@ -5,7 +5,9 @@ import com.macro.mall.dao.OmsOrderReturnApplyDao;
 import com.macro.mall.dto.OmsOrderReturnApplyResult;
 import com.macro.mall.dto.OmsReturnApplyQueryParam;
 import com.macro.mall.dto.OmsUpdateStatusParam;
+import com.macro.mall.mapper.OmsOrderMapper;
 import com.macro.mall.mapper.OmsOrderReturnApplyMapper;
+import com.macro.mall.model.OmsOrder;
 import com.macro.mall.model.OmsOrderReturnApply;
 import com.macro.mall.model.OmsOrderReturnApplyExample;
 import com.macro.mall.service.OmsOrderReturnApplyService;
@@ -25,6 +27,8 @@ public class OmsOrderReturnApplyServiceImpl implements OmsOrderReturnApplyServic
     private OmsOrderReturnApplyDao returnApplyDao;
     @Autowired
     private OmsOrderReturnApplyMapper returnApplyMapper;
+    @Autowired
+    private OmsOrderMapper orderMapper;
     @Override
     public List<OmsOrderReturnApply> list(OmsReturnApplyQueryParam queryParam, Integer pageSize, Integer pageNum) {
         PageHelper.startPage(pageNum,pageSize);
@@ -74,5 +78,21 @@ public class OmsOrderReturnApplyServiceImpl implements OmsOrderReturnApplyServic
     @Override
     public OmsOrderReturnApplyResult getItem(Long id) {
         return returnApplyDao.getDetail(id);
+    }
+
+    @Override
+    public OmsOrder getOrderForAudit(Long orderId) {
+        return orderMapper.selectByPrimaryKey(orderId);
+    }
+
+    @Override
+    public List<OmsOrderReturnApply> getHistoryForAudit(String memberUsername, int limit) {
+        OmsOrderReturnApplyExample example = new OmsOrderReturnApplyExample();
+        example.createCriteria().andMemberUsernameEqualTo(memberUsername);
+        example.setOrderByClause("create_time DESC");
+        if (limit > 0) {
+            com.github.pagehelper.PageHelper.startPage(1, limit);
+        }
+        return returnApplyMapper.selectByExample(example);
     }
 }

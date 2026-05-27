@@ -3,6 +3,7 @@ package com.macro.mall.service;
 import com.macro.mall.dto.OmsOrderReturnApplyResult;
 import com.macro.mall.dto.OmsReturnApplyQueryParam;
 import com.macro.mall.dto.OmsUpdateStatusParam;
+import com.macro.mall.model.OmsOrder;
 import com.macro.mall.model.OmsOrderReturnApply;
 
 import java.util.List;
@@ -31,4 +32,14 @@ public interface OmsOrderReturnApplyService {
      * 获取指定申请详情
      */
     OmsOrderReturnApplyResult getItem(Long id);
+
+    /**
+     * Agent调用-根据订单ID获取订单收货时间等信息
+     */
+    OmsOrder getOrderForAudit(Long orderId);
+
+    /**
+     * Agent调用-获取用户历史退货申请
+     */
+    List<OmsOrderReturnApply> getHistoryForAudit(String memberUsername, int limit);
 }

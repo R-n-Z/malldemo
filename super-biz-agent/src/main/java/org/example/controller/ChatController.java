@@ -6,6 +6,7 @@ import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 import com.alibaba.cloud.ai.graph.NodeOutput;
 import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.agent.flow.agent.SupervisorAgent;
 import com.alibaba.cloud.ai.graph.streaming.OutputType;
 import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
 import lombok.Getter;
@@ -83,19 +84,14 @@ public class ChatController {
             DashScopeApi dashScopeApi = chatService.createDashScopeApi();
             DashScopeChatModel chatModel = chatService.createStandardChatModel(dashScopeApi);
 
-            // 记录可用工具
-            chatService.logAvailableTools();
+            logger.info("开始 SupervisorAgent 多智能体对话");
 
-            logger.info("开始 ReactAgent 对话（支持自动工具调用）");
-            
-            // 构建系统提示词（包含历史消息和商品上下文）
-            String systemPrompt = chatService.buildSystemPrompt(history, request.getProductName());
-            
-            // 创建 ReactAgent
-            ReactAgent agent = chatService.createReactAgent(chatModel, systemPrompt);
-            
-            // 执行对话
-            String fullAnswer = chatService.executeChat(agent, request.getQuestion());
+            // 创建 SupervisorAgent（含4个子Agent：售前/售后/升级/闲聊）
+            SupervisorAgent supervisor = chatService.createSupervisorAgent(
+                chatModel, request.getProductName(), history);
+
+            // 执行对话：Supervisor自动路由到合适的子Agent
+            String fullAnswer = chatService.executeSupervisor(supervisor, request.getQuestion());
             
             // 更新会话历史
             session.addMessage(request.getQuestion(), fullAnswer);
@@ -174,95 +170,38 @@ public class ChatController {
                 // 记录可用工具
                 chatService.logAvailableTools();
 
-                logger.info("开始 ReactAgent 流式对话（支持自动工具调用）");
-                
-                // 构建系统提示词（包含历史消息）
-                String systemPrompt = chatService.buildSystemPrompt(history, request.getProductName());
-                
-                // 创建 ReactAgent
-                ReactAgent agent = chatService.createReactAgent(chatModel, systemPrompt);
-                
+                logger.info("开始 SupervisorAgent 流式对话");
+
+                // 创建 SupervisorAgent
+                SupervisorAgent supervisor = chatService.createSupervisorAgent(
+                    chatModel, request.getProductName(), history);
+
                 // 用于累积完整答案
                 StringBuilder fullAnswerBuilder = new StringBuilder();
-                
-                // 使用 agent.stream() 进行流式对话
-                Flux<NodeOutput> stream = agent.stream(request.getQuestion());
-                
-                stream.subscribe(
-                    output -> {
-                        try {
-                            // 检查是否为 StreamingOutput 类型
-                            if (output instanceof StreamingOutput streamingOutput) {
-                                OutputType type = streamingOutput.getOutputType();
-                                
-                                // 处理模型推理的流式输出
-                                if (type == OutputType.AGENT_MODEL_STREAMING) {
-                                    // 流式增量内容，逐步显示
-                                    String chunk = streamingOutput.message().getText();
-                                    if (chunk != null && !chunk.isEmpty()) {
-                                        fullAnswerBuilder.append(chunk);
-                                        
-                                        // 实时发送到前端
-                                        emitter.send(SseEmitter.event()
-                                                .name("message")
-                                                .data(SseMessage.content(chunk), MediaType.APPLICATION_JSON));
-                                        
-                                        logger.info("发送流式内容: {}", chunk);
-                                    }
-                                } else if (type == OutputType.AGENT_MODEL_FINISHED) {
-                                    // 模型推理完成
-                                    logger.info("模型输出完成");
-                                } else if (type == OutputType.AGENT_TOOL_FINISHED) {
-                                    // 工具调用完成
-                                    logger.info("工具调用完成: {}", output.node());
-                                } else if (type == OutputType.AGENT_HOOK_FINISHED) {
-                                    // Hook 执行完成
-                                    logger.debug("Hook 执行完成: {}", output.node());
-                                }
-                            }
-                        } catch (IOException e) {
-                            logger.error("发送流式消息失败", e);
-                            throw new RuntimeException(e);
-                        }
-                    },
-                    error -> {
-                        // 错误处理
-                        logger.error("ReactAgent 流式对话失败", error);
-                        try {
-                            emitter.send(SseEmitter.event()
-                                    .name("message")
-                                    .data(SseMessage.error(error.getMessage()), MediaType.APPLICATION_JSON));
-                        } catch (IOException ex) {
-                            logger.error("发送错误消息失败", ex);
-                        }
-                        emitter.completeWithError(error);
-                    },
-                    () -> {
-                        // 完成处理
-                        try {
-                            String fullAnswer = fullAnswerBuilder.toString();
-                            logger.info("ReactAgent 流式对话完成 - SessionId: {}, 答案长度: {}", 
-                                request.getId(), fullAnswer.length());
-                            
-                            // 更新会话历史
-                            session.addMessage(request.getQuestion(), fullAnswer);
-                            logger.info("已更新会话历史 - SessionId: {}, 当前消息对数: {}", 
-                                request.getId(), session.getMessagePairCount());
-                            
-                            // 发送完成标记
-                            emitter.send(SseEmitter.event()
-                                    .name("message")
-                                    .data(SseMessage.done(), MediaType.APPLICATION_JSON));
-                            emitter.complete();
-                        } catch (IOException e) {
-                            logger.error("发送完成消息失败", e);
-                            emitter.completeWithError(e);
-                        }
-                    }
-                );
+
+                // 执行对话（非流式，但通过SSE分块发送）
+                String fullAnswer = chatService.executeSupervisor(supervisor, request.getQuestion());
+                fullAnswerBuilder.append(fullAnswer);
+
+                // 分块发送答案（模拟流式效果）
+                int chunkSize = 50;
+                for (int i = 0; i < fullAnswer.length(); i += chunkSize) {
+                    int end = Math.min(i + chunkSize, fullAnswer.length());
+                    emitter.send(SseEmitter.event().name("message")
+                        .data(SseMessage.content(fullAnswer.substring(i, end)), MediaType.APPLICATION_JSON));
+                }
+
+                // 更新会话历史
+                session.addMessage(request.getQuestion(), fullAnswer);
+                logger.info("SupervisorAgent 流式完成 - SessionId: {}, 答案长度: {}",
+                    request.getId(), fullAnswer.length());
+
+                emitter.send(SseEmitter.event().name("message")
+                    .data(SseMessage.done(), MediaType.APPLICATION_JSON));
+                emitter.complete();
 
             } catch (Exception e) {
-                logger.error("ReactAgent 对话初始化失败", e);
+                logger.error("SupervisorAgent 初始化失败", e);
                 try {
                     emitter.send(SseEmitter.event()
                             .name("message")
