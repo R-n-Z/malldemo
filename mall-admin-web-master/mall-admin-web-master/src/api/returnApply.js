@@ -28,3 +28,11 @@ export function getApplyDetail(id) {
     method:'get'
   })
 }
+
+export function auditApply(applyId) {
+  return request({
+    url:'/api/return/audit',
+    method:'post',
+    data: { applyId }
+  })
+}

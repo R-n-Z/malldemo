@@ -36,15 +36,22 @@
 							件商品 实付款
 							<text class="price">{{item.payAmount}}</text>
 						</view>
+						<!-- 各状态共用：申请售后始终显示 -->
 						<view class="action-box b-t" v-if="item.status == 0">
+							<button class="action-btn" @click="handleReturnApply(item.id)">申请售后</button>
 							<button class="action-btn" @click="cancelOrder(item.id)">取消订单</button>
 							<button class="action-btn recom" @click="payOrder(item.id)">立即付款</button>
 						</view>
+						<view class="action-box b-t" v-if="item.status == 1">
+							<button class="action-btn" @click="handleReturnApply(item.id)">申请售后</button>
+						</view>
 						<view class="action-box b-t" v-if="item.status == 2">
+							<button class="action-btn" @click="handleReturnApply(item.id)">申请售后</button>
 							<button class="action-btn" >查看物流</button>
 							<button class="action-btn recom" @click="receiveOrder(item.id)">确认收货</button>
 						</view>
 						<view class="action-box b-t" v-if="item.status == 3">
+							<button class="action-btn" @click="handleReturnApply(item.id)">申请售后</button>
 							<button class="action-btn recom" >评价商品</button>
 						</view>
 					</view>
@@ -275,6 +282,12 @@
 				        }
 				    }
 				});
+			},
+			//申请售后（跳转到退货申请页）
+			handleReturnApply(orderId){
+				uni.navigateTo({
+					url: `/pages/order/returnApply?orderId=${orderId}`
+				})
 			},
 			//查看订单详情
 			showOrderDetail(orderId){

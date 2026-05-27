@@ -39,6 +39,66 @@ services:
     networks:
       - mall-network
 
+  # Elasticsearch 搜索引擎
+  elasticsearch:
+    image: elasticsearch:8.10.2
+    container_name: mall-elasticsearch
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      TZ: Asia/Shanghai
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - mall-network
+
+  # MongoDB 文档数据库（浏览历史、品牌关注、商品收藏）
+  mongodb:
+    image: mongo:7.0
+    container_name: mall-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mall-network
+
+  # RabbitMQ 消息队列（取消订单延迟队列）
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: mall-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: mall
+      RABBITMQ_DEFAULT_PASS: mall
+      RABBITMQ_DEFAULT_VHOST: /mall
+      TZ: Asia/Shanghai
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mall-network
+
   # MinIO 对象存储
   minio:
     image: minio/minio:latest
@@ -91,6 +151,9 @@ volumes:
   mysql_data:
   redis_data:
   minio_data:
+  es_data:
+  mongo_data:
+  rabbitmq_data:
 
 networks:
   mall-network:

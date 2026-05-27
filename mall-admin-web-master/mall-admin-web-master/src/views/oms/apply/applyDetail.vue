@@ -39,6 +39,22 @@
         <span class="font-title-medium color-danger">￥{{totalAmount}}</span>
       </div>
     </el-card>
+    <el-card shadow="never" class="standard-margin" v-show="orderReturnApply.status===0">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="font-title-medium">AI 智能预审</span>
+        <el-button type="warning" size="small" icon="el-icon-cpu"
+                   :loading="auditing" @click="handleAiAudit"
+                   :disabled="audited">AI 预审</el-button>
+      </div>
+      <div v-if="auditReport" class="audit-report" style="margin-top:12px">
+        <el-alert :title="auditSummary" :type="auditResultType" :closable="false" show-icon></el-alert>
+        <el-collapse style="margin-top:10px">
+          <el-collapse-item title="查看完整审核报告" name="1">
+            <div v-html="renderedReport" style="line-height:1.8;font-size:13px"></div>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+    </el-card>
     <el-card shadow="never" class="standard-margin">
       <span class="font-title-medium">服务单信息</span>
       <div class="form-container-border">
@@ -195,7 +211,7 @@
   </div>
 </template>
 <script>
-  import {getApplyDetail,updateApplyStatus} from '@/api/returnApply';
+  import {getApplyDetail,updateApplyStatus,auditApply} from '@/api/returnApply';
   import {fetchList} from '@/api/companyAddress';
   import {formatDate} from '@/utils/date';
 
@@ -246,7 +262,12 @@
         productList: null,
         proofPics: null,
         updateStatusParam: Object.assign({}, defaultUpdateStatusParam),
-        companyAddressList: null
+        companyAddressList: null,
+        auditing: false,
+        audited: false,
+        auditReport: null,
+        auditResultType: 'info',
+        auditSummary: ''
       }
     },
     created() {
@@ -272,6 +293,18 @@
           }
         }
         return null;
+      },
+      renderedReport() {
+        if (!this.auditReport) return '';
+        return this.auditReport
+          .replace(/### (.*)/g, '<h4>$1</h4>')
+          .replace(/## (.*)/g, '<h3>$1</h3>')
+          .replace(/# (.*)/g, '<h2>$1</h2>')
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\- (.*)/g, '<li>$1</li>')
+          .replace(/\n\n/g, '</p><p>')
+          .replace(/\n/g, '<br>')
+          .replace(/<li>/g, '<ul><li>').replace(/<\/li>/g, '</li></ul>');
       }
     },
     filters: {
@@ -349,6 +382,34 @@
             });
             this.$router.back();
           });
+        });
+      },
+      handleAiAudit() {
+        this.auditing = true;
+        this.auditReport = null;
+        auditApply(this.id).then(response => {
+          this.auditing = false;
+          if (response.success && response.auditReport) {
+            this.auditReport = response.auditReport;
+            this.audited = true;
+            if (response.auditPassed) {
+              this.auditResultType = 'success';
+              this.auditSummary = 'AI 审核建议：通过 — ' + response.reason;
+            } else if (response.needHumanSupport) {
+              this.auditResultType = 'error';
+              this.auditSummary = 'AI 审核建议：转人工 — ' + response.reason
+                + '（连续拒绝 ' + response.consecutiveRejections + ' 次）';
+            } else {
+              this.auditResultType = 'warning';
+              this.auditSummary = 'AI 审核建议：拒绝 — ' + response.reason;
+            }
+          } else {
+            this.auditReport = null;
+            this.$message.warning('AI 预审未返回有效结果：' + (response.reason || '未知错误'));
+          }
+        }).catch(err => {
+          this.auditing = false;
+          this.$message.error('AI 预审请求失败，agent 服务可能未启动');
         });
       }
     }

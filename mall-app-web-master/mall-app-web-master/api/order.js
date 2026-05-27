@@ -70,3 +70,26 @@ export function fetchAliapyStatus(params) {
 		params: params
 	})
 }
+
+export function createReturnApply(data) {
+	return request({
+		method: 'POST',
+		url: '/returnApply/create',
+		data: data
+	})
+}
+
+export function fetchReturnApplyList(params) {
+	return request({
+		method: 'GET',
+		url: '/returnApply/list',
+		params: params
+	})
+}
+
+export function fetchReturnApplyDetail(applyId) {
+	return request({
+		method: 'GET',
+		url: `/returnApply/${applyId}`
+	})
+}

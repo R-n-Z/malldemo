@@ -40,6 +40,11 @@ module.exports = {
         target: process.env.API_URL || 'http://localhost:8080',
         changeOrigin: true,
         pathRewrite: {}
+      },
+      '/api/return': {
+        target: process.env.AGENT_URL || 'http://localhost:9900',
+        changeOrigin: true,
+        pathRewrite: {}
       }
     },
 
