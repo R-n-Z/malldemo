@@ -1,0 +1,124 @@
+{
+  "description": "退货规则关键词检索测试用例 - 用于评估混合检索（向量+精确）的召回率和准确率",
+  "version": "2.0",
+  "collection": "rule_keywords",
+  "searchTool": "HybridSearchTools.hybridKeywordSearch",
+  "topK": 5,
+  "config": {
+    "vectorTopK": 5,
+    "vectorThreshold": 0.4,
+    "keywordWeight": 1.0,
+    "vectorWeight": 0.8
+  },
+  "testCases": [
+    {"id":"R001","category":"精确-投诉","text":"我要投诉你们，服务太差了","expectedKeywords":["投诉"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.7,"description":"明确关键词"},
+    {"id":"R002","category":"精确-投诉","text":"不给我解决的话我就去投诉","expectedKeywords":["投诉"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.7,"description":"条件句+投诉"},
+    {"id":"R003","category":"精确-投诉","text":"你们客服态度很差我要举报","expectedKeywords":["投诉"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.7,"description":"举报同义→投诉"},
+
+    {"id":"R010","category":"精确-12315","text":"不解决我就打12315举报","expectedKeywords":["12315"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.7,"description":"明确12315"},
+    {"id":"R011","category":"精确-12315","text":"12315消费者热线见","expectedKeywords":["12315"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.7,"description":"12315+热线"},
+
+    {"id":"R020","category":"精确-律师","text":"我的律师会联系你们公司","expectedKeywords":["律师"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.7,"description":"明确律师"},
+    {"id":"R021","category":"精确-律师","text":"我已经咨询过法务了","expectedKeywords":["律师"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.6,"description":"法务同义→律师"},
+
+    {"id":"R030","category":"精确-生鲜","text":"我买的水果到了是坏的，要退货","expectedKeywords":["水果"],"expectedRuleTypes":["strict_reject"],"expectedMinScore":0.5,"description":"水果=生鲜"},
+    {"id":"R031","category":"精确-生鲜","text":"三文鱼收到已经变质了","expectedKeywords":["海鲜","三文鱼"],"expectedRuleTypes":["strict_reject"],"expectedMinScore":0.5,"description":"海鲜子类"},
+    {"id":"R032","category":"精确-生鲜","text":"买的蛋糕到了发现发霉了能退吗","expectedKeywords":["蛋糕","熟食"],"expectedRuleTypes":["strict_reject"],"expectedMinScore":0.5,"description":"蛋糕=熟食"},
+
+    {"id":"R040","category":"精确-内衣","text":"买的内裤不合适，想退","expectedKeywords":["内裤"],"expectedRuleTypes":["strict_reject"],"expectedMinScore":0.5,"description":"内裤=个人卫生"},
+    {"id":"R041","category":"精确-内衣","text":"文胸买小了能换吗","expectedKeywords":["文胸"],"expectedRuleTypes":["strict_reject"],"expectedMinScore":0.5,"description":"文胸=内衣类"},
+    {"id":"R042","category":"精确-内衣","text":"袜子穿过了能退吗","expectedKeywords":["袜子"],"expectedRuleTypes":["strict_reject"],"expectedMinScore":0.5,"description":"袜子=个人卫生"},
+
+    {"id":"R050","category":"精确-定制","text":"这个是刻了名字的定制款，但是质量有问题","expectedKeywords":["定制"],"expectedRuleTypes":["strict_reject"],"expectedMinScore":0.5,"description":"定制+质量问题"},
+
+    {"id":"R060","category":"语义-假货","text":"这个看起来和专柜的不一样，是不是仿的？","expectedKeywords":["假货"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"语义等价-无直接关键词"},
+    {"id":"R061","category":"语义-假货","text":"收到的东西做工很粗糙感觉不像正品","expectedKeywords":["假货"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"描述性→假货"},
+    {"id":"R062","category":"语义-假货","text":"这个跟我在实体店买的不一样","expectedKeywords":["假货"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"比较式质疑"},
+    {"id":"R063","category":"语义-假货","text":"怀疑买到山寨货了","expectedKeywords":["假货"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.5,"description":"直接说山寨"},
+
+    {"id":"R070","category":"语义-欺诈","text":"你们完全是在骗人，虚假宣传","expectedKeywords":["欺诈"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"骗人+虚假宣传"},
+    {"id":"R071","category":"语义-欺诈","text":"网页上说的和实际完全不一样，这不是坑人吗","expectedKeywords":["欺诈"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"坑人→欺诈"},
+    {"id":"R072","category":"语义-欺诈","text":"你们就是诈骗，我要报警","expectedKeywords":["欺诈"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.4,"description":"诈骗→欺诈"},
+
+    {"id":"R080","category":"语义-起诉","text":"等着被告吧，我已经准备去法院了","expectedKeywords":["起诉"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"被告+法院→起诉"},
+    {"id":"R081","category":"语义-起诉","text":"不退款我就打官司","expectedKeywords":["起诉"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.5,"description":"打官司→起诉"},
+    {"id":"R082","category":"语义-起诉","text":"等着收传票吧","expectedKeywords":["起诉"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"传票→诉讼→起诉"},
+
+    {"id":"R090","category":"语义-过敏","text":"用了这个面霜脸上起了很多红点，又痒又痛","expectedKeywords":["过敏"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"症状描述"},
+    {"id":"R091","category":"语义-过敏","text":"擦完之后皮肤发红发烫","expectedKeywords":["过敏"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"发红发烫→过敏"},
+    {"id":"R092","category":"语义-过敏","text":"孩子用了以后身上起疹子了","expectedKeywords":["过敏"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"起疹→过敏(儿童场景)"},
+
+    {"id":"R100","category":"语义-曝光","text":"我要把这件事发到微博上让大家都看看","expectedKeywords":["曝光"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"微博曝光"},
+    {"id":"R101","category":"语义-曝光","text":"信不信我把聊天记录发抖音","expectedKeywords":["曝光"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"抖音曝光"},
+    {"id":"R102","category":"语义-曝光","text":"让全网都知道你们是怎么对待客户的","expectedKeywords":["曝光"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"全网公开→曝光"},
+
+    {"id":"R110","category":"语义-媒体","text":"我认识电视台的记者，让他们来采访一下","expectedKeywords":["媒体"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"记者→媒体"},
+    {"id":"R111","category":"语义-媒体","text":"有报社的朋友，可以让他们报道","expectedKeywords":["媒体"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"报社→媒体"},
+
+    {"id":"R120","category":"语义-工商","text":"我要去市场监督管理局举报","expectedKeywords":["工商"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"全称→工商"},
+    {"id":"R121","category":"语义-工商","text":"我要找工商部门投诉","expectedKeywords":["工商"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.5,"description":"直接说工商"},
+
+    {"id":"R130","category":"语义-受伤","text":"使用这个电器的时候手被划了一下，有安全隐患","expectedKeywords":["受伤"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"划伤→受伤"},
+    {"id":"R131","category":"语义-受伤","text":"这个东西有尖锐的边缘差点割到手","expectedKeywords":["受伤"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"割到→受伤"},
+    {"id":"R132","category":"语义-受伤","text":"用的时候突然冒烟差点烫到","expectedKeywords":["受伤"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"烫到→受伤"},
+
+    {"id":"R140","category":"同义-不想要","text":"买回来发现用不上，冲动消费了","expectedKeywords":["不想要了"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"用不上+冲动→AA-001"},
+    {"id":"R141","category":"同义-不想要","text":"下错订单了想取消重新买","expectedKeywords":["不想要了","买错了"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"下错单→AA-001"},
+    {"id":"R142","category":"同义-不想要","text":"多拍了一件不需要想退掉","expectedKeywords":["不想要了","多拍"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"多拍→AA-001"},
+    {"id":"R143","category":"同义-不想要","text":"买了之后不想要了，还没拆封","expectedKeywords":["不想要了"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.5,"description":"直接说关键词"},
+    {"id":"R144","category":"同义-不想要","text":"就是不喜欢了可以退吗","expectedKeywords":["不想要了","不喜欢"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"不喜欢→AA-001"},
+
+    {"id":"R150","category":"同义-质量","text":"收到的东西做工太差了，线头到处都是","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"做工差+线头→AA-002"},
+    {"id":"R151","category":"同义-质量","text":"用了两天屏幕就不亮了","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"功能异常→AA-002"},
+    {"id":"R152","category":"同义-质量","text":"衣服洗了一次就掉色严重","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"掉色→AA-002"},
+    {"id":"R153","category":"同义-质量","text":"拉链拉了两下就坏了","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"坏了→AA-002"},
+    {"id":"R154","category":"同义-质量","text":"这个做工也太粗糙了明显是残次品","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.4,"description":"残次品→AA-002"},
+
+    {"id":"R160","category":"同义-描述不符","text":"实物颜色和网页图片差太多了","expectedKeywords":["与描述不符"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"色差→AA-003"},
+    {"id":"R161","category":"同义-描述不符","text":"买的L码发过来的是M码","expectedKeywords":["与描述不符","发错货"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"尺码错误→AA-003"},
+    {"id":"R162","category":"同义-描述不符","text":"少发了一个充电器配件","expectedKeywords":["与描述不符","少件"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"少件→AA-003"},
+    {"id":"R163","category":"同义-描述不符","text":"网页写的有蓝牙功能实际没有","expectedKeywords":["与描述不符"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"功能不符→AA-003"},
+    {"id":"R164","category":"同义-描述不符","text":"图片上明明有三个颜色可选发过来只有一个","expectedKeywords":["与描述不符"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"规格不符→AA-003"},
+
+    {"id":"R170","category":"同义-物流损坏","text":"收到的时候盒子已经完全烂了，里面东西也变形了","expectedKeywords":["物流损坏"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"包装破损+变形→AA-004"},
+    {"id":"R171","category":"同义-物流损坏","text":"快递过来的时候包装都破了","expectedKeywords":["物流损坏"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"包装破了→AA-004"},
+    {"id":"R172","category":"同义-物流损坏","text":"收到发现屏幕被快递摔裂了","expectedKeywords":["物流损坏"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"快递摔坏→AA-004"},
+
+    {"id":"R180","category":"模糊-错别字","text":"我要去消协头诉","expectedKeywords":["消协"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.4,"description":"投诉→头诉(错字)"},
+    {"id":"R181","category":"模糊-错别字","text":"你们这是期诈行为","expectedKeywords":["欺诈"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"欺诈→期诈(错字)"},
+    {"id":"R182","category":"模糊-错别字","text":"你们卖的是仿品吧？高访的？","expectedKeywords":["假货"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"高仿→高访(错字)"},
+    {"id":"R183","category":"模糊-错别字","text":"这个是不文胸尺寸不对","expectedKeywords":["文胸"],"expectedRuleTypes":["strict_reject"],"expectedMinScore":0.5,"description":"文胸含在文本中"},
+
+    {"id":"R190","category":"混合-双重风险","text":"买的化妆品拆开试了一次不合适，而且用了脸上不舒服","expectedKeywords":["化妆品","过敏"],"expectedRuleTypes":["strict_reject","escalation"],"expectedMinScore":0.35,"description":"strictReject+escalation"},
+    {"id":"R191","category":"混合-双重风险","text":"买的海鲜到了已经臭了，我要退款，不然就投诉","expectedKeywords":["海鲜","投诉"],"expectedRuleTypes":["strict_reject","escalation"],"expectedMinScore":0.35,"description":"生鲜+投诉"},
+    {"id":"R192","category":"混合-三重风险","text":"这个定制刻字的打火机收到就是坏的，我要去12315投诉你们卖假货","expectedKeywords":["定制","12315","假货"],"expectedRuleTypes":["strict_reject","escalation","escalation"],"expectedMinScore":0.35,"description":"定制+12315+假货"},
+    {"id":"R193","category":"混合-升级路径","text":"手指被割伤了而且你们客服态度极差我要投诉到工商","expectedKeywords":["受伤","投诉","工商"],"expectedRuleTypes":["escalation","escalation","escalation"],"expectedMinScore":0.35,"description":"受伤+投诉+工商"},
+
+    {"id":"R200","category":"无关文本","text":"今天天气真好，适合出去逛街","expectedKeywords":[],"expectedRuleTypes":[],"expectedMinScore":0,"description":"完全无关"},
+    {"id":"R201","category":"无关文本","text":"请问这个商品什么时候补货？","expectedKeywords":[],"expectedRuleTypes":[],"expectedMinScore":0,"description":"正常商品咨询"},
+    {"id":"R202","category":"无关文本","text":"可以开发票吗","expectedKeywords":[],"expectedRuleTypes":[],"expectedMinScore":0,"description":"发票问题-非规则类"},
+    {"id":"R203","category":"无关文本","text":"能便宜点吗有优惠券吗","expectedKeywords":[],"expectedRuleTypes":[],"expectedMinScore":0,"description":"议价-非规则类"},
+
+    {"id":"R210","category":"边界-退款","text":"我的退款什么时候到账？已经等了三天了","expectedKeywords":["退款"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"正常退款查询(LOW优先级)"},
+    {"id":"R211","category":"边界-退款","text":"都五天了退款还没到","expectedKeywords":["退款"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"退款延迟抱怨"},
+
+    {"id":"R220","category":"否定句","text":"我不是要投诉你们，只是想问问售后流程","expectedKeywords":[],"expectedRuleTypes":[],"expectedMinScore":0,"description":"明确否定投诉意图"},
+    {"id":"R221","category":"否定句","text":"没有质量问题，就是想换个颜色","expectedKeywords":[],"expectedRuleTypes":[],"expectedMinScore":0,"description":"明确否定质量问题"},
+    {"id":"R222","category":"否定句","text":"不用打12315我就是问一下","expectedKeywords":[],"expectedRuleTypes":[],"expectedMinScore":0,"description":"提及12315但明确否定"},
+
+    {"id":"R230","category":"长文本","text":"事情是这样的，一周前我在你们平台买了一个电热水壶，收到后用了两天发现按钮不灵敏了，有时候按下去弹不上来，而且壶身有明显的划痕，感觉不太像全新的。我跟客服沟通了好几次都没解决，现在想退货退款，但是你们客服说超过7天了不给退。我想问一下这种情况到底能不能退","expectedKeywords":["质量问题","退款"],"expectedRuleTypes":["auto_approve","escalation"],"expectedMinScore":0.3,"description":"长文本多意图"},
+    {"id":"R231","category":"长文本","text":"这个面膜我女朋友用了之后脸上又红又肿还起了很多小疙瘩，去医院看了医生说是接触性皮炎，花了好几百医药费。我想问问你们这个产品是不是有问题，能不能赔偿医药费，不然我就找律师了","expectedKeywords":["过敏","律师"],"expectedRuleTypes":["escalation","escalation"],"expectedMinScore":0.3,"description":"长文本-过敏+律师威胁"},
+
+    {"id":"R240","category":"电话场景","text":"喂你好我要投诉","expectedKeywords":["投诉"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.6,"description":"电话开场白"},
+    {"id":"R241","category":"电话场景","text":"喂你们这什么东西啊收到就坏了","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"电话抱怨"},
+    {"id":"R242","category":"电话场景","text":"喂你给我查一下退款怎么还没到","expectedKeywords":["退款"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"电话退款查询"}
+  ],
+  "metrics": {
+    "primary": ["Recall@K", "Precision@K", "MRR", "Hit@K", "F1@K"],
+    "K_values": [1, 3, 5],
+    "thresholds": {
+      "relevant_score": 0.4,
+      "description": "混合检索得分阈值"
+    }
+  }
+}

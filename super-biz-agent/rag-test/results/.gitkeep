@@ -1,0 +1,7 @@
+# 测试结果文件目录
+# 运行测试后会自动生成以下文件:
+#   faq_results_YYYYMMDD_HHmmss.json    - FAQ检索结果
+#   exact_results_YYYYMMDD_HHmmss.json  - 精确匹配结果
+#   hybrid_results_YYYYMMDD_HHmmss.json - 混合检索结果
+#   *_latest.json                        - 最新结果(覆盖)
+#   *_report.json                        - 评估报告

@@ -1,0 +1,730 @@
+{
+  "R001": [
+    {
+      "keyword": "投诉",
+      "score": 1.0,
+      "source": "exact",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    }
+  ],
+  "R002": [
+    {
+      "keyword": "投诉",
+      "score": 1.0,
+      "source": "exact",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "起诉",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R003": [
+    {
+      "keyword": "投诉",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    }
+  ],
+  "R010": [
+    {
+      "keyword": "12315",
+      "score": 1.0,
+      "source": "exact",
+      "category": "监管投诉",
+      "priority": "CRITICAL"
+    },
+    {
+      "keyword": "投诉",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    }
+  ],
+  "R011": [
+    {
+      "keyword": "12315",
+      "score": 1.0,
+      "source": "exact",
+      "category": "监管投诉",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R020": [
+    {
+      "keyword": "律师",
+      "score": 1.0,
+      "source": "exact",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R021": [
+    {
+      "keyword": "律师",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R030": [
+    {
+      "keyword": "水果",
+      "score": 1.0,
+      "source": "exact",
+      "category": "生鲜易腐商品",
+      "priority": ""
+    },
+    {
+      "keyword": "假货",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "严重质量问题",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    },
+    {
+      "keyword": "尾货",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "限时/抢购商品",
+      "priority": ""
+    }
+  ],
+  "R031": [],
+  "R032": [
+    {
+      "keyword": "蛋糕",
+      "score": 1.0,
+      "source": "exact",
+      "category": "生鲜易腐商品",
+      "priority": ""
+    },
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R040": [
+    {
+      "keyword": "内裤",
+      "score": 1.0,
+      "source": "exact",
+      "category": "个人卫生用品",
+      "priority": ""
+    },
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R041": [
+    {
+      "keyword": "文胸",
+      "score": 1.0,
+      "source": "exact",
+      "category": "个人卫生用品",
+      "priority": ""
+    },
+    {
+      "keyword": "兑换码",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "数字化商品",
+      "priority": ""
+    }
+  ],
+  "R042": [
+    {
+      "keyword": "袜子",
+      "score": 1.0,
+      "source": "exact",
+      "category": "个人卫生用品",
+      "priority": ""
+    },
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R050": [
+    {
+      "keyword": "定制款",
+      "score": 1.0,
+      "source": "exact",
+      "category": "定制类商品",
+      "priority": ""
+    },
+    {
+      "keyword": "定制",
+      "score": 1.0,
+      "source": "exact",
+      "category": "定制类商品",
+      "priority": ""
+    }
+  ],
+  "R060": [
+    {
+      "keyword": "假货",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "严重质量问题",
+      "priority": "HIGH"
+    }
+  ],
+  "R061": [
+    {
+      "keyword": "假货",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "严重质量问题",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "化妆品",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "已使用的消耗品",
+      "priority": ""
+    },
+    {
+      "keyword": "护肤品",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "已使用的消耗品",
+      "priority": ""
+    },
+    {
+      "keyword": "保健品",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "已使用的消耗品",
+      "priority": ""
+    },
+    {
+      "keyword": "食品",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "已使用的消耗品",
+      "priority": ""
+    }
+  ],
+  "R062": [
+    {
+      "keyword": "样机",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "限时/抢购商品",
+      "priority": ""
+    }
+  ],
+  "R063": [
+    {
+      "keyword": "假货",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "严重质量问题",
+      "priority": "HIGH"
+    }
+  ],
+  "R070": [
+    {
+      "keyword": "欺诈",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "严重投诉",
+      "priority": "HIGH"
+    }
+  ],
+  "R071": [
+    {
+      "keyword": "欺诈",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "严重投诉",
+      "priority": "HIGH"
+    }
+  ],
+  "R072": [
+    {
+      "keyword": "欺诈",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "严重投诉",
+      "priority": "HIGH"
+    }
+  ],
+  "R080": [
+    {
+      "keyword": "起诉",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R081": [
+    {
+      "keyword": "退款",
+      "score": 1.0,
+      "source": "exact",
+      "category": "金额敏感",
+      "priority": "LOW"
+    },
+    {
+      "keyword": "起诉",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R082": [],
+  "R090": [],
+  "R091": [],
+  "R092": [
+    {
+      "keyword": "过敏",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "人身安全",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "电子券",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "数字化商品",
+      "priority": ""
+    },
+    {
+      "keyword": "电子书",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "数字化商品",
+      "priority": ""
+    }
+  ],
+  "R100": [],
+  "R101": [
+    {
+      "keyword": "曝光",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "舆情风险",
+      "priority": "MEDIUM"
+    }
+  ],
+  "R102": [],
+  "R110": [
+    {
+      "keyword": "媒体",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "舆情风险",
+      "priority": "MEDIUM"
+    }
+  ],
+  "R111": [
+    {
+      "keyword": "媒体",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "舆情风险",
+      "priority": "MEDIUM"
+    }
+  ],
+  "R120": [
+    {
+      "keyword": "投诉",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "工商",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "行政投诉",
+      "priority": "HIGH"
+    }
+  ],
+  "R121": [
+    {
+      "keyword": "工商",
+      "score": 1.0,
+      "source": "exact",
+      "category": "行政投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "投诉",
+      "score": 1.0,
+      "source": "exact",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "起诉",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R130": [],
+  "R131": [
+    {
+      "keyword": "受伤",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "人身安全",
+      "priority": "HIGH"
+    }
+  ],
+  "R132": [],
+  "R140": [],
+  "R141": [],
+  "R142": [
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R143": [],
+  "R144": [
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R150": [],
+  "R151": [],
+  "R152": [],
+  "R153": [],
+  "R154": [
+    {
+      "keyword": "化妆品",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "已使用的消耗品",
+      "priority": ""
+    },
+    {
+      "keyword": "护肤品",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "已使用的消耗品",
+      "priority": ""
+    },
+    {
+      "keyword": "保健品",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "已使用的消耗品",
+      "priority": ""
+    },
+    {
+      "keyword": "食品",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "已使用的消耗品",
+      "priority": ""
+    }
+  ],
+  "R160": [],
+  "R161": [
+    {
+      "keyword": "激活码",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "数字化商品",
+      "priority": ""
+    },
+    {
+      "keyword": "兑换码",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "数字化商品",
+      "priority": ""
+    }
+  ],
+  "R162": [],
+  "R163": [],
+  "R164": [],
+  "R170": [],
+  "R171": [],
+  "R172": [],
+  "R180": [
+    {
+      "keyword": "消协",
+      "score": 1.0,
+      "source": "exact",
+      "category": "监管投诉",
+      "priority": "CRITICAL"
+    },
+    {
+      "keyword": "投诉",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "起诉",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R181": [],
+  "R182": [
+    {
+      "keyword": "假货",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "严重质量问题",
+      "priority": "HIGH"
+    }
+  ],
+  "R183": [
+    {
+      "keyword": "文胸",
+      "score": 1.0,
+      "source": "exact",
+      "category": "个人卫生用品",
+      "priority": ""
+    }
+  ],
+  "R190": [
+    {
+      "keyword": "化妆品",
+      "score": 1.0,
+      "source": "exact",
+      "category": "已使用的消耗品",
+      "priority": ""
+    }
+  ],
+  "R191": [
+    {
+      "keyword": "海鲜",
+      "score": 1.0,
+      "source": "exact",
+      "category": "生鲜易腐商品",
+      "priority": ""
+    },
+    {
+      "keyword": "退款",
+      "score": 1.0,
+      "source": "exact",
+      "category": "金额敏感",
+      "priority": "LOW"
+    },
+    {
+      "keyword": "投诉",
+      "score": 1.0,
+      "source": "exact",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "起诉",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R192": [
+    {
+      "keyword": "12315",
+      "score": 1.0,
+      "source": "exact",
+      "category": "监管投诉",
+      "priority": "CRITICAL"
+    },
+    {
+      "keyword": "假货",
+      "score": 1.0,
+      "source": "exact",
+      "category": "严重质量问题",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "定制",
+      "score": 1.0,
+      "source": "exact",
+      "category": "定制类商品",
+      "priority": ""
+    },
+    {
+      "keyword": "投诉",
+      "score": 1.0,
+      "source": "exact",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "刻字",
+      "score": 1.0,
+      "source": "exact",
+      "category": "定制类商品",
+      "priority": ""
+    },
+    {
+      "keyword": "尾货",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "限时/抢购商品",
+      "priority": ""
+    }
+  ],
+  "R193": [
+    {
+      "keyword": "工商",
+      "score": 1.0,
+      "source": "exact",
+      "category": "行政投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "投诉",
+      "score": 1.0,
+      "source": "exact",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    }
+  ],
+  "R200": [],
+  "R201": [],
+  "R202": [],
+  "R203": [],
+  "R210": [
+    {
+      "keyword": "退款",
+      "score": 1.0,
+      "source": "exact",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R211": [
+    {
+      "keyword": "退款",
+      "score": 1.0,
+      "source": "exact",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R220": [
+    {
+      "keyword": "投诉",
+      "score": 1.0,
+      "source": "exact",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "课程",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "数字化商品",
+      "priority": ""
+    }
+  ],
+  "R221": [
+    {
+      "keyword": "个性化",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "定制类商品",
+      "priority": ""
+    }
+  ],
+  "R222": [
+    {
+      "keyword": "12315",
+      "score": 1.0,
+      "source": "exact",
+      "category": "监管投诉",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R230": [
+    {
+      "keyword": "退款",
+      "score": 1.0,
+      "source": "exact",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R231": [
+    {
+      "keyword": "律师",
+      "score": 1.0,
+      "source": "exact",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R240": [
+    {
+      "keyword": "投诉",
+      "score": 1.0,
+      "source": "exact",
+      "category": "官方投诉",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "起诉",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R241": [],
+  "R242": [
+    {
+      "keyword": "退款",
+      "score": 1.0,
+      "source": "exact",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ]
+}

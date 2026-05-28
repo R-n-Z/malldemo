@@ -142,70 +142,63 @@ public class VectorEmbeddingService {
         return floatEmbedding;
     }
 
+    private static final int MAX_BATCH_SIZE = 10;
+
     /**
-     * 批量生成向量嵌入
-     * 
-     * @param contents 文本内容列表
-     * @return 向量嵌入列表
+     * 批量生成向量嵌入（自动分批，每批最多10条，符合 DashScope API 限制）
      */
     public List<List<Float>> generateEmbeddings(List<String> contents) {
-        try {
-            if (contents == null || contents.isEmpty()) {
-                logger.warn("内容列表为空，无法生成向量");
-                return Collections.emptyList();
-            }
+        if (contents == null || contents.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-            logger.info("开始批量生成向量嵌入, 数量: {}", contents.size());
-            
-            // 确保 API Key 已设置
+        logger.info("开始批量生成向量嵌入, 总数: {}", contents.size());
+        List<List<Float>> all = new ArrayList<>();
+        int batches = (contents.size() + MAX_BATCH_SIZE - 1) / MAX_BATCH_SIZE;
+
+        for (int i = 0; i < batches; i++) {
+            int from = i * MAX_BATCH_SIZE;
+            int to = Math.min(from + MAX_BATCH_SIZE, contents.size());
+            List<String> sub = contents.subList(from, to);
+            logger.info("批次 {}/{}: {} 条", i + 1, batches, sub.size());
+            all.addAll(doGenerateEmbeddings(sub));
+        }
+
+        logger.info("批量生成完成, 总数: {}", all.size());
+        return all;
+    }
+
+    private List<List<Float>> doGenerateEmbeddings(List<String> contents) {
+        try {
             if (Constants.apiKey == null || Constants.apiKey.isEmpty()) {
-                logger.warn("检测到 Constants.apiKey 为空，重新设置");
                 Constants.apiKey = apiKey;
             }
 
-            // 构建请求参数 - 批量输入
             TextEmbeddingParam param = TextEmbeddingParam
                     .builder()
                     .model(model)
                     .texts(contents)
                     .build();
 
-            // 调用 API
             TextEmbeddingResult result = textEmbedding.call(param);
 
-            // 检查结果
             if (result == null || result.getOutput() == null || result.getOutput().getEmbeddings() == null) {
                 throw new RuntimeException("批量 DashScope API 返回空结果");
             }
 
-            List<TextEmbeddingResultItem> embeddingItems = result.getOutput().getEmbeddings();
-            
-            if (embeddingItems.isEmpty()) {
-                throw new RuntimeException("批量 DashScope API 返回空向量列表");
-            }
-
-            // 转换结果
+            List<TextEmbeddingResultItem> items = result.getOutput().getEmbeddings();
             List<List<Float>> embeddings = new ArrayList<>();
-            for (TextEmbeddingResultItem item : embeddingItems) {
-                List<Double> embeddingDoubles = item.getEmbedding();
-                List<Float> embedding = new ArrayList<>(embeddingDoubles.size());
-                for (Double value : embeddingDoubles) {
-                    embedding.add(value.floatValue());
+            for (TextEmbeddingResultItem item : items) {
+                List<Float> emb = new ArrayList<>(item.getEmbedding().size());
+                for (Double v : item.getEmbedding()) {
+                    emb.add(v.floatValue());
                 }
-                embeddings.add(embedding);
+                embeddings.add(emb);
             }
-
-            logger.info("成功批量生成向量嵌入, 数量: {}, 维度: {}", 
-                embeddings.size(), 
-                embeddings.isEmpty() ? 0 : embeddings.get(0).size());
-
             return embeddings;
-
         } catch (NoApiKeyException e) {
-            logger.error("批量调用时 API Key 未设置或无效", e);
-            throw new RuntimeException("API Key 未设置，请配置 dashscope.api.key", e);
+            throw new RuntimeException("API Key 未设置", e);
         } catch (Exception e) {
-            logger.error("批量生成向量嵌入失败", e);
             throw new RuntimeException("批量生成向量嵌入失败: " + e.getMessage(), e);
         }
     }

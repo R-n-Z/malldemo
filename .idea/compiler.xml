@@ -3,51 +3,6 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for mall" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/2.7.5/spring-boot-configuration-processor-2.7.5.jar" />
-        </processorPath>
-        <module name="mall-security" />
-        <module name="mall-admin" />
-        <module name="mall-search" />
-        <module name="mall-demo" />
-        <module name="mall-mbg" />
-        <module name="mall-common" />
-        <module name="mall-portal" />
-<<<<<<< HEAD
-      </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="super-biz-agent" target="17" />
-    </bytecodeTargetLevel>
-=======
-      </profile>
-      <profile name="Annotation profile for super-biz-agent" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
-        </processorPath>
-        <module name="super-biz-agent" />
-      </profile>
-    </annotationProcessing>
->>>>>>> master
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="mall-admin" options="-parameters" />
-      <module name="mall-common" options="-parameters" />
-      <module name="mall-demo" options="-parameters" />
-      <module name="mall-mbg" options="-parameters" />
-      <module name="mall-portal" options="-parameters" />
-      <module name="mall-search" options="-parameters" />
-      <module name="mall-security" options="-parameters" />
-      <module name="super-biz-agent" options="-parameters" />
-    </option>
   </component>
 </project>

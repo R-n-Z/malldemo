@@ -1,0 +1,900 @@
+{
+  "dataset": "D:\\DownLoad\\malldemo-main\\super-biz-agent\\rag-test\\datasets\\faq_test_cases.json",
+  "summary": {
+    "Recall@1": 0.8833333333333333,
+    "Precision@1": 0.75,
+    "Hit@1": 0.75,
+    "MRR@1": 0.75,
+    "F1@1": 0.8112244897959183,
+    "Recall@3": 1.0,
+    "Precision@3": 0.28888888888888886,
+    "Hit@3": 0.8666666666666667,
+    "MRR@3": 0.8083333333333333,
+    "F1@3": 0.4482758620689655,
+    "Recall@5": 1.0,
+    "Precision@5": 0.17333333333333334,
+    "Hit@5": 0.8666666666666667,
+    "MRR@5": 0.8083333333333333,
+    "F1@5": 0.29545454545454547,
+    "Micro_Recall": 1.0,
+    "Total_Queries": 60,
+    "Total_Relevant": 52,
+    "Total_Relevant_Retrieved": 52,
+    "Avg_Results_Per_Query": 3.0,
+    "Eval_Mode": "text_match"
+  },
+  "category_analysis": {
+    "中英混杂": {
+      "Recall@1": 0.6666666666666666,
+      "Precision@1": 0.6666666666666666,
+      "Hit@1": 0.6666666666666666,
+      "MRR@1": 0.6666666666666666,
+      "F1@1": 0.6666666666666666,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 0.8333333333333334,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.20000000000000004,
+      "Hit@5": 1.0,
+      "MRR@5": 0.8333333333333334,
+      "F1@5": 0.3333333333333334,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 3,
+      "Total_Relevant": 3,
+      "Total_Relevant_Retrieved": 3,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "否定意图": {
+      "Recall@1": 1.0,
+      "Precision@1": 0.3333333333333333,
+      "Hit@1": 0.3333333333333333,
+      "MRR@1": 0.3333333333333333,
+      "F1@1": 0.5,
+      "Recall@3": 1.0,
+      "Precision@3": 0.1111111111111111,
+      "Hit@3": 0.3333333333333333,
+      "MRR@3": 0.3333333333333333,
+      "F1@3": 0.19999999999999998,
+      "Recall@5": 1.0,
+      "Precision@5": 0.06666666666666667,
+      "Hit@5": 0.3333333333333333,
+      "MRR@5": 0.3333333333333333,
+      "F1@5": 0.125,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 3,
+      "Total_Relevant": 1,
+      "Total_Relevant_Retrieved": 1,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "商品查询-价格": {
+      "Recall@1": 1.0,
+      "Precision@1": 1.0,
+      "Hit@1": 1.0,
+      "MRR@1": 1.0,
+      "F1@1": 1.0,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 1.0,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.20000000000000004,
+      "Hit@5": 1.0,
+      "MRR@5": 1.0,
+      "F1@5": 0.3333333333333334,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 3,
+      "Total_Relevant": 3,
+      "Total_Relevant_Retrieved": 3,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "商品查询-品牌": {
+      "Recall@1": 1.0,
+      "Precision@1": 1.0,
+      "Hit@1": 1.0,
+      "MRR@1": 1.0,
+      "F1@1": 1.0,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 1.0,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.20000000000000004,
+      "Hit@5": 1.0,
+      "MRR@5": 1.0,
+      "F1@5": 0.3333333333333334,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 3,
+      "Total_Relevant": 3,
+      "Total_Relevant_Retrieved": 3,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "商品查询-库存": {
+      "Recall@1": 0.5,
+      "Precision@1": 0.5,
+      "Hit@1": 0.5,
+      "MRR@1": 0.5,
+      "F1@1": 0.5,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 0.75,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.2,
+      "Hit@5": 1.0,
+      "MRR@5": 0.75,
+      "F1@5": 0.33333333333333337,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 2,
+      "Total_Relevant": 2,
+      "Total_Relevant_Retrieved": 2,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "商品查询-规格": {
+      "Recall@1": 1.0,
+      "Precision@1": 1.0,
+      "Hit@1": 1.0,
+      "MRR@1": 1.0,
+      "F1@1": 1.0,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 1.0,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.2,
+      "Hit@5": 1.0,
+      "MRR@5": 1.0,
+      "F1@5": 0.33333333333333337,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 2,
+      "Total_Relevant": 2,
+      "Total_Relevant_Retrieved": 2,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "无关查询-闲聊": {
+      "Recall@1": 1.0,
+      "Precision@1": 0.0,
+      "Hit@1": 0.0,
+      "MRR@1": 0.0,
+      "F1@1": 0.0,
+      "Recall@3": 1.0,
+      "Precision@3": 0.0,
+      "Hit@3": 0.0,
+      "MRR@3": 0.0,
+      "F1@3": 0.0,
+      "Recall@5": 1.0,
+      "Precision@5": 0.0,
+      "Hit@5": 0.0,
+      "MRR@5": 0.0,
+      "F1@5": 0.0,
+      "Micro_Recall": 0.0,
+      "Total_Queries": 6,
+      "Total_Relevant": 0,
+      "Total_Relevant_Retrieved": 0,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "模糊查询": {
+      "Recall@1": 0.3333333333333333,
+      "Precision@1": 0.3333333333333333,
+      "Hit@1": 0.3333333333333333,
+      "MRR@1": 0.3333333333333333,
+      "F1@1": 0.3333333333333333,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 0.6666666666666666,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.20000000000000004,
+      "Hit@5": 1.0,
+      "MRR@5": 0.6666666666666666,
+      "F1@5": 0.3333333333333334,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 3,
+      "Total_Relevant": 3,
+      "Total_Relevant_Retrieved": 3,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "短查询": {
+      "Recall@1": 0.5,
+      "Precision@1": 0.5,
+      "Hit@1": 0.5,
+      "MRR@1": 0.5,
+      "F1@1": 0.5,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 0.75,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.2,
+      "Hit@5": 1.0,
+      "MRR@5": 0.75,
+      "F1@5": 0.33333333333333337,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 4,
+      "Total_Relevant": 4,
+      "Total_Relevant_Retrieved": 4,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "精确匹配": {
+      "Recall@1": 1.0,
+      "Precision@1": 1.0,
+      "Hit@1": 1.0,
+      "MRR@1": 1.0,
+      "F1@1": 1.0,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 1.0,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.2,
+      "Hit@5": 1.0,
+      "MRR@5": 1.0,
+      "F1@5": 0.33333333333333337,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 5,
+      "Total_Relevant": 5,
+      "Total_Relevant_Retrieved": 5,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "语义相似-售后": {
+      "Recall@1": 1.0,
+      "Precision@1": 1.0,
+      "Hit@1": 1.0,
+      "MRR@1": 1.0,
+      "F1@1": 1.0,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 1.0,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.2,
+      "Hit@5": 1.0,
+      "MRR@5": 1.0,
+      "F1@5": 0.33333333333333337,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 5,
+      "Total_Relevant": 5,
+      "Total_Relevant_Retrieved": 5,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "语义相似-支付": {
+      "Recall@1": 0.8571428571428571,
+      "Precision@1": 0.8571428571428571,
+      "Hit@1": 0.8571428571428571,
+      "MRR@1": 0.8571428571428571,
+      "F1@1": 0.8571428571428571,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 0.9285714285714286,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.2,
+      "Hit@5": 1.0,
+      "MRR@5": 0.9285714285714286,
+      "F1@5": 0.33333333333333337,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 7,
+      "Total_Relevant": 7,
+      "Total_Relevant_Retrieved": 7,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "语义相似-物流": {
+      "Recall@1": 1.0,
+      "Precision@1": 1.0,
+      "Hit@1": 1.0,
+      "MRR@1": 1.0,
+      "F1@1": 1.0,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 1.0,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.2,
+      "Hit@5": 1.0,
+      "MRR@5": 1.0,
+      "F1@5": 0.33333333333333337,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 5,
+      "Total_Relevant": 5,
+      "Total_Relevant_Retrieved": 5,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "语义相似-退换货": {
+      "Recall@1": 1.0,
+      "Precision@1": 1.0,
+      "Hit@1": 1.0,
+      "MRR@1": 1.0,
+      "F1@1": 1.0,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 1.0,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.20000000000000004,
+      "Hit@5": 1.0,
+      "MRR@5": 1.0,
+      "F1@5": 0.3333333333333334,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 6,
+      "Total_Relevant": 6,
+      "Total_Relevant_Retrieved": 6,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    },
+    "长查询": {
+      "Recall@1": 1.0,
+      "Precision@1": 1.0,
+      "Hit@1": 1.0,
+      "MRR@1": 1.0,
+      "F1@1": 1.0,
+      "Recall@3": 1.0,
+      "Precision@3": 0.3333333333333333,
+      "Hit@3": 1.0,
+      "MRR@3": 1.0,
+      "F1@3": 0.5,
+      "Recall@5": 1.0,
+      "Precision@5": 0.20000000000000004,
+      "Hit@5": 1.0,
+      "MRR@5": 1.0,
+      "F1@5": 0.3333333333333334,
+      "Micro_Recall": 1.0,
+      "Total_Queries": 3,
+      "Total_Relevant": 3,
+      "Total_Relevant_Retrieved": 3,
+      "Avg_Results_Per_Query": 3.0,
+      "Eval_Mode": "text_match"
+    }
+  },
+  "failed_queries": [],
+  "per_case": [
+    {
+      "id": "FAQ-001",
+      "query": "支持哪些支付方式？",
+      "expected": [
+        "支持哪些支付方式？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-002",
+      "query": "如何申请退换货？",
+      "expected": [
+        "如何申请退换货？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-003",
+      "query": "发货需要多长时间？",
+      "expected": [
+        "发货需要多长时间？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-004",
+      "query": "HLA海澜之家短袖T恤男基础款多少钱？",
+      "expected": [
+        "HLA海澜之家短袖T恤男基础款多少钱？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-005",
+      "query": "怎么联系人工客服？",
+      "expected": [
+        "怎么联系人工客服？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-010",
+      "query": "你们收哪些付款方式？",
+      "expected": [
+        "支持哪些支付方式？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-011",
+      "query": "能用微信付钱吗？",
+      "expected": [
+        "支持哪些支付方式？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-012",
+      "query": "付款有哪几种办法？",
+      "expected": [
+        "支持哪些支付方式？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-013",
+      "query": "可以支付宝支付不？",
+      "expected": [
+        "支持哪些支付方式？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-014",
+      "query": "支付不成功怎么办？",
+      "expected": [
+        "支付失败怎么办？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-015",
+      "query": "付完款显示失败咋回事",
+      "expected": [
+        "支付失败怎么办？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-016",
+      "query": "能货到再给钱不",
+      "expected": [
+        "可以货到付款吗？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-020",
+      "query": "怎么退货？",
+      "expected": [
+        "如何申请退换货？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-021",
+      "query": "东西不满意想退掉",
+      "expected": [
+        "如何申请退换货？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-022",
+      "query": "退款几天能到账？",
+      "expected": [
+        "退货后多久能收到退款？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-023",
+      "query": "运费谁来承担？",
+      "expected": [
+        "退换货运费谁出？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-024",
+      "query": "换货运费算谁的",
+      "expected": [
+        "退换货运费谁出？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-025",
+      "query": "退回去的快递费我自己出吗",
+      "expected": [
+        "退换货运费谁出？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-030",
+      "query": "什么时候能发货？",
+      "expected": [
+        "发货需要多长时间？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-031",
+      "query": "下单后几天发",
+      "expected": [
+        "发货需要多长时间？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-032",
+      "query": "怎么查快递到哪了？",
+      "expected": [
+        "如何查询物流信息？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-033",
+      "query": "帮我看看包裹走到哪了",
+      "expected": [
+        "如何查询物流信息？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-034",
+      "query": "快递单号在哪看",
+      "expected": [
+        "如何查询物流信息？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-040",
+      "query": "保修期是多长时间？",
+      "expected": [
+        "保修多久？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-041",
+      "query": "这个东西保修几年",
+      "expected": [
+        "保修多久？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-042",
+      "query": "怎么联系客服？",
+      "expected": [
+        "怎么联系人工客服？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-043",
+      "query": "有客服电话吗",
+      "expected": [
+        "怎么联系人工客服？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-044",
+      "query": "我要找人工",
+      "expected": [
+        "怎么联系人工客服？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-050",
+      "query": "iPhone 14多少钱？",
+      "expected": [
+        "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-051",
+      "query": "那个苹果14现在什么价",
+      "expected": [
+        "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-052",
+      "query": "海澜之家最便宜的T恤卖多少",
+      "expected": [
+        "HLA海澜之家短袖T恤男基础款多少钱？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-053",
+      "query": "海澜之家的T恤有货吗？",
+      "expected": [
+        "HLA海澜之家简约动物印花短袖T恤有货吗？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-054",
+      "query": "iPhone 14还有货没",
+      "expected": [
+        "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有货吗？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-055",
+      "query": "小米电视有什么规格？",
+      "expected": [
+        "小米（MI）小米电视4A 有什么规格可选？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-056",
+      "query": "iPad有哪些容量可选",
+      "expected": [
+        "Apple iPad 10.9英寸平板电脑 2022年款有什么规格可选？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-057",
+      "query": "耐克鞋子有哪些型号？",
+      "expected": [
+        "NIKE有哪些产品？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-058",
+      "query": "小米都卖什么东西",
+      "expected": [
+        "小米有哪些产品？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-059",
+      "query": "华为有什么手机",
+      "expected": [
+        "华为有哪些产品？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-060",
+      "query": "我前两天买了一件海澜之家的短袖T恤基础款藏青色的，现在想看看物流到哪了怎么查",
+      "expected": [
+        "如何查询物流信息？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-061",
+      "query": "你好我想问一下如果是质量问题想要退货的话这个运费是你们出还是我自己出麻烦了谢谢",
+      "expected": [
+        "退换货运费谁出？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-062",
+      "query": "那个什么，我之前买了个东西现在不想要了，还没发货，能不能取消订单退钱给我啊",
+      "expected": [
+        "如何申请退换货？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-070",
+      "query": "我不是想退货，只是想问问颜色会不会掉色",
+      "expected": [],
+      "retrieved_count": 3,
+      "relevant_retrieved": 0
+    },
+    {
+      "id": "FAQ-071",
+      "query": "没有要退款的意思，就是想了解下退货流程以备不时之需",
+      "expected": [
+        "如何申请退换货？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-072",
+      "query": "不退款不退货，就问问",
+      "expected": [],
+      "retrieved_count": 3,
+      "relevant_retrieved": 0
+    },
+    {
+      "id": "FAQ-080",
+      "query": "今天天气怎么样？",
+      "expected": [],
+      "retrieved_count": 3,
+      "relevant_retrieved": 0
+    },
+    {
+      "id": "FAQ-081",
+      "query": "帮我写一首诗",
+      "expected": [],
+      "retrieved_count": 3,
+      "relevant_retrieved": 0
+    },
+    {
+      "id": "FAQ-082",
+      "query": "讲个笑话听听",
+      "expected": [],
+      "retrieved_count": 3,
+      "relevant_retrieved": 0
+    },
+    {
+      "id": "FAQ-083",
+      "query": "你会做红烧肉吗教我",
+      "expected": [],
+      "retrieved_count": 3,
+      "relevant_retrieved": 0
+    },
+    {
+      "id": "FAQ-084",
+      "query": "推荐个旅游景点",
+      "expected": [],
+      "retrieved_count": 3,
+      "relevant_retrieved": 0
+    },
+    {
+      "id": "FAQ-085",
+      "query": "帮我算一下328乘以17等于多少",
+      "expected": [],
+      "retrieved_count": 3,
+      "relevant_retrieved": 0
+    },
+    {
+      "id": "FAQ-090",
+      "query": "发货",
+      "expected": [
+        "发货需要多长时间？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-091",
+      "query": "退款",
+      "expected": [
+        "退货后多久能收到退款？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-092",
+      "query": "支付",
+      "expected": [
+        "支持哪些支付方式？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-093",
+      "query": "保修",
+      "expected": [
+        "保修多久？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-100",
+      "query": "那个苹果的手机现在卖多钱？",
+      "expected": [
+        "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-101",
+      "query": "那个牌子的气垫鞋白色的多少钱",
+      "expected": [
+        "耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码多少钱？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-102",
+      "query": "能放热水那个万和的多少",
+      "expected": [
+        "万和（Vanward)燃气热水器天然气家用四重防冻直流变频节能全新升级增压水伺服恒温高抗风多少钱？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-110",
+      "query": "iPhone 14 price 多少",
+      "expected": [
+        "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-111",
+      "query": "Nike AIR MAX白色的有stock吗",
+      "expected": [
+        "耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码有货吗？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    },
+    {
+      "id": "FAQ-112",
+      "query": "这个T-shirt能不能退",
+      "expected": [
+        "如何申请退换货？"
+      ],
+      "retrieved_count": 3,
+      "relevant_retrieved": 1
+    }
+  ]
+}

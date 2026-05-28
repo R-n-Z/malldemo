@@ -1,0 +1,1202 @@
+{
+  "FAQ-001": [
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.0,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.6751334,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.8391109,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-002": [
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.0,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.77904564,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.8005618,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-003": [
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 0.0,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.630831,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.7656323,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-004": [
+    {
+      "keyword": "HLA海澜之家短袖T恤男基础款多少钱？",
+      "score": 0.0,
+      "category": "T恤",
+      "source": "vector"
+    },
+    {
+      "keyword": "HLA海澜之家简约动物印花短袖T恤多少钱？",
+      "score": 0.10678166,
+      "category": "T恤",
+      "source": "vector"
+    },
+    {
+      "keyword": "HLA海澜之家蓝灰花纹圆领针织布短袖T恤多少钱？",
+      "score": 0.17373139,
+      "category": "T恤",
+      "source": "vector"
+    }
+  ],
+  "FAQ-005": [
+    {
+      "keyword": "怎么联系人工客服？",
+      "score": 0.0,
+      "category": "售后",
+      "source": "vector"
+    },
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.97121245,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.99316925,
+      "category": "退换货",
+      "source": "vector"
+    }
+  ],
+  "FAQ-010": [
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.48726076,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.6030384,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.8563046,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-011": [
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.57589203,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.6249828,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.7547771,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-012": [
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.6102513,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.6918214,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.7250968,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-013": [
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.5212249,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.5982683,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.8026817,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-014": [
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.20201367,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.8603736,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.9062786,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-015": [
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.300562,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.92869675,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.92919827,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-016": [
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.4945436,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "退换货运费谁出？",
+      "score": 0.83274806,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.8477743,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-020": [
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.46353576,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.5755531,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.7541641,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-021": [
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.6665213,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.82541376,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.8571199,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-022": [
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.4252079,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 0.6475938,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.78634596,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-023": [
+    {
+      "keyword": "退换货运费谁出？",
+      "score": 0.65141284,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 1.0164369,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 1.0760658,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-024": [
+    {
+      "keyword": "退换货运费谁出？",
+      "score": 0.41028476,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 0.9389802,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "如何查询物流信息？",
+      "score": 1.0477238,
+      "category": "物流",
+      "source": "vector"
+    }
+  ],
+  "FAQ-025": [
+    {
+      "keyword": "退换货运费谁出？",
+      "score": 0.4279915,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.82859474,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 0.9192146,
+      "category": "物流",
+      "source": "vector"
+    }
+  ],
+  "FAQ-030": [
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 0.4395709,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.7217244,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.7492763,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-031": [
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 0.5578831,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.60497177,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.9292307,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-032": [
+    {
+      "keyword": "如何查询物流信息？",
+      "score": 0.5821152,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 1.0267192,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 1.0528307,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-033": [
+    {
+      "keyword": "如何查询物流信息？",
+      "score": 0.6979434,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 0.7591208,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.9109309,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-034": [
+    {
+      "keyword": "如何查询物流信息？",
+      "score": 0.658405,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 1.0345078,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 1.0427881,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-040": [
+    {
+      "keyword": "保修多久？",
+      "score": 0.23477903,
+      "category": "售后",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 0.87421864,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.9592477,
+      "category": "退换货",
+      "source": "vector"
+    }
+  ],
+  "FAQ-041": [
+    {
+      "keyword": "保修多久？",
+      "score": 0.36687136,
+      "category": "售后",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 1.0646887,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 1.0745261,
+      "category": "物流",
+      "source": "vector"
+    }
+  ],
+  "FAQ-042": [
+    {
+      "keyword": "怎么联系人工客服？",
+      "score": 0.27571142,
+      "category": "售后",
+      "source": "vector"
+    },
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.9294077,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.9486667,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-043": [
+    {
+      "keyword": "怎么联系人工客服？",
+      "score": 0.48237997,
+      "category": "售后",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.92385817,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "保修多久？",
+      "score": 0.96775734,
+      "category": "售后",
+      "source": "vector"
+    }
+  ],
+  "FAQ-044": [
+    {
+      "keyword": "怎么联系人工客服？",
+      "score": 0.580104,
+      "category": "售后",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 1.1102567,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "万和（Vanward)燃气热水器天然气家用四重防冻直流变频节能全新升级增压水伺服恒温高抗风适合什么人？",
+      "score": 1.1511765,
+      "category": "厨卫大电",
+      "source": "vector"
+    }
+  ],
+  "FAQ-050": [
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？",
+      "score": 0.39442742,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有优惠吗？",
+      "score": 0.6164932,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有货吗？",
+      "score": 0.686378,
+      "category": "手机通讯",
+      "source": "vector"
+    }
+  ],
+  "FAQ-051": [
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？",
+      "score": 0.5227926,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有优惠吗？",
+      "score": 0.68850756,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有货吗？",
+      "score": 0.7252238,
+      "category": "手机通讯",
+      "source": "vector"
+    }
+  ],
+  "FAQ-052": [
+    {
+      "keyword": "HLA海澜之家短袖T恤男基础款多少钱？",
+      "score": 0.26757133,
+      "category": "T恤",
+      "source": "vector"
+    },
+    {
+      "keyword": "HLA海澜之家简约动物印花短袖T恤多少钱？",
+      "score": 0.32276565,
+      "category": "T恤",
+      "source": "vector"
+    },
+    {
+      "keyword": "HLA海澜之家蓝灰花纹圆领针织布短袖T恤多少钱？",
+      "score": 0.35296452,
+      "category": "T恤",
+      "source": "vector"
+    }
+  ],
+  "FAQ-053": [
+    {
+      "keyword": "HLA海澜之家短袖T恤男基础款有货吗？",
+      "score": 0.21269506,
+      "category": "T恤",
+      "source": "vector"
+    },
+    {
+      "keyword": "HLA海澜之家简约动物印花短袖T恤有货吗？",
+      "score": 0.30955243,
+      "category": "T恤",
+      "source": "vector"
+    },
+    {
+      "keyword": "HLA海澜之家蓝灰花纹圆领针织布短袖T恤有货吗？",
+      "score": 0.32702848,
+      "category": "T恤",
+      "source": "vector"
+    }
+  ],
+  "FAQ-054": [
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有货吗？",
+      "score": 0.45319206,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有优惠吗？",
+      "score": 0.6461375,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？",
+      "score": 0.6835703,
+      "category": "手机通讯",
+      "source": "vector"
+    }
+  ],
+  "FAQ-055": [
+    {
+      "keyword": "小米（MI）小米电视4A 有什么规格可选？",
+      "score": 0.40935954,
+      "category": "电视",
+      "source": "vector"
+    },
+    {
+      "keyword": "小米（MI）小米电视4A 65英寸有什么规格可选？",
+      "score": 0.47746983,
+      "category": "电视",
+      "source": "vector"
+    },
+    {
+      "keyword": "小米（MI）小米电视4A 多少钱？",
+      "score": 0.5826752,
+      "category": "电视",
+      "source": "vector"
+    }
+  ],
+  "FAQ-056": [
+    {
+      "keyword": "Apple iPad 10.9英寸平板电脑 2022年款有什么规格可选？",
+      "score": 0.7123797,
+      "category": "平板电脑",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 8 Plus 64GB 红色特别版 移动联通电信4G手机有什么规格可选？",
+      "score": 0.8079822,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPad 10.9英寸平板电脑 2022年款有货吗？",
+      "score": 0.80812144,
+      "category": "平板电脑",
+      "source": "vector"
+    }
+  ],
+  "FAQ-057": [
+    {
+      "keyword": "NIKE有哪些产品？",
+      "score": 0.5211862,
+      "category": "品牌",
+      "source": "vector"
+    },
+    {
+      "keyword": "耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码和耐克NIKE 男子 休闲鞋 ROSHE RUN 运动鞋 511881-010黑色41码哪个好？",
+      "score": 0.65790355,
+      "category": "男鞋",
+      "source": "vector"
+    },
+    {
+      "keyword": "耐克NIKE 男子 休闲鞋 ROSHE RUN 运动鞋 511881-010黑色41码有货吗？",
+      "score": 0.6688068,
+      "category": "男鞋",
+      "source": "vector"
+    }
+  ],
+  "FAQ-058": [
+    {
+      "keyword": "小米有哪些产品？",
+      "score": 0.4237088,
+      "category": "品牌",
+      "source": "vector"
+    },
+    {
+      "keyword": "小米（MI）小米电视4A 有货吗？",
+      "score": 0.7475827,
+      "category": "电视",
+      "source": "vector"
+    },
+    {
+      "keyword": "小米8 全面屏游戏智能手机 6GB+64GB 黑色 全网通4G 双卡双待有货吗？",
+      "score": 0.7603897,
+      "category": "手机通讯",
+      "source": "vector"
+    }
+  ],
+  "FAQ-059": [
+    {
+      "keyword": "华为有哪些产品？",
+      "score": 0.31347626,
+      "category": "品牌",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 8 Plus 64GB 红色特别版 移动联通电信4G手机和HUAWEI Mate 50 直屏旗舰 超光变XMAGE影像 北斗卫星消息哪个好？",
+      "score": 0.7316242,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "华为 HUAWEI P20 有货吗？",
+      "score": 0.7323102,
+      "category": "手机通讯",
+      "source": "vector"
+    }
+  ],
+  "FAQ-060": [
+    {
+      "keyword": "如何查询物流信息？",
+      "score": 0.54231906,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "HLA海澜之家短袖T恤男基础款有货吗？",
+      "score": 0.5904468,
+      "category": "T恤",
+      "source": "vector"
+    },
+    {
+      "keyword": "HLA海澜之家简约动物印花短袖T恤有货吗？",
+      "score": 0.65007156,
+      "category": "T恤",
+      "source": "vector"
+    }
+  ],
+  "FAQ-061": [
+    {
+      "keyword": "退换货运费谁出？",
+      "score": 0.37787813,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.7948886,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.81720424,
+      "category": "退换货",
+      "source": "vector"
+    }
+  ],
+  "FAQ-062": [
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.6982196,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.74904597,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.7739495,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-070": [
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.7347131,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.8618546,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.9113008,
+      "category": "退换货",
+      "source": "vector"
+    }
+  ],
+  "FAQ-071": [
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.66477764,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.6922343,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.8015938,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-072": [
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.787392,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.815557,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.82499564,
+      "category": "退换货",
+      "source": "vector"
+    }
+  ],
+  "FAQ-080": [
+    {
+      "keyword": "如何查询物流信息？",
+      "score": 1.2398567,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 1.2854047,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "HUAWEI Mate 50 直屏旗舰 超光变XMAGE影像 北斗卫星消息有货吗？",
+      "score": 1.3133175,
+      "category": "手机通讯",
+      "source": "vector"
+    }
+  ],
+  "FAQ-081": [
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 1.4793706,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "怎么联系人工客服？",
+      "score": 1.4836882,
+      "category": "售后",
+      "source": "vector"
+    },
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 1.5244539,
+      "category": "物流",
+      "source": "vector"
+    }
+  ],
+  "FAQ-082": [
+    {
+      "keyword": "怎么联系人工客服？",
+      "score": 1.3322594,
+      "category": "售后",
+      "source": "vector"
+    },
+    {
+      "keyword": "HUAWEI Mate 50 直屏旗舰 超光变XMAGE影像 北斗卫星消息有货吗？",
+      "score": 1.3756516,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "手机通讯有哪些推荐？",
+      "score": 1.3854178,
+      "category": "手机通讯",
+      "source": "vector"
+    }
+  ],
+  "FAQ-083": [
+    {
+      "keyword": "万和有哪些产品？",
+      "score": 1.3707426,
+      "category": "品牌",
+      "source": "vector"
+    },
+    {
+      "keyword": "万和（Vanward)燃气热水器天然气家用四重防冻直流变频节能全新升级增压水伺服恒温高抗风有货吗？",
+      "score": 1.3953059,
+      "category": "厨卫大电",
+      "source": "vector"
+    },
+    {
+      "keyword": "万和（Vanward)燃气热水器天然气家用四重防冻直流变频节能全新升级增压水伺服恒温高抗风适合什么人？",
+      "score": 1.4092699,
+      "category": "厨卫大电",
+      "source": "vector"
+    }
+  ],
+  "FAQ-084": [
+    {
+      "keyword": "电视有哪些推荐？",
+      "score": 1.2130473,
+      "category": "电视",
+      "source": "vector"
+    },
+    {
+      "keyword": "笔记本有哪些推荐？",
+      "score": 1.2296593,
+      "category": "笔记本",
+      "source": "vector"
+    },
+    {
+      "keyword": "T恤有哪些推荐？",
+      "score": 1.2365334,
+      "category": "T恤",
+      "source": "vector"
+    }
+  ],
+  "FAQ-085": [
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 1.4141612,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "三星有哪些产品？",
+      "score": 1.4142526,
+      "category": "品牌",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有货吗？",
+      "score": 1.4214263,
+      "category": "手机通讯",
+      "source": "vector"
+    }
+  ],
+  "FAQ-090": [
+    {
+      "keyword": "发货需要多长时间？",
+      "score": 0.5903061,
+      "category": "物流",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.8264549,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.9381045,
+      "category": "退换货",
+      "source": "vector"
+    }
+  ],
+  "FAQ-091": [
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.7239411,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.7346439,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.76690304,
+      "category": "退换货",
+      "source": "vector"
+    }
+  ],
+  "FAQ-092": [
+    {
+      "keyword": "支付失败怎么办？",
+      "score": 0.68243724,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "支持哪些支付方式？",
+      "score": 0.84121186,
+      "category": "支付",
+      "source": "vector"
+    },
+    {
+      "keyword": "可以货到付款吗？",
+      "score": 0.9388393,
+      "category": "支付",
+      "source": "vector"
+    }
+  ],
+  "FAQ-093": [
+    {
+      "keyword": "保修多久？",
+      "score": 0.46245068,
+      "category": "售后",
+      "source": "vector"
+    },
+    {
+      "keyword": "退货后多久能收到退款？",
+      "score": 0.98239684,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.995062,
+      "category": "退换货",
+      "source": "vector"
+    }
+  ],
+  "FAQ-100": [
+    {
+      "keyword": "Apple iPhone 8 Plus 64GB 红色特别版 移动联通电信4G手机多少钱？",
+      "score": 0.59000456,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？",
+      "score": 0.61110187,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPad 10.9英寸平板电脑 2022年款多少钱？",
+      "score": 0.6776873,
+      "category": "平板电脑",
+      "source": "vector"
+    }
+  ],
+  "FAQ-101": [
+    {
+      "keyword": "耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码多少钱？",
+      "score": 0.6456009,
+      "category": "男鞋",
+      "source": "vector"
+    },
+    {
+      "keyword": "耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码有优惠吗？",
+      "score": 0.7187172,
+      "category": "男鞋",
+      "source": "vector"
+    },
+    {
+      "keyword": "耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码有货吗？",
+      "score": 0.76460993,
+      "category": "男鞋",
+      "source": "vector"
+    }
+  ],
+  "FAQ-102": [
+    {
+      "keyword": "万和（Vanward)燃气热水器天然气家用四重防冻直流变频节能全新升级增压水伺服恒温高抗风有什么规格可选？",
+      "score": 0.4950652,
+      "category": "厨卫大电",
+      "source": "vector"
+    },
+    {
+      "keyword": "万和（Vanward)燃气热水器天然气家用四重防冻直流变频节能全新升级增压水伺服恒温高抗风多少钱？",
+      "score": 0.52674973,
+      "category": "厨卫大电",
+      "source": "vector"
+    },
+    {
+      "keyword": "万和（Vanward)燃气热水器天然气家用四重防冻直流变频节能全新升级增压水伺服恒温高抗风有货吗？",
+      "score": 0.54392606,
+      "category": "厨卫大电",
+      "source": "vector"
+    }
+  ],
+  "FAQ-110": [
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？",
+      "score": 0.42191836,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有优惠吗？",
+      "score": 0.6301446,
+      "category": "手机通讯",
+      "source": "vector"
+    },
+    {
+      "keyword": "Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有货吗？",
+      "score": 0.7059716,
+      "category": "手机通讯",
+      "source": "vector"
+    }
+  ],
+  "FAQ-111": [
+    {
+      "keyword": "耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码有货吗？",
+      "score": 0.5671029,
+      "category": "男鞋",
+      "source": "vector"
+    },
+    {
+      "keyword": "耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码有优惠吗？",
+      "score": 0.60277796,
+      "category": "男鞋",
+      "source": "vector"
+    },
+    {
+      "keyword": "耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码多少钱？",
+      "score": 0.6415775,
+      "category": "男鞋",
+      "source": "vector"
+    }
+  ],
+  "FAQ-112": [
+    {
+      "keyword": "T恤有哪些推荐？",
+      "score": 0.7408837,
+      "category": "T恤",
+      "source": "vector"
+    },
+    {
+      "keyword": "如何申请退换货？",
+      "score": 0.7737012,
+      "category": "退换货",
+      "source": "vector"
+    },
+    {
+      "keyword": "T恤大概多少钱？",
+      "score": 0.8351371,
+      "category": "T恤",
+      "source": "vector"
+    }
+  ]
+}

@@ -2,6 +2,8 @@ package org.example.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.milvus.client.MilvusServiceClient;
 import io.milvus.grpc.DataType;
 import io.milvus.grpc.ShowCollectionsResponse;
@@ -38,14 +40,31 @@ public class RuleKeywordInitializer {
     private VectorEmbeddingService embeddingService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Gson gson = new Gson();
 
     @PostConstruct
     public void init() {
         try {
             if (collectionExists()) {
-                logger.info("rule_keywords collection 已存在，跳过初始化");
-                return;
+                logger.info("rule_keywords collection 已存在，尝试加载...");
+                try {
+                    R<RpcStatus> loadResp = milvusClient.loadCollection(
+                            LoadCollectionParam.newBuilder()
+                                    .withCollectionName(COLLECTION).build());
+                    if (loadResp.getStatus() == 0) {
+                        logger.info("rule_keywords collection 加载成功");
+                        return;
+                    }
+                } catch (Exception e) {
+                    logger.warn("rule_keywords 加载失败({})，删除重建...", e.getMessage());
+                    try {
+                        milvusClient.dropCollection(
+                                DropCollectionParam.newBuilder()
+                                        .withCollectionName(COLLECTION).build());
+                    } catch (Exception ignored) {}
+                }
             }
+            // 新建或重建
             createCollection();
             insertKeywords();
             createIndex();
@@ -111,20 +130,20 @@ public class RuleKeywordInitializer {
         JsonNode root = objectMapper.readTree(content);
 
         List<KeywordEntry> entries = new ArrayList<>();
-        // 从 escalationKeywords 提取
+        // 从 escalationKeywords 提取（Object 节点，自带 synonyms+examples）
         for (JsonNode kw : root.get("escalationKeywords")) {
             entries.add(buildEntry(kw, "escalation"));
         }
-        // 从 strictRejectRules 提取 productKeywords
+        // 从 strictRejectRules 提取 productKeywords（纯字符串，需关联父规则的 synonyms+examples）
         for (JsonNode rule : root.get("strictRejectRules")) {
             for (JsonNode kw : rule.get("productKeywords")) {
-                entries.add(buildEntry(kw, "strict_reject", rule.get("ruleId").asText()));
+                entries.add(buildEntryWithParent(kw, rule, "strict_reject", rule.get("ruleId").asText()));
             }
         }
-        // 从 autoApproveRules 提取 allowedReasons
+        // 从 autoApproveRules 提取 allowedReasons（纯字符串，需关联父规则的 synonyms+examples）
         for (JsonNode rule : root.get("autoApproveRules")) {
             for (JsonNode reason : rule.get("allowedReasons")) {
-                entries.add(buildEntry(reason, "auto_approve", rule.get("ruleId").asText()));
+                entries.add(buildEntryWithParent(reason, rule, "auto_approve", rule.get("ruleId").asText()));
             }
         }
 
@@ -136,18 +155,18 @@ public class RuleKeywordInitializer {
         List<String> ids = new ArrayList<>();
         List<String> contents = new ArrayList<>();
         List<List<Float>> vectorList = new ArrayList<>();
-        List<Map<String, Object>> metas = new ArrayList<>();
+        List<JsonObject> metas = new ArrayList<>();
 
         for (int i = 0; i < entries.size(); i++) {
             KeywordEntry e = entries.get(i);
             ids.add(UUID.nameUUIDFromBytes(("rule_kw_" + i).getBytes()).toString());
             contents.add(e.embedText);
             vectorList.add(vectors.get(i));
-            Map<String, Object> meta = new LinkedHashMap<>();
-            meta.put("keyword", e.keyword);
-            meta.put("ruleType", e.ruleType);
-            meta.put("ruleId", e.ruleId);
-            metas.add(meta);
+            Map<String, String> metaMap = new LinkedHashMap<>();
+            metaMap.put("keyword", e.keyword);
+            metaMap.put("ruleType", e.ruleType);
+            metaMap.put("ruleId", e.ruleId);
+            metas.add(gson.toJsonTree(metaMap).getAsJsonObject());
         }
 
         fields.add(new InsertParam.Field("id", ids));
@@ -172,12 +191,26 @@ public class RuleKeywordInitializer {
         e.ruleId = ruleId.isEmpty() && node.isObject() && node.has("ruleId")
                 ? node.get("ruleId").asText() : ruleId;
 
-        // 构建嵌入文本：关键词 + 同义词 + 典型表达
         StringBuilder embedBuilder = new StringBuilder(e.keyword);
         if (node.isObject()) {
             appendArray(node, "synonyms", embedBuilder);
             appendArray(node, "examples", embedBuilder);
         }
+        e.embedText = embedBuilder.toString();
+        return e;
+    }
+
+    /** 为纯字符串关键词构建嵌入文本，从父规则继承 synonyms+examples */
+    private KeywordEntry buildEntryWithParent(JsonNode keywordNode, JsonNode parentRule,
+                                               String ruleType, String ruleId) {
+        KeywordEntry e = new KeywordEntry();
+        e.keyword = keywordNode.asText();
+        e.ruleType = ruleType;
+        e.ruleId = ruleId;
+
+        StringBuilder embedBuilder = new StringBuilder(e.keyword);
+        appendArray(parentRule, "synonyms", embedBuilder);
+        appendArray(parentRule, "examples", embedBuilder);
         e.embedText = embedBuilder.toString();
         return e;
     }

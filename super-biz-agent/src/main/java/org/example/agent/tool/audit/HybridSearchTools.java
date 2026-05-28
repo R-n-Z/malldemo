@@ -7,6 +7,7 @@ import io.milvus.grpc.SearchResults;
 import io.milvus.param.R;
 import io.milvus.param.dml.SearchParam;
 import io.milvus.response.SearchResultsWrapper;
+import org.example.config.HybridSearchProperties;
 import org.example.constant.MilvusConstants;
 import org.example.service.VectorEmbeddingService;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -38,17 +38,8 @@ public class HybridSearchTools {
     @Autowired
     private ExactMatchTools exactMatchTools;
 
-    @Value("${rule.rag.hybrid.vector-top-k:5}")
-    private int vectorTopK;
-
-    @Value("${rule.rag.hybrid.vector-threshold:0.4}")
-    private double vectorThreshold;
-
-    @Value("${rule.rag.hybrid.keyword-weight:1.0}")
-    private double keywordWeight;
-
-    @Value("${rule.rag.hybrid.vector-weight:0.8}")
-    private double vectorWeight;
+    @Autowired
+    private HybridSearchProperties hybridProps;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -74,7 +65,7 @@ public class HybridSearchTools {
                     Map<String, Object> entry = new LinkedHashMap<>();
                     entry.put("keyword", m.has("keyword") ? m.get("keyword").asText() : "");
                     entry.put("source", m.has("source") ? m.get("source").asText() : "exact");
-                    entry.put("score", m.has("score") ? m.get("score").asDouble() * keywordWeight : 0.0);
+                    entry.put("score", m.has("score") ? m.get("score").asDouble() * hybridProps.getKeywordWeight() : 0.0);
                     if (m.has("category")) entry.put("category", m.get("category").asText());
                     if (m.has("priority")) entry.put("priority", m.get("priority").asText());
                     if (m.has("ruleId")) entry.put("ruleId", m.get("ruleId").asText());
@@ -116,7 +107,7 @@ public class HybridSearchTools {
                 .withVectorFieldName("vector")
                 .withVectors(Collections.singletonList(queryVector))
                 .withOutFields(Arrays.asList("content", "metadata"))
-                .withTopK(vectorTopK)
+                .withTopK(hybridProps.getVectorTopK())
                 .withMetricType(io.milvus.param.MetricType.L2)
                 .withParams("{\"nprobe\":10}").build();
 
@@ -129,7 +120,7 @@ public class HybridSearchTools {
         for (int i = 0; i < wrapper.getRowRecords(0).size(); i++) {
             float l2Score = wrapper.getIDScore(0).get(i).getScore();
             double similarity = 1.0 - Math.min(l2Score, 1.0);
-            if (similarity < vectorThreshold) continue;
+            if (similarity < hybridProps.getVectorThreshold()) continue;
 
             String content = (String) wrapper.getFieldData("content", 0).get(i);
             Object metaRaw = wrapper.getFieldData("metadata", 0).get(i);
@@ -137,7 +128,7 @@ public class HybridSearchTools {
             Map<String, Object> entry = new LinkedHashMap<>();
             entry.put("keyword", content);
             entry.put("source", "vector");
-            entry.put("score", similarity * vectorWeight);
+            entry.put("score", similarity * hybridProps.getVectorWeight());
             entry.put("l2Distance", (double) l2Score);
 
             if (metaRaw instanceof Map) {

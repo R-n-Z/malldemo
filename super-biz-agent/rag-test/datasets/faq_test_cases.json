@@ -1,0 +1,88 @@
+{
+  "description": "FAQ检索测试用例 - 用于评估向量检索的召回率和准确率",
+  "version": "2.0",
+  "collection": "faq",
+  "searchTool": "FaqTools.searchFaq",
+  "topK": 5,
+  "testCases": [
+    {"id":"FAQ-001","category":"精确匹配","query":"支持哪些支付方式？","expectedMatch":"支持哪些支付方式？","expectedCategory":"支付","description":"完全匹配FAQ"},
+    {"id":"FAQ-002","category":"精确匹配","query":"如何申请退换货？","expectedMatch":"如何申请退换货？","expectedCategory":"退换货","description":"完全匹配FAQ"},
+    {"id":"FAQ-003","category":"精确匹配","query":"发货需要多长时间？","expectedMatch":"发货需要多长时间？","expectedCategory":"物流","description":"完全匹配FAQ"},
+    {"id":"FAQ-004","category":"精确匹配","query":"HLA海澜之家短袖T恤男基础款多少钱？","expectedMatch":"HLA海澜之家短袖T恤男基础款多少钱？","expectedCategory":"T恤","description":"完全匹配FAQ商品价格"},
+    {"id":"FAQ-005","category":"精确匹配","query":"怎么联系人工客服？","expectedMatch":"怎么联系人工客服？","expectedCategory":"售后","description":"完全匹配FAQ"},
+
+    {"id":"FAQ-010","category":"语义相似-支付","query":"你们收哪些付款方式？","expectedMatch":"支持哪些支付方式？","expectedCategory":"支付","description":"语义等价-方式→方式"},
+    {"id":"FAQ-011","category":"语义相似-支付","query":"能用微信付钱吗？","expectedMatch":"支持哪些支付方式？","expectedCategory":"支付","description":"口语化-具体支付方式"},
+    {"id":"FAQ-012","category":"语义相似-支付","query":"付款有哪几种办法？","expectedMatch":"支持哪些支付方式？","expectedCategory":"支付","description":"语义等价-方式→办法"},
+    {"id":"FAQ-013","category":"语义相似-支付","query":"可以支付宝支付不？","expectedMatch":"支持哪些支付方式？","expectedCategory":"支付","description":"方言化表达"},
+    {"id":"FAQ-014","category":"语义相似-支付","query":"支付不成功怎么办？","expectedMatch":"支付失败怎么办？","expectedCategory":"支付","description":"支付失败等价"},
+    {"id":"FAQ-015","category":"语义相似-支付","query":"付完款显示失败咋回事","expectedMatch":"支付失败怎么办？","expectedCategory":"支付","description":"支付失败口语化"},
+    {"id":"FAQ-016","category":"语义相似-支付","query":"能货到再给钱不","expectedMatch":"可以货到付款吗？","expectedCategory":"支付","description":"货到付款方言化"},
+
+    {"id":"FAQ-020","category":"语义相似-退换货","query":"怎么退货？","expectedMatch":"如何申请退换货？","expectedCategory":"退换货","description":"简短口语化"},
+    {"id":"FAQ-021","category":"语义相似-退换货","query":"东西不满意想退掉","expectedMatch":"如何申请退换货？","expectedCategory":"退换货","description":"理由+想退货"},
+    {"id":"FAQ-022","category":"语义相似-退换货","query":"退款几天能到账？","expectedMatch":"退货后多久能收到退款？","expectedCategory":"退换货","description":"退款时效"},
+    {"id":"FAQ-023","category":"语义相似-退换货","query":"运费谁来承担？","expectedMatch":"退换货运费谁出？","expectedCategory":"退换货","description":"运费责任"},
+    {"id":"FAQ-024","category":"语义相似-退换货","query":"换货运费算谁的","expectedMatch":"退换货运费谁出？","expectedCategory":"退换货","description":"运费-换货场景"},
+    {"id":"FAQ-025","category":"语义相似-退换货","query":"退回去的快递费我自己出吗","expectedMatch":"退换货运费谁出？","expectedCategory":"退换货","description":"运费-详细版"},
+
+    {"id":"FAQ-030","category":"语义相似-物流","query":"什么时候能发货？","expectedMatch":"发货需要多长时间？","expectedCategory":"物流","description":"发货时间-语义等价"},
+    {"id":"FAQ-031","category":"语义相似-物流","query":"下单后几天发","expectedMatch":"发货需要多长时间？","expectedCategory":"物流","description":"发货时间-缩写"},
+    {"id":"FAQ-032","category":"语义相似-物流","query":"怎么查快递到哪了？","expectedMatch":"如何查询物流信息？","expectedCategory":"物流","description":"物流查询口语化"},
+    {"id":"FAQ-033","category":"语义相似-物流","query":"帮我看看包裹走到哪了","expectedMatch":"如何查询物流信息？","expectedCategory":"物流","description":"物流查询-帮忙语气"},
+    {"id":"FAQ-034","category":"语义相似-物流","query":"快递单号在哪看","expectedMatch":"如何查询物流信息？","expectedCategory":"物流","description":"物流查询-单号角度"},
+
+    {"id":"FAQ-040","category":"语义相似-售后","query":"保修期是多长时间？","expectedMatch":"保修多久？","expectedCategory":"售后","description":"保修期限"},
+    {"id":"FAQ-041","category":"语义相似-售后","query":"这个东西保修几年","expectedMatch":"保修多久？","expectedCategory":"售后","description":"保修-年份"},
+    {"id":"FAQ-042","category":"语义相似-售后","query":"怎么联系客服？","expectedMatch":"怎么联系人工客服？","expectedCategory":"售后","description":"联系客服"},
+    {"id":"FAQ-043","category":"语义相似-售后","query":"有客服电话吗","expectedMatch":"怎么联系人工客服？","expectedCategory":"售后","description":"联系客服-电话"},
+    {"id":"FAQ-044","category":"语义相似-售后","query":"我要找人工","expectedMatch":"怎么联系人工客服？","expectedCategory":"售后","description":"联系客服-极简"},
+
+    {"id":"FAQ-050","category":"商品查询-价格","query":"iPhone 14多少钱？","expectedMatch":"Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？","expectedCategory":"手机通讯","description":"简写查询"},
+    {"id":"FAQ-051","category":"商品查询-价格","query":"那个苹果14现在什么价","expectedMatch":"Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？","expectedCategory":"手机通讯","description":"口语化价格"},
+    {"id":"FAQ-052","category":"商品查询-价格","query":"海澜之家最便宜的T恤卖多少","expectedMatch":"HLA海澜之家短袖T恤男基础款多少钱？","expectedCategory":"T恤","description":"品牌+品类+最便宜"},
+    {"id":"FAQ-053","category":"商品查询-库存","query":"海澜之家的T恤有货吗？","expectedMatch":"HLA海澜之家简约动物印花短袖T恤有货吗？","expectedCategory":"T恤","description":"商品库存查询"},
+    {"id":"FAQ-054","category":"商品查询-库存","query":"iPhone 14还有货没","expectedMatch":"Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机有货吗？","expectedCategory":"手机通讯","description":"口语化库存"},
+    {"id":"FAQ-055","category":"商品查询-规格","query":"小米电视有什么规格？","expectedMatch":"小米（MI）小米电视4A 有什么规格可选？","expectedCategory":"电视","description":"商品规格"},
+    {"id":"FAQ-056","category":"商品查询-规格","query":"iPad有哪些容量可选","expectedMatch":"Apple iPad 10.9英寸平板电脑 2022年款有什么规格可选？","expectedCategory":"平板电脑","description":"SKU维度查询"},
+    {"id":"FAQ-057","category":"商品查询-品牌","query":"耐克鞋子有哪些型号？","expectedMatch":"NIKE有哪些产品？","expectedCategory":"品牌","description":"品牌列表"},
+    {"id":"FAQ-058","category":"商品查询-品牌","query":"小米都卖什么东西","expectedMatch":"小米有哪些产品？","expectedCategory":"品牌","description":"品牌全景"},
+    {"id":"FAQ-059","category":"商品查询-品牌","query":"华为有什么手机","expectedMatch":"华为有哪些产品？","expectedCategory":"品牌","description":"品牌品类交叉"},
+
+    {"id":"FAQ-060","category":"长查询","query":"我前两天买了一件海澜之家的短袖T恤基础款藏青色的，现在想看看物流到哪了怎么查","expectedMatch":"如何查询物流信息？","expectedCategory":"物流","description":"长查询-含无关细节"},
+    {"id":"FAQ-061","category":"长查询","query":"你好我想问一下如果是质量问题想要退货的话这个运费是你们出还是我自己出麻烦了谢谢","expectedMatch":"退换货运费谁出？","expectedCategory":"退换货","description":"长查询-礼貌用语"},
+    {"id":"FAQ-062","category":"长查询","query":"那个什么，我之前买了个东西现在不想要了，还没发货，能不能取消订单退钱给我啊","expectedMatch":"如何申请退换货？","expectedCategory":"退换货","description":"长查询-口语化退换货"},
+
+    {"id":"FAQ-070","category":"否定意图","query":"我不是想退货，只是想问问颜色会不会掉色","expectedMatch":null,"expectedCategory":null,"description":"否定句-明确表示不是退货"},
+    {"id":"FAQ-071","category":"否定意图","query":"没有要退款的意思，就是想了解下退货流程以备不时之需","expectedMatch":"如何申请退换货？","expectedCategory":"退换货","description":"否定+了解流程-前端否定后端意图"},
+    {"id":"FAQ-072","category":"否定意图","query":"不退款不退货，就问问","expectedMatch":null,"expectedCategory":null,"description":"明确否定"},
+
+    {"id":"FAQ-080","category":"无关查询-闲聊","query":"今天天气怎么样？","expectedMatch":null,"expectedCategory":null,"description":"天气"},
+    {"id":"FAQ-081","category":"无关查询-闲聊","query":"帮我写一首诗","expectedMatch":null,"expectedCategory":null,"description":"写诗"},
+    {"id":"FAQ-082","category":"无关查询-闲聊","query":"讲个笑话听听","expectedMatch":null,"expectedCategory":null,"description":"笑话"},
+    {"id":"FAQ-083","category":"无关查询-闲聊","query":"你会做红烧肉吗教我","expectedMatch":null,"expectedCategory":null,"description":"菜谱"},
+    {"id":"FAQ-084","category":"无关查询-闲聊","query":"推荐个旅游景点","expectedMatch":null,"expectedCategory":null,"description":"旅游"},
+    {"id":"FAQ-085","category":"无关查询-闲聊","query":"帮我算一下328乘以17等于多少","expectedMatch":null,"expectedCategory":null,"description":"数学计算"},
+
+    {"id":"FAQ-090","category":"短查询","query":"发货","expectedMatch":"发货需要多长时间？","expectedCategory":"物流","description":"极简单关键词"},
+    {"id":"FAQ-091","category":"短查询","query":"退款","expectedMatch":"退货后多久能收到退款？","expectedCategory":"退换货","description":"极简单关键词"},
+    {"id":"FAQ-092","category":"短查询","query":"支付","expectedMatch":"支持哪些支付方式？","expectedCategory":"支付","description":"极简单关键词"},
+    {"id":"FAQ-093","category":"短查询","query":"保修","expectedMatch":"保修多久？","expectedCategory":"售后","description":"极简单关键词"},
+
+    {"id":"FAQ-100","category":"模糊查询","query":"那个苹果的手机现在卖多钱？","expectedMatch":"Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？","expectedCategory":"手机通讯","description":"指代词+口语价格"},
+    {"id":"FAQ-101","category":"模糊查询","query":"那个牌子的气垫鞋白色的多少钱","expectedMatch":"耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码多少钱？","expectedCategory":"男鞋","description":"描述性查询-无品牌名"},
+    {"id":"FAQ-102","category":"模糊查询","query":"能放热水那个万和的多少","expectedMatch":"万和（Vanward)燃气热水器天然气家用四重防冻直流变频节能全新升级增压水伺服恒温高抗风多少钱？","expectedCategory":"厨卫大电","description":"功能描述+品牌"},
+
+    {"id":"FAQ-110","category":"中英混杂","query":"iPhone 14 price 多少","expectedMatch":"Apple iPhone 14 (A2884) 128GB 支持移动联通电信5G 双卡双待手机多少钱？","expectedCategory":"手机通讯","description":"中英混杂"},
+    {"id":"FAQ-111","category":"中英混杂","query":"Nike AIR MAX白色的有stock吗","expectedMatch":"耐克NIKE 男子 气垫 休闲鞋 AIR MAX 90 ESSENTIAL 运动鞋 AJ1285-101白色41码有货吗？","expectedCategory":"男鞋","description":"中英混杂库存"},
+    {"id":"FAQ-112","category":"中英混杂","query":"这个T-shirt能不能退","expectedMatch":"如何申请退换货？","expectedCategory":"退换货","description":"中英混杂-退货"}
+  ],
+  "metrics": {
+    "primary": ["Recall@K", "Precision@K", "MRR", "Hit@K"],
+    "K_values": [1, 3, 5],
+    "thresholds": {
+      "relevant_score": 0.5,
+      "description": "L2距离阈值"
+    }
+  }
+}
