@@ -28,3 +28,18 @@ export function getApplyDetail(id) {
     method:'get'
   })
 }
+
+export function auditApply(applyId) {
+  return request({
+    url:'/api/return/audit',
+    method:'post',
+    data: { applyId }
+  })
+}
+
+export function getByOrderId(orderId) {
+  return request({
+    url:'/returnApply/order/'+orderId,
+    method:'get'
+  })
+}

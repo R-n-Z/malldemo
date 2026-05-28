@@ -39,10 +39,11 @@ public class CacheService {
      */
     public <T> T getWithBloomFilter(String cacheKey, String bloomFilterName, 
                                     String id, CacheLoader<T> loader, long cacheExpireSeconds) {
-        // 1. 先检查布隆过滤器
-        if (!bloomFilter.mightContain(bloomFilterName, id)) {
+        // 1. 先检查布隆过滤器（过滤器中至少要有数据才拦截，空过滤器不拦截）
+        double fillRatio = bloomFilter.getFillRatio(bloomFilterName);
+        if (fillRatio > 0 && !bloomFilter.mightContain(bloomFilterName, id)) {
             log.debug("布隆过滤器拦截: bloomFilter={}, id={}", bloomFilterName, id);
-            return null; // 一定不存在，直接返回
+            return null;
         }
 
         // 2. 查缓存

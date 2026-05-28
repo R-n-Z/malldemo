@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.dao.ChatAdminDao">
+
+    <select id="getAllSessions" resultType="java.util.Map">
+        SELECT * FROM chat_session WHERE status = 1 ORDER BY update_time DESC
+    </select>
+
+    <select id="getMessages" resultType="java.util.Map">
+        SELECT * FROM chat_message WHERE session_id = #{sessionId} ORDER BY create_time ASC
+    </select>
+
+    <insert id="insertMessage">
+        INSERT INTO chat_message (session_id, sender_type, sender_id, sender_name, content, msg_type, is_read, status, create_time)
+        VALUES (#{sessionId}, #{senderType}, #{senderId}, #{senderName}, #{content}, 1, 0, 1, NOW())
+    </insert>
+
+    <update id="recallMessage">
+        UPDATE chat_message SET status = 2, content = '消息已撤回'
+        WHERE id = #{id} AND sender_type = #{senderType} AND status = 1
+        AND create_time >= DATE_SUB(NOW(), INTERVAL 2 MINUTE)
+    </update>
+
+    <update id="takeSession">
+        UPDATE chat_session SET admin_id = #{adminId}, admin_name = #{adminName} WHERE id = #{id} AND admin_id IS NULL
+    </update>
+
+    <update id="closeSession">
+        UPDATE chat_session SET status = 2 WHERE id = #{id}
+    </update>
+
+    <update id="markRead">
+        UPDATE chat_message SET is_read = 1 WHERE session_id = #{sessionId} AND sender_type != #{senderType} AND is_read = 0
+    </update>
+
+    <update id="updateLastMsg">
+        UPDATE chat_session SET last_message = #{msg}, update_time = NOW() WHERE id = #{id}
+    </update>
+
+</mapper>

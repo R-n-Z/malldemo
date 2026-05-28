@@ -16,6 +16,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -38,6 +39,9 @@ public class UmsMemberServiceImpl implements UmsMemberService {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Value("${redis.database:mall}")
     private String redisDatabase;
@@ -63,10 +67,13 @@ public class UmsMemberServiceImpl implements UmsMemberService {
             throw new RuntimeException("用户不存在");
         }
 
-        // 验证密码
-        String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
-        if (!md5Password.equals(member.getPassword())) {
-            throw new RuntimeException("密码错误");
+        // 验证密码（支持 BCrypt 和 MD5）
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            // 兼容旧的 MD5 密码
+            String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
+            if (!md5Password.equals(member.getPassword())) {
+                throw new RuntimeException("密码错误");
+            }
         }
 
         // 生成Token
@@ -121,7 +128,7 @@ public class UmsMemberServiceImpl implements UmsMemberService {
         // 创建会员
         UmsMember member = new UmsMember();
         member.setUsername(username);
-        member.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+        member.setPassword(passwordEncoder.encode(password));
         member.setPhone(telephone);
         member.setStatus(1); // 启用状态
         member.setCreateTime(new java.util.Date());

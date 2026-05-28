@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "rocketmq.enabled", havingValue = "true")
 public class RocketMQCancelOrderSender {
 
     private static final String ORDER_TIMEOUT_TOPIC = "order-timeout-topic";

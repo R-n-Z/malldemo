@@ -2,7 +2,7 @@ spring:
   application:
     name: mall-admin
   profiles:
-    active: docker #默认为开发环境
+    active: dev #默认为开发环境
   servlet:
     multipart:
       enabled: true #开启文件上传
@@ -47,8 +47,10 @@ secure:
       - /admin/login
       - /admin/register
       - /admin/info
+      - /chat/**
       - /admin/logout
       - /minio/upload
+      - /returnApply/audit/**
 
 aliyun:
   oss:
@@ -62,3 +64,6 @@ aliyun:
     callback: http://39.98.190.128:8080/aliyun/oss/callback # 文件上传成功后的回调地址
     dir:
       prefix: mall/images/ # 上传文件夹路径前缀
+
+agent:
+  url: http://localhost:9900/api/chat

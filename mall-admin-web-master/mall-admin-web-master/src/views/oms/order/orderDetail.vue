@@ -218,6 +218,21 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <el-card v-if="returnApply" shadow="never" style="margin-top: 15px">
+      <div slot="header">
+        <span>退货/售后</span>
+        <el-tag :type="returnTagType" style="margin-left: 12px">{{ returnApply.status | formatReturnStatus }}</el-tag>
+        <el-button type="text" style="float:right" @click="handleViewReturnDetail">查看详情</el-button>
+      </div>
+      <el-row>
+        <el-col :span="8"><span class="info-label">服务单号：</span>{{returnApply.id}}</el-col>
+        <el-col :span="8"><span class="info-label">退货原因：</span>{{returnApply.reason}}</el-col>
+        <el-col :span="8"><span class="info-label">申请时间：</span>{{returnApply.createTime | formatTime}}</el-col>
+      </el-row>
+      <el-row style="margin-top: 10px" v-if="returnApply.handleNote">
+        <el-col :span="24"><span class="info-label">处理备注：</span>{{returnApply.handleNote}}</el-col>
+      </el-row>
+    </el-card>
     <el-dialog title="修改收货人信息"
                :visible.sync="receiverDialogVisible"
                width="40%">
@@ -347,6 +362,7 @@
 </template>
 <script>
   import {getOrderDetail,updateReceiverInfo,updateMoneyInfo,closeOrder,updateOrderNote,deleteOrder} from '@/api/order';
+  import {getByOrderId} from '@/api/returnApply';
   import LogisticsDialog from '@/views/oms/order/components/logisticsDialog';
   import {formatDate} from '@/utils/date';
   import VDistpicker from 'v-distpicker';
@@ -378,7 +394,8 @@
         closeInfo:{note:null,id:null},
         markOrderDialogVisible:false,
         markInfo:{note:null},
-        logisticsDialogVisible:false
+        logisticsDialogVisible:false,
+        returnApply: null
       }
     },
     created() {
@@ -386,8 +403,24 @@
       getOrderDetail(this.id).then(response => {
         this.order = response.data;
       });
+      this.loadReturnStatus();
+    },
+    computed: {
+      returnTagType() {
+        if (!this.returnApply) return '';
+        const s = this.returnApply.status;
+        if (s === 0) return 'warning';
+        if (s === 1) return '';
+        if (s === 2) return 'success';
+        if (s === 3) return 'danger';
+        return '';
+      }
     },
     filters: {
+      formatReturnStatus(status) {
+        const map = {0:'待处理',1:'退货中',2:'已完成',3:'已拒绝'};
+        return map[status] || '未知';
+      },
       formatNull(value) {
         if(value===undefined||value===null||value===''){
           return '暂无';
@@ -484,6 +517,16 @@
       }
     },
     methods: {
+      loadReturnStatus() {
+        getByOrderId(this.id).then(response => {
+          this.returnApply = response.data;
+        }).catch(() => {});
+      },
+      handleViewReturnDetail() {
+        if (this.returnApply) {
+          this.$router.push({path:'/oms/returnApplyDetail', query:{id: this.returnApply.id}});
+        }
+      },
       onSelectRegion(data){
         this.receiverInfo.receiverProvince=data.province.value;
         this.receiverInfo.receiverCity=data.city.value;

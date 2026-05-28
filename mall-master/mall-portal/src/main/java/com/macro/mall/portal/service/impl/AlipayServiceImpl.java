@@ -43,9 +43,9 @@ public class AlipayServiceImpl implements AlipayService {
     private OmsOrderMapper orderMapper;
     @Autowired
     private OmsPortalOrderService portalOrderService;
-    @Autowired
+    @Autowired(required = false)
     private KafkaPayMessageSender kafkaPayMessageSender;
-    @Autowired
+    @Autowired(required = false)
     private PayFailMessageSender payFailMessageSender;
     @Override
     public String pay(AliPayParam aliPayParam) {

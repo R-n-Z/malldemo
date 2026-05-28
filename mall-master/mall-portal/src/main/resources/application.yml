@@ -37,7 +37,7 @@ spring:
       # 连接最大生存时间（毫秒）
       max-evictable-idle-time-millis: 600000
       # 监控统计
-      filters: stat,wall,slf4j
+      filters: stat,slf4j
       # 慢SQL记录
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=3000
       # Web监控
@@ -64,16 +64,19 @@ mybatis:
 
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
-  secret: mall-portal-secret #JWT加解密使用的密钥
+  secret: mall-portal-secret-key-is-longer-now-256bits!! #JWT加解密使用的密钥
   expiration: 604800 #JWT的超期限时间(60*60*24*7)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
 
 secure:
   ignored:
     urls: #安全路径白名单
-      - /swagger-ui/
+      - /swagger-ui/**
       - /swagger-resources/**
-      - /**/v2/api-docs
+      - /v2/api-docs/**
+      - /v3/api-docs/**
+      - /doc.html
+      - /webjars/**
       - /**/*.html
       - /**/*.js
       - /**/*.css
@@ -82,7 +85,10 @@ secure:
       - /favicon.ico
       - /druid/**
       - /actuator/**
-      - /sso/**
+      - /ws/**
+      - /sso/login
+      - /sso/register
+      - /sso/getAuthCode
       - /home/**
       - /product/**
       - /brand/**

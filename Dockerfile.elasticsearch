@@ -1,0 +1,14 @@
+FROM elasticsearch:8.10.2
+
+# Install IK Analyzer in a retry loop (multiple mirror fallbacks)
+RUN for url in \
+      "https://ghproxy.com/https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v8.10.2/elasticsearch-analysis-ik-8.10.2.zip" \
+      "https://mirror.ghproxy.com/https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v8.10.2/elasticsearch-analysis-ik-8.10.2.zip" \
+      "https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v8.10.2/elasticsearch-analysis-ik-8.10.2.zip"; do \
+      echo "Trying $url ..."; \
+      if elasticsearch-plugin install "$url"; then \
+        echo "IK plugin installed successfully"; \
+        exit 0; \
+      fi; \
+    done; \
+    echo "All mirrors failed, IK plugin not installed"; exit 1

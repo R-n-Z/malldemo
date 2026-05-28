@@ -133,6 +133,9 @@ public class RedisRateLimiter {
      * 固定窗口限流
      */
     private boolean tryFixedWindow(String key, RateLimitConfig config) {
+        if (rateLimitScript == null) {
+            return true; // 脚本未加载，降级放行
+        }
         try {
             Long result = redisTemplate.execute(
                     rateLimitScript,
@@ -151,6 +154,9 @@ public class RedisRateLimiter {
      * 滑动窗口限流
      */
     private boolean trySlidingWindow(String key, RateLimitConfig config) {
+        if (slidingWindowScript == null) {
+            return true;
+        }
         try {
             Long result = redisTemplate.execute(
                     slidingWindowScript,
@@ -170,6 +176,9 @@ public class RedisRateLimiter {
      * 令牌桶限流
      */
     private boolean tryTokenBucket(String key, RateLimitConfig config, int tokens) {
+        if (tokenBucketScript == null) {
+            return true;
+        }
         try {
             // 计算每秒添加的令牌数
             int rate = config.getLimit() / config.getWindowSeconds();

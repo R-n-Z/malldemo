@@ -24,14 +24,11 @@ export function fetchOrderList(params) {
 	})
 }
 
-export function payOrderSuccess(data) {
+export function payOrderSuccess(params) {
 	return request({
 		method: 'POST',
 		url: '/order/paySuccess',
-		header: {
-			'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-		},
-		data: data
+		params: params
 	})
 }
 
@@ -42,36 +39,27 @@ export function fetchOrderDetail(orderId) {
 	})
 }
 
-export function cancelUserOrder(data) {
+export function cancelUserOrder(params) {
 	return request({
 		method: 'POST',
 		url: '/order/cancelUserOrder',
-		header: {
-			'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-		},
-		data: data
+		params: params
 	})
 }
 
-export function confirmReceiveOrder(data) {
+export function confirmReceiveOrder(params) {
 	return request({
 		method: 'POST',
 		url: '/order/confirmReceiveOrder',
-		header: {
-			'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-		},
-		data: data
+		params: params
 	})
 }
 
-export function deleteUserOrder(data) {
+export function deleteUserOrder(params) {
 	return request({
 		method: 'POST',
 		url: '/order/deleteOrder',
-		header: {
-			'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-		},
-		data: data
+		params: params
 	})
 }
 
@@ -80,5 +68,28 @@ export function fetchAliapyStatus(params) {
 		method: 'GET',
 		url: '/alipay/query',
 		params: params
+	})
+}
+
+export function createReturnApply(data) {
+	return request({
+		method: 'POST',
+		url: '/returnApply/create',
+		data: data
+	})
+}
+
+export function fetchReturnApplyList(params) {
+	return request({
+		method: 'GET',
+		url: '/returnApply/list',
+		params: params
+	})
+}
+
+export function fetchReturnApplyDetail(applyId) {
+	return request({
+		method: 'GET',
+		url: `/returnApply/${applyId}`
 	})
 }

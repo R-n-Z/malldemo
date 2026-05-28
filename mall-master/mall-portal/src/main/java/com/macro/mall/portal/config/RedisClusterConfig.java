@@ -22,6 +22,7 @@ import java.util.List;
  * 将单点Redis改为集群模式，支持数据分片和高可用
  */
 @Configuration
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "redis.cluster.enabled", havingValue = "true")
 public class RedisClusterConfig {
 
     @Value("${redis.cluster.nodes:192.168.1.1:7001,192.168.1.1:7002,192.168.1.1:7003,192.168.1.1:7004,192.168.1.1:7005,192.168.1.1:7006}")

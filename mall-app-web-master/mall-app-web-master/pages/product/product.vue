@@ -135,6 +135,10 @@
 				<text class="yticon icon-shoucang"></text>
 				<text>收藏</text>
 			</view>
+			<view class="p-b-btn" @click="toChat">
+				<text class="yticon icon-xiaoxizhongxin"></text>
+				<text>客服</text>
+			</view>
 
 			<view class="action-btn-group">
 				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
@@ -221,7 +225,8 @@
 		fetchProductDetail
 	} from '@/api/product.js';
 	import {
-		addCartItem
+		addCartItem,
+		fetchCartList
 	} from '@/api/cart.js';
 	import {
 		fetchProductCouponList,
@@ -454,12 +459,54 @@
 					});
 				}
 			},
-			buy() {
-				uni.showToast({
-					title: "暂时只支持从购物车下单！",
-					icon: 'none'
+			toChat() {
+				if (!this.checkForLogin()) {
+					return;
+				}
+				uni.navigateTo({
+					url: '/pages/chat/chat?productId=' + this.product.id + '&productName=' + encodeURIComponent(this.product.name) + '&productPic=' + encodeURIComponent(this.product.pic)
 				});
 			},
+			buy() {
+			if (!this.checkForLogin()) {
+				return;
+			}
+			let productSkuStock = this.getSkuStock();
+			let cartItem = {
+				price: this.product.price,
+				productAttr: productSkuStock.spData,
+				productBrand: this.product.brandName,
+				productCategoryId: this.product.productCategoryId,
+				productId: this.product.id,
+				productName: this.product.name,
+				productPic: this.product.pic,
+				productSkuCode: productSkuStock.skuCode,
+				productSkuId: productSkuStock.id,
+				productSn: this.product.productSn,
+				productSubTitle: this.product.subTitle,
+				quantity: 1
+			};
+			uni.showLoading({ title: '请稍候' });
+			addCartItem(cartItem).then(() => {
+				// 加购成功后获取购物车列表，取最新一项的 cartId
+				fetchCartList().then(res => {
+					uni.hideLoading();
+					let items = res.data;
+					if (items && items.length > 0) {
+						let lastItem = items[items.length - 1];
+						uni.navigateTo({
+							url: '/pages/order/createOrder?cartIds=[' + lastItem.id + ']'
+						});
+					}
+				}).catch(() => {
+					uni.hideLoading();
+					uni.switchTab({ url: '/pages/cart/cart' });
+				});
+			}).catch(() => {
+				uni.hideLoading();
+				uni.showToast({ title: '操作失败', icon: 'none' });
+			});
+		},
 			stopPrevent() {},
 			//设置头图信息
 			initImgList() {

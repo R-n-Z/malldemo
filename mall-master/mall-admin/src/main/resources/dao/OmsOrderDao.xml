@@ -32,6 +32,7 @@
             OR receiver_phone LIKE concat("%",#{queryParam.receiverKeyword},"%")
             )
         </if>
+        ORDER BY create_time DESC
     </select>
     <update id="delivery">
         UPDATE oms_order

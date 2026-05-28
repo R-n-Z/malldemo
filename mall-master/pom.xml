@@ -48,6 +48,7 @@
         <spring-data-commons.version>2.7.5</spring-data-commons.version>
         <jjwt.version>0.12.5</jjwt.version>
         <aliyun-oss.version>2.5.0</aliyun-oss.version>
+        <aspectj.version>1.9.19</aspectj.version>
         <alipay-sdk.version>4.38.61.ALL</alipay-sdk.version>
         <logstash-logback.version>7.2</logstash-logback.version>
         <minio.version>8.5.10</minio.version>
@@ -65,6 +66,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

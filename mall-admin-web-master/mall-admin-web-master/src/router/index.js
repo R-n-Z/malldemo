@@ -32,17 +32,20 @@ export const constantRouterMap = [
       component: () => import('@/views/home/index'),
       meta: {title: '仪表盘', icon: 'dashboard'}
     },
-    {
-      name: 'document',
-      path: 'https://www.macrozheng.com',
-      meta: {title: '学习教程', icon: 'document'}
-    },
-    {
-      name: 'video',
-      path: 'https://www.macrozheng.com/mall/foreword/mall_video.html',
-      meta: {title: '视频教程', icon: 'video'}
-    },
     ]
+  },
+  {
+    path: '/chat',
+    component: Layout,
+    redirect: '/chat/index',
+    name: 'chat',
+    meta: {title: '客服', icon: 'cms'},
+    children: [{
+      path: 'index',
+      name: 'chatIndex',
+      component: () => import('@/views/chat/index'),
+      meta: {title: '客服工作台', icon: 'cms'}
+    }]
   }
 ]
 
@@ -302,7 +305,7 @@ export const asyncRouterMap = [
       }
     ]
   },
-  {
+    {
     path:'/ums',
     component: Layout,
     redirect: '/ums/admin',

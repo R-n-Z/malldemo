@@ -6,6 +6,7 @@
       <list>
         <option value="$PROJECT_DIR$/mall-master/mall-admin/pom.xml" />
         <option value="$PROJECT_DIR$/mall-master/pom.xml" />
+        <option value="$PROJECT_DIR$/super-biz-agent/pom.xml" />
       </list>
     </option>
   </component>

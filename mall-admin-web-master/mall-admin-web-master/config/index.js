@@ -11,23 +11,38 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/chat': {
+        target: process.env.API_URL || 'http://localhost:8080',
+        changeOrigin: true,
+        pathRewrite: {}
+      },
       '/admin': {
-        target: process.env.API_URL || 'http://localhost:8888',
+        target: process.env.API_URL || 'http://localhost:8080',
         changeOrigin: true,
         pathRewrite: {}
       },
       '/minio': {
-        target: process.env.API_URL || 'http://localhost:8888',
+        target: process.env.API_URL || 'http://localhost:8080',
+        changeOrigin: true,
+        pathRewrite: {}
+      },
+      '/order': {
+        target: process.env.API_URL || 'http://localhost:8080',
         changeOrigin: true,
         pathRewrite: {}
       },
       '/swagger-ui': {
-        target: process.env.API_URL || 'http://localhost:8888',
+        target: process.env.API_URL || 'http://localhost:8080',
         changeOrigin: true,
         pathRewrite: {}
       },
       '/v2': {
-        target: process.env.API_URL || 'http://localhost:8888',
+        target: process.env.API_URL || 'http://localhost:8080',
+        changeOrigin: true,
+        pathRewrite: {}
+      },
+      '/api/return': {
+        target: process.env.AGENT_URL || 'http://localhost:9900',
         changeOrigin: true,
         pathRewrite: {}
       }
@@ -35,7 +50,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8090, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8888, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

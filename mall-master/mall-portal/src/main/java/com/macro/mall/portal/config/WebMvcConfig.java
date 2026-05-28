@@ -31,14 +31,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtAuthInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
+                        "/ws/**",
                         "/sso/login",
                         "/sso/register",
                         "/sso/getAuthCode",
+                        "/sso/refreshToken",
                         "/home/**",
                         "/product/**",
                         "/brand/**",
                         "/alipay/**",
                         "/swagger-ui/**",
+                        "/swagger-resources/**",
+                        "/v2/api-docs/**",
                         "/v3/api-docs/**",
                         "/doc.html",
                         "/webjars/**",

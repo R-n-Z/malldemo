@@ -1,9 +1,10 @@
 package com.macro.mall.portal.controller;
 
 import com.macro.mall.common.api.CommonResult;
-import com.macro.mall.portal.aspect.RateLimitAspect.Algorithm;
-import com.macro.mall.portal.aspect.RateLimitAspect.LimitType;
-import com.macro.mall.portal.aspect.RateLimitAspect.RateLimit;
+import com.macro.mall.model.UmsMember;
+import com.macro.mall.portal.annotation.RateLimit;
+import com.macro.mall.portal.annotation.RateLimit.Algorithm;
+import com.macro.mall.portal.annotation.RateLimit.LimitType;
 import com.macro.mall.portal.domain.JwtLoginRequest;
 import com.macro.mall.portal.service.UmsMemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +69,23 @@ public class UmsMemberController {
     public CommonResult getAuthCode(@RequestParam String telephone) {
         String authCode = memberService.generateAuthCode(telephone);
         return CommonResult.success(authCode, "获取验证码成功");
+    }
+
+    @Operation(summary = "获取当前会员信息")
+    @GetMapping("/info")
+    public CommonResult info() {
+        UmsMember member = memberService.getCurrentMember();
+        if (member == null) {
+            return CommonResult.unauthorized(null);
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", member.getId());
+        result.put("username", member.getUsername());
+        result.put("phone", member.getPhone());
+        result.put("icon", member.getIcon());
+        result.put("gender", member.getGender());
+        result.put("nickname", member.getNickname());
+        return CommonResult.success(result);
     }
 
     @Operation(summary = "刷新Token")

@@ -140,6 +140,16 @@
 				"navigationBarTitleText": "订单详情"
 			}
 		}, {
+			"path": "pages/order/returnApply",
+			"style": {
+				"navigationBarTitleText": "申请退货"
+			}
+		}, {
+			"path": "pages/order/returnList",
+			"style": {
+				"navigationBarTitleText": "退货记录"
+			}
+		}, {
 			"path": "pages/address/address",
 			"style": {
 				"navigationBarTitleText": "收货地址"
@@ -259,6 +269,13 @@
 						}]
 					}
 				}
+			}
+		}, {
+			"path": "pages/chat/chat",
+			"style": {
+				"navigationBarTitleText": "AI客服",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}
 	],

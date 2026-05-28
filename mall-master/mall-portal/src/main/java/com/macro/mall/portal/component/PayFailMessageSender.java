@@ -16,6 +16,7 @@ import java.util.Date;
  */
 @Slf4j
 @Component
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "kafka.enabled", havingValue = "true")
 public class PayFailMessageSender {
 
     private static final String TOPIC = "pay-fail-topic";
