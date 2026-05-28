@@ -63,7 +63,7 @@ public class FaqTools {
                     .withTopK(topK)
                     .withMetricType(io.milvus.param.MetricType.L2)
                     .withOutFields(List.of("id", "content", "metadata"))
-                    .withParams("{\"nprobe\":10}")
+                    .withParams("{\"ef\":64}")
                     .build();
 
             R<SearchResults> searchResponse = milvusClient.search(searchParam);

@@ -181,10 +181,10 @@ public class ReturnAuditController {
      * 从审核报告中解析审计结果，更新拒绝计数
      */
     private ReturnAuditResponse parseAuditResult(Long applyId, String report) {
-        String lowerReport = report.toLowerCase();
-        boolean passed = lowerReport.contains("通过") && !lowerReport.contains("拒绝");
-        boolean needHuman = lowerReport.contains("人工介入") || lowerReport.contains("转人工")
-                || lowerReport.contains("needhumansupport");
+        // 从报告中提取"决策："行的实际结果，而非全文匹配
+        boolean passed = extractDecision(report, "通过");
+        boolean needHuman = extractDecision(report, "转人工") || extractDecision(report, "人工介入")
+                || report.toLowerCase().contains("needhumansupport");
 
         String memberUsername = extractMemberUsername(report);
         int rejectCount = memberUsername != null ? returnAgentService.getRejectionCount(memberUsername) : 0;
@@ -226,6 +226,20 @@ public class ReturnAuditController {
             int updatedCount = memberUsername != null ? returnAgentService.getRejectionCount(memberUsername) : 0;
             return ReturnAuditResponse.rejected(applyId, reason, needHuman, updatedCount, report);
         }
+    }
+
+    /** 从报告"决策："行提取实际判定结果 */
+    private boolean extractDecision(String report, String keyword) {
+        if (report == null) return false;
+        // 找"决策："或"决策:"行
+        for (String line : report.split("\n")) {
+            String trimmed = line.trim();
+            if (trimmed.contains("决策：") || trimmed.contains("决策:")) {
+                // 检查该行是否包含目标关键词
+                return trimmed.contains(keyword);
+            }
+        }
+        return false;
     }
 
     private String extractMemberUsername(String report) {

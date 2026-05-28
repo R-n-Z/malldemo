@@ -36,7 +36,6 @@ public class ReturnRuleAgentService {
                 .model(chatModel)
                 .systemPrompt(buildRuleJudgePrompt())
                 .methodTools(new Object[]{hybridSearchTools, exactMatchTools})
-                .tools(toolCallbacks)
                 .outputKey("rule_judge_result")
                 .build();
     }

@@ -107,9 +107,9 @@ public class FaqInitializer {
         CreateIndexParam param = CreateIndexParam.newBuilder()
                 .withCollectionName(FAQ_COLLECTION)
                 .withFieldName("vector")
-                .withIndexType(io.milvus.param.IndexType.IVF_FLAT)
+                .withIndexType(io.milvus.param.IndexType.HNSW)
                 .withMetricType(io.milvus.param.MetricType.L2)
-                .withExtraParam("{\"nlist\":128}")
+                .withExtraParam("{\"M\":16,\"efConstruction\":200}")
                 .build();
         R<RpcStatus> resp = milvusClient.createIndex(param);
         if (resp.getStatus() != 0) {
