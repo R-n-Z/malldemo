@@ -12,6 +12,7 @@ import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.dto.ConversationState;
 import org.example.service.AiOpsService;
 import org.example.service.ChatService;
 import org.slf4j.Logger;
@@ -123,17 +124,20 @@ public class ChatController {
                 session.replaceHistory(history);
                 logger.info("使用请求中的DB历史, 共 {} 条", history.size());
             }
-            List<Map<String, String>> effectiveHistory = session.getHistory();
-            logger.info("会话历史消息对数: {}", effectiveHistory.size() / 2);
+            // 使用结构化对话状态替代原始历史
+            ConversationState convState = session.getConversationState();
+            logger.info("对话状态: 轮次={}, 意图={}, 实体={}",
+                convState.getTurnCount(), convState.getLastIntent(),
+                String.join(",", convState.getEntities()));
 
             DashScopeApi dashScopeApi = chatService.createDashScopeApi();
             DashScopeChatModel chatModel = chatService.createStandardChatModel(dashScopeApi);
 
             logger.info("开始 SupervisorAgent 多智能体对话");
 
-            // 创建 SupervisorAgent（传入完整上下文）
+            // 创建 SupervisorAgent（传入 ConversationState）
             SupervisorAgent supervisor = chatService.createSupervisorAgent(
-                chatModel, productName, contextSummary, effectiveHistory);
+                chatModel, productName, contextSummary, convState);
 
             // 执行对话
             String fullAnswer = chatService.executeSupervisor(supervisor, question);
@@ -217,9 +221,24 @@ public class ChatController {
 
                 logger.info("开始 SupervisorAgent 流式对话");
 
-                // 创建 SupervisorAgent
+                // 创建 SupervisorAgent（流式请求使用新建 ConversationState）
+                ConversationState streamState = new ConversationState();
+                if (history != null) {
+                    for (int i = 0; i < history.size(); i++) {
+                        Map<String, String> msg = history.get(i);
+                        String role = msg.get("role");
+                        String content = msg.get("content");
+                        if ("user".equals(role) && i + 1 < history.size()) {
+                            Map<String, String> next = history.get(i + 1);
+                            if ("assistant".equals(next.get("role"))) {
+                                streamState.recordTurn(content, next.get("content"), "");
+                                i++; // skip next assistant
+                            }
+                        }
+                    }
+                }
                 SupervisorAgent supervisor = chatService.createSupervisorAgent(
-                    chatModel, request.getProductName(), null, history);
+                    chatModel, request.getProductName(), null, streamState);
 
                 // 用于累积完整答案
                 StringBuilder fullAnswerBuilder = new StringBuilder();
@@ -456,47 +475,59 @@ public class ChatController {
      */
     private static class SessionInfo {
         private final String sessionId;
-        // 存储历史消息对：[{"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]
         private final List<Map<String, String>> messageHistory;
+        private final ConversationState conversationState;
         private final long createTime;
         private final ReentrantLock lock;
 
         public SessionInfo(String sessionId) {
             this.sessionId = sessionId;
             this.messageHistory = new ArrayList<>();
+            this.conversationState = new ConversationState();
             this.createTime = System.currentTimeMillis();
             this.lock = new ReentrantLock();
         }
 
+        /** 获取结构化对话状态 */
+        public ConversationState getConversationState() {
+            lock.lock();
+            try {
+                return conversationState;
+            } finally {
+                lock.unlock();
+            }
+        }
+
         /**
-         * 添加一对消息（用户问题 + AI回复）
-         * 自动管理历史消息窗口大小
+         * 添加一对消息（用户问题 + AI回复），同时更新 ConversationState
          */
         public void addMessage(String userQuestion, String aiAnswer) {
             lock.lock();
             try {
-                // 添加用户消息
                 Map<String, String> userMsg = new HashMap<>();
                 userMsg.put("role", "user");
                 userMsg.put("content", userQuestion);
                 messageHistory.add(userMsg);
 
-                // 添加AI回复
                 Map<String, String> assistantMsg = new HashMap<>();
                 assistantMsg.put("role", "assistant");
                 assistantMsg.put("content", aiAnswer);
                 messageHistory.add(assistantMsg);
 
-                // 自动清理：保持最多 MAX_WINDOW_SIZE 对消息
-                // 每对消息包含2条记录（user + assistant）
                 int maxMessages = MAX_WINDOW_SIZE * 2;
                 while (messageHistory.size() > maxMessages) {
-                    // 成对删除最旧的消息（删除前2条）
-                    messageHistory.remove(0); // 删除最旧的用户消息
+                    messageHistory.remove(0);
                     if (!messageHistory.isEmpty()) {
-                        messageHistory.remove(0); // 删除对应的AI回复
+                        messageHistory.remove(0);
                     }
                 }
+
+                // 更新 ConversationState: 记录轮次和意图
+                String detectedIntent = detectIntent(userQuestion, aiAnswer);
+                conversationState.recordTurn(userQuestion, aiAnswer, detectedIntent);
+
+                // 提取提到的商品实体
+                extractEntities(userQuestion, aiAnswer);
 
                 logger.debug("会话 {} 更新历史消息，当前消息对数: {}", 
                     sessionId, messageHistory.size() / 2);
@@ -571,6 +602,41 @@ public class ChatController {
                 return messageHistory.size() / 2;
             } finally {
                 lock.unlock();
+            }
+        }
+
+        /** 简单意图检测 — 从用户消息和 AI 回复中推断意图类别 */
+        private String detectIntent(String question, String answer) {
+            String combined = (question + " " + answer).toLowerCase();
+            if (combined.contains("售后") || combined.contains("退货") || combined.contains("退款")
+                    || combined.contains("保修") || combined.contains("物流") || combined.contains("换货"))
+                return "POST_SALES";
+            if (combined.contains("多少钱") || combined.contains("价格") || combined.contains("有货")
+                    || combined.contains("规格") || combined.contains("对比") || combined.contains("推荐")
+                    || combined.contains("品牌"))
+                return "PRE_SALES";
+            if (combined.contains("投诉") || combined.contains("律师") || combined.contains("12315")
+                    || combined.contains("升级") || combined.contains("人工"))
+                return "ESCALATION";
+            if (answer.contains("NEED_HUMAN"))
+                return "ESCALATION";
+            return "CHITCHAT";
+        }
+
+        /** 从消息中提取商品名等实体 */
+        private void extractEntities(String question, String answer) {
+            String combined = question + " " + answer;
+            // 简单关键词提取
+            String[] productHints = {"iPhone", "华为", "小米", "海澜之家", "耐克", "NIKE",
+                    "iPad", "MacBook", "三文鱼", "文胸", "T恤", "面霜", "面膜"};
+            for (String hint : productHints) {
+                if (combined.contains(hint)) {
+                    conversationState.addEntity(hint);
+                }
+            }
+            // 提取订单号模式
+            if (combined.matches(".*\\d{6,}.*")) {
+                conversationState.addEntity("订单");
             }
         }
     }

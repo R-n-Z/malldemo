@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.ai.chat.messages.AssistantMessage;
 
+import org.example.dto.ConversationState;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -216,13 +218,13 @@ public class ChatService {
     // ==================== SupervisorAgent ====================
 
     public SupervisorAgent createSupervisorAgent(DashScopeChatModel model,
-            String productName, String contextSummary, List<Map<String, String>> history) {
+            String productName, String contextSummary, ConversationState convState) {
         ReactAgent preSales = buildPreSalesAgent(model, productName, contextSummary);
         ReactAgent postSales = buildPostSalesAgent(model, contextSummary);
         ReactAgent escalation = buildEscalationAgent(model, contextSummary);
         ReactAgent chitchat = buildChitchatAgent(model, contextSummary);
 
-        String supervisorPrompt = buildSupervisorPrompt(productName, contextSummary, history);
+        String supervisorPrompt = buildSupervisorPrompt(productName, contextSummary, convState);
 
         return SupervisorAgent.builder()
                 .name("agent_router")
@@ -237,22 +239,30 @@ public class ChatService {
     // ==================== Supervisor Prompt ====================
 
     private String buildSupervisorPrompt(String productName, String contextSummary,
-                                          List<Map<String, String>> history) {
+                                          ConversationState convState) {
         StringBuilder sb = new StringBuilder();
-        sb.append("你是一个智能客服路由系统。你的任务是根据用户问题，将请求路由到最合适的专业Agent处理。\n\n");
+        sb.append("你是一个智能客服路由系统。你的任务是根据用户问题和对话状态，将请求路由到最合适的专业Agent处理。\n\n");
         if (contextSummary != null && !contextSummary.isEmpty()) {
             sb.append("**当前会话信息**：").append(contextSummary).append("\n\n");
         }
+
+        // 结构化对话状态（压缩上下文）
+        if (convState != null && convState.getTurnCount() > 0) {
+            sb.append("**对话状态**：\n").append(convState.toPromptContext()).append("\n");
+        }
+
         sb.append("## 可用的子Agent：\n");
         sb.append("- pre_sales_agent：售前咨询 → 商品信息、价格、优惠、库存、型号对比、品牌推荐、适用人群、规格选配、功能特点\n");
         sb.append("- post_sales_agent：售后支持 → 退换货/退款政策咨询、退货资格判断（可查规则库+计算天数）、物流、支付、发票、保修、订单修改/取消\n");
         sb.append("- escalation_agent：人工升级 → 投诉、复杂纠纷、用户要求人工、法律合规、Agent无法回答的问题\n");
         sb.append("- chitchat_agent：闲聊处理 → 问候、感谢、告别、与电商无关的话题\n\n");
+
         sb.append("## 路由规则：\n");
         sb.append("1. 先判断用户意图，再调用对应的子Agent\n");
         sb.append("2. 如果用户问题同时涉及售前和售后，优先调用最相关的那个\n");
-        sb.append("3. 不确定时优先调用 escalation_agent 升级处理\n");
-        sb.append("4. 调用子Agent后，将子Agent的回复直接返回给用户，不要修改内容\n\n");
+        sb.append("3. 如果用户的指代不明确（如只说「这个」「它」且无上下文），先追问澄清而非直接路由\n");
+        sb.append("4. 不确定时优先调用 escalation_agent 升级处理\n");
+        sb.append("5. 调用子Agent后，将子Agent的回复直接返回给用户，不要修改内容\n\n");
 
         if (productName != null && !productName.isEmpty()) {
             sb.append("## 当前商品上下文\n");
@@ -260,16 +270,7 @@ public class ChatService {
             sb.append("用户说「这个」「它」「该」等指代词时，指的就是「").append(productName).append("」\n\n");
         }
 
-        if (history != null && !history.isEmpty()) {
-            sb.append("## 对话历史\n");
-            for (Map<String, String> msg : history) {
-                String role = "user".equals(msg.get("role")) ? "用户" : "助手";
-                sb.append(role).append(": ").append(msg.get("content")).append("\n");
-            }
-            sb.append("\n");
-        }
-
-        sb.append("重要：只调用一次子Agent，得到回复后立即停止，把子Agent的回复作为最终答案输出。不要重复调用同一个子Agent。");
+        sb.append("重要：参考对话状态中的上下文理解用户意图。只调用一次子Agent，得到回复后立即停止。");
         return sb.toString();
     }
 
