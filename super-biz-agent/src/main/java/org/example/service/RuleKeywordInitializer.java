@@ -52,7 +52,7 @@ public class RuleKeywordInitializer {
                             LoadCollectionParam.newBuilder()
                                     .withCollectionName(COLLECTION).build());
                     if (loadResp.getStatus() == 0) {
-                        logger.info("rule_keywords collection 加载成功");
+                        logger.info("rule_keywords collection 加载成功（HNSW索引）");
                         return;
                     }
                 } catch (Exception e) {
@@ -113,9 +113,10 @@ public class RuleKeywordInitializer {
     private void createIndex() {
         CreateIndexParam param = CreateIndexParam.newBuilder()
                 .withCollectionName(COLLECTION).withFieldName("vector")
-                .withIndexType(io.milvus.param.IndexType.IVF_FLAT)
+                .withIndexType(io.milvus.param.IndexType.HNSW)
                 .withMetricType(io.milvus.param.MetricType.L2)
-                .withExtraParam("{\"nlist\":128}").build();
+                .withExtraParam(String.format("{\"M\":%d,\"efConstruction\":%d}",
+                        MilvusConstants.HNSW_M, MilvusConstants.HNSW_EF_CONSTRUCTION)).build();
         milvusClient.createIndex(param);
     }
 

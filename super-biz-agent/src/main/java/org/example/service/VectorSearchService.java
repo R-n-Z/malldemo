@@ -55,7 +55,7 @@ public class VectorSearchService {
                     .withTopK(topK)
                     .withMetricType(io.milvus.param.MetricType.L2)
                     .withOutFields(List.of("id", "content", "metadata"))
-                    .withParams("{\"nprobe\":10}")
+                    .withParams(String.format("{\"ef\":%d}", MilvusConstants.HNSW_EF))
                     .build();
 
             // 3. 执行搜索

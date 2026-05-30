@@ -36,7 +36,22 @@ public class MilvusConstants {
      * 默认分片数
      */
     public static final int DEFAULT_SHARD_NUMBER = 2;
-    
+
+    /**
+     * HNSW 索引参数 — 图节点度数（每个节点连接 M 个邻居）
+     */
+    public static final int HNSW_M = 16;
+
+    /**
+     * HNSW 索引参数 — 构建时搜索深度
+     */
+    public static final int HNSW_EF_CONSTRUCTION = 200;
+
+    /**
+     * HNSW 查询参数 — 查询时搜索深度（ef 越大召回越高但延迟越大）
+     */
+    public static final int HNSW_EF = 64;
+
     private MilvusConstants() {
         // 工具类，禁止实例化
     }

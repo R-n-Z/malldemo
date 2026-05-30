@@ -1,0 +1,86 @@
+{
+  "description": "退货审核Agent时间维度测试用例 — 测试Plan-Execute Agent的时间窗口判定和短路逻辑",
+  "version": "1.0",
+  "testType": "agent_decision",
+  "agentEndpoint": "/api/return/audit",
+  "note": "此数据集需配合 mock 数据使用。每个用例包含输入参数和期望的Agent决策结果。",
+
+  "scenarios": {
+    "AA001_7day_no_reason": {
+      "rule": "AA-001: 七天无理由退货, 收货≤7天 → 自动通过",
+      "testCases": [
+        {"id":"T-7D-001","applyId":1001,"scenario":"1天+不想要","expectedDecision":"通过","expectedReason":"AA-001","note":"收货1天, 明确表达不想要"},
+        {"id":"T-7D-002","applyId":1002,"scenario":"3天+买错了","expectedDecision":"通过","expectedReason":"AA-001","note":"收货3天, 买错/拍多"},
+        {"id":"T-7D-003","applyId":1003,"scenario":"6天+不喜欢","expectedDecision":"通过","expectedReason":"AA-001","note":"收货6天, 不喜欢/冲动消费"},
+        {"id":"T-7D-004","applyId":1004,"scenario":"7天临界+无理由","expectedDecision":"通过","expectedReason":"AA-001","note":"收货恰好7天, 边界值应通过"},
+        {"id":"T-7D-005","applyId":1005,"scenario":"8天+不想要","expectedDecision":"拒绝","expectedReason":"超出7天窗口","note":"收货8天, 超出AA-001窗口, 且无质量/描述问题"},
+        {"id":"T-7D-006","applyId":1006,"scenario":"10天+冲动消费","expectedDecision":"拒绝","expectedReason":"超出7天窗口","note":"收货10天, 纯粹不想要, 无其他通过条件"}
+      ]
+    },
+
+    "AA002_15day_quality": {
+      "rule": "AA-002: 质量问题, 收货≤15天且有凭证 → 自动通过",
+      "testCases": [
+        {"id":"T-15D-001","applyId":1101,"scenario":"3天+屏幕不亮","expectedDecision":"通过","expectedReason":"AA-002","note":"收货3天, 功能故障=质量问题, 窗口内"},
+        {"id":"T-15D-002","applyId":1102,"scenario":"10天+做工差线头多","expectedDecision":"通过","expectedReason":"AA-002","note":"收货10天, 做工问题=质量问题, 窗口内"},
+        {"id":"T-15D-003","applyId":1103,"scenario":"15天临界+掉色","expectedDecision":"通过","expectedReason":"AA-002","note":"收货恰好15天, 边界值应通过"},
+        {"id":"T-15D-004","applyId":1104,"scenario":"16天+拉链坏了","expectedDecision":"拒绝","expectedReason":"超出15天窗口","note":"收货16天, 超出AA-002窗口"},
+        {"id":"T-15D-005","applyId":1105,"scenario":"25天+残次品","expectedDecision":"拒绝","expectedReason":"超出15天窗口","note":"收货25天, 超出15天但未超30天, 无凭证无法通过"}
+      ]
+    },
+
+    "AA003_15day_description_mismatch": {
+      "rule": "AA-003: 描述不符/发错货/少件, 收货≤15天 → 自动通过",
+      "testCases": [
+        {"id":"T-15D-010","applyId":1201,"scenario":"2天+尺码发错","expectedDecision":"通过","expectedReason":"AA-003","note":"收货2天, 买L发M, 发错货"},
+        {"id":"T-15D-011","applyId":1202,"scenario":"7天+颜色不符","expectedDecision":"通过","expectedReason":"AA-003","note":"收货7天, 实物颜色与图片差异大"},
+        {"id":"T-15D-012","applyId":1203,"scenario":"14天+少配件","expectedDecision":"通过","expectedReason":"AA-003","note":"收货14天, 少发充电器"},
+        {"id":"T-15D-013","applyId":1204,"scenario":"18天+色差","expectedDecision":"拒绝","expectedReason":"超出15天窗口","note":"收货18天, 描述不符但超出窗口"}
+      ]
+    },
+
+    "AA004_3day_logistics_damage": {
+      "rule": "AA-004: 物流损坏, 收货≤3天且有凭证 → 自动通过",
+      "testCases": [
+        {"id":"T-3D-001","applyId":1301,"scenario":"1天+盒子烂了","expectedDecision":"通过","expectedReason":"AA-004","note":"收货1天, 包装破损=物流损坏"},
+        {"id":"T-3D-002","applyId":1302,"scenario":"3天临界+快递摔坏","expectedDecision":"通过","expectedReason":"AA-004","note":"收货恰好3天, 边界值应通过"},
+        {"id":"T-3D-003","applyId":1303,"scenario":"4天+发现摔裂","expectedDecision":"拒绝","expectedReason":"超出3天物流窗口","note":"收货4天, 无法证明是物流损坏还是用户损坏"},
+        {"id":"T-3D-004","applyId":1304,"scenario":"2天+包装破损但无凭证","expectedDecision":"转人工","expectedReason":"AA-004要求有凭证","note":"收货2天, 物流损坏但缺少开箱照片/视频"}
+      ]
+    },
+
+    "SR001_strict_reject_priority": {
+      "rule": "SR-001~006: 严格拒绝品类优先于自动通过规则",
+      "testCases": [
+        {"id":"T-SR-001","applyId":1401,"scenario":"三文鱼+物流损坏+2天","expectedDecision":"拒绝","expectedReason":"SR-001 生鲜>AA-004","note":"虽然同时满足AA-004条件, 但品类严格拒绝优先"},
+        {"id":"T-SR-002","applyId":1402,"scenario":"内裤+质量问题+3天","expectedDecision":"拒绝","expectedReason":"SR-003 个人卫生>AA-002","note":"质量问题的自动通过不覆盖严格拒绝品类"},
+        {"id":"T-SR-003","applyId":1403,"scenario":"定制刻字+不想要+1天","expectedDecision":"拒绝","expectedReason":"SR-005 定制商品>AA-001","note":"定制商品即使在7天窗口内也不可无理由退"}
+      ]
+    },
+
+    "escalation_with_time": {
+      "rule": "升级关键词叠加时间窗口",
+      "testCases": [
+        {"id":"T-ESC-001","applyId":1501,"scenario":"质量问题+15天窗口内+提及投诉","expectedDecision":"通过","expectedReason":"AA-002","note":"'投诉'关键词不影响品类正常的通过判定, 仅标记needHumanReview"},
+        {"id":"T-ESC-002","applyId":1502,"scenario":"超出窗口+强烈投诉","expectedDecision":"转人工","expectedReason":"超出窗口+escalation关键词","note":"已无法自动通过+用户情绪激动→升级人工"}
+      ]
+    },
+
+    "short_circuit_logic": {
+      "rule": "Plan-Execute 短路逻辑验证 — 这些用例验证 Planner 是否能正确跳过无效检查",
+      "testCases": [
+        {"id":"T-SC-001","applyId":1601,"scenario":"生鲜命中→应短路跳过auto_approve","expectedDecision":"拒绝","expectedSteps":["getApplyDetail","getRejectCount","queryStrictRejectRules"],"skippedSteps":["queryAutoApproveRules","calculateReceiveDays","hybridKeywordSearch"],"note":"Planner应在SR命中后replan, 跳过auto_approve和时间检查"},
+        {"id":"T-SC-002","applyId":1602,"scenario":"连续拒绝≥3→应短路直接转人工","expectedDecision":"转人工","expectedSteps":["getApplyDetail","getRejectCount"],"skippedSteps":["queryStrictRejectRules","queryAutoApproveRules","calculateReceiveDays","hybridKeywordSearch"],"note":"Planner应在getRejectCount≥3后直接FINISH, 跳过所有检查"},
+        {"id":"T-SC-003","applyId":1603,"scenario":"正常品类+7天内+不想要→全量检查但通过","expectedDecision":"通过","expectedSteps":["getApplyDetail","getRejectCount","queryStrictRejectRules","queryAutoApproveRules","calculateReceiveDays"],"note":"无短路条件, 应执行完整检查流程"}
+      ]
+    }
+  },
+
+  "metrics": {
+    "primary": ["decision_accuracy", "step_efficiency", "short_circuit_rate"],
+    "decision_accuracy": "Agent决策与expectedDecision的匹配率",
+    "step_efficiency": "实际执行步数 / 无短路情况下应执行的步数",
+    "short_circuit_rate": "成功短路的用例数 / 应短路的用例数",
+    "note": "step_efficiency < 1.0 表示短路生效, 值越小越高效"
+  }
+}

@@ -159,13 +159,14 @@ public class MilvusClientFactory {
      * 为 collection 创建索引
      */
     private void createIndexes(MilvusServiceClient client) {
-        // 为 vector 字段创建索引（FloatVector 使用 IVF_FLAT 和 L2 距离）
+        // 为 vector 字段创建索引（FloatVector 使用 HNSW 和 L2 距离）
         CreateIndexParam vectorIndexParam = CreateIndexParam.newBuilder()
                 .withCollectionName(MilvusConstants.MILVUS_COLLECTION_NAME)
                 .withFieldName("vector")
-                .withIndexType(IndexType.IVF_FLAT)
+                .withIndexType(IndexType.HNSW)
                 .withMetricType(MetricType.L2)  // L2 距离（欧氏距离）
-                .withExtraParam("{\"nlist\":128}")
+                .withExtraParam(String.format("{\"M\":%d,\"efConstruction\":%d}",
+                        MilvusConstants.HNSW_M, MilvusConstants.HNSW_EF_CONSTRUCTION))
                 .withSyncMode(Boolean.FALSE)
                 .build();
 

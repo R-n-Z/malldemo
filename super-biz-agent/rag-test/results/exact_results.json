@@ -303,9 +303,33 @@
       "priority": "CRITICAL"
     }
   ],
-  "R082": [],
-  "R090": [],
-  "R091": [],
+  "R082": [
+    {
+      "keyword": "起诉",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "法律威胁",
+      "priority": "CRITICAL"
+    }
+  ],
+  "R090": [
+    {
+      "keyword": "过敏",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "人身安全",
+      "priority": "HIGH"
+    }
+  ],
+  "R091": [
+    {
+      "keyword": "过敏",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "人身安全",
+      "priority": "HIGH"
+    }
+  ],
   "R092": [
     {
       "keyword": "过敏",
@@ -329,7 +353,15 @@
       "priority": ""
     }
   ],
-  "R100": [],
+  "R100": [
+    {
+      "keyword": "曝光",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "舆情风险",
+      "priority": "MEDIUM"
+    }
+  ],
   "R101": [
     {
       "keyword": "曝光",
@@ -339,7 +371,15 @@
       "priority": "MEDIUM"
     }
   ],
-  "R102": [],
+  "R102": [
+    {
+      "keyword": "曝光",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "舆情风险",
+      "priority": "MEDIUM"
+    }
+  ],
   "R110": [
     {
       "keyword": "媒体",
@@ -397,7 +437,15 @@
       "priority": "CRITICAL"
     }
   ],
-  "R130": [],
+  "R130": [
+    {
+      "keyword": "受伤",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "人身安全",
+      "priority": "HIGH"
+    }
+  ],
   "R131": [
     {
       "keyword": "受伤",
@@ -407,7 +455,15 @@
       "priority": "HIGH"
     }
   ],
-  "R132": [],
+  "R132": [
+    {
+      "keyword": "受伤",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "人身安全",
+      "priority": "HIGH"
+    }
+  ],
   "R140": [],
   "R141": [],
   "R142": [
@@ -509,7 +565,15 @@
       "priority": "CRITICAL"
     }
   ],
-  "R181": [],
+  "R181": [
+    {
+      "keyword": "欺诈",
+      "score": 0.9,
+      "source": "synonym",
+      "category": "严重投诉",
+      "priority": "HIGH"
+    }
+  ],
   "R182": [
     {
       "keyword": "假货",
@@ -726,5 +790,102 @@
       "category": "金额敏感",
       "priority": "LOW"
     }
-  ]
+  ],
+  "R250": [
+    {
+      "keyword": "假货",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "严重质量问题",
+      "priority": "HIGH"
+    },
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    },
+    {
+      "keyword": "尾货",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "限时/抢购商品",
+      "priority": ""
+    }
+  ],
+  "R251": [
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R252": [
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R253": [
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R254": [
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R255": [
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R260": [],
+  "R261": [],
+  "R262": [],
+  "R263": [],
+  "R264": [
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R265": [],
+  "R270": [],
+  "R271": [],
+  "R272": [],
+  "R280": [
+    {
+      "keyword": "退款",
+      "score": 0.7,
+      "source": "fuzzy",
+      "category": "金额敏感",
+      "priority": "LOW"
+    }
+  ],
+  "R281": [],
+  "R290": [],
+  "R291": []
 }

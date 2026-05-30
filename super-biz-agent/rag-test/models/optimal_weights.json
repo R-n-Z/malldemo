@@ -7,74 +7,29 @@
       "vector_top_k": 5
     },
     "metrics": {
-      "Recall@1": 0.7277777777777777,
-      "Recall@3": 1.1027777777777779,
-      "Recall@5": 1.1944444444444444
+      "Recall@1": 0.5622489959839359,
+      "Recall@3": 0.9176706827309238,
+      "Recall@5": 0.9839357429718876
     }
   },
   "differential_evolution": {
     "method": "differential_evolution",
     "parameters": {
-      "vector_weight": 1.3104,
-      "keyword_weight": 0.6465,
-      "vector_threshold": 0.2969,
+      "vector_weight": 0.6076,
+      "keyword_weight": 0.5158,
+      "vector_threshold": 0.2576,
       "vector_top_k": 6
     },
     "metrics": {
-      "Recall@1": 0.7777777777777778,
-      "Recall@3": 1.1777777777777778,
-      "Recall@5": 1.1944444444444444
+      "Recall@1": 0.6526104417670683,
+      "Recall@3": 1.1646586345381524,
+      "Recall@5": 1.2068273092369477
     },
     "optimization": {
       "success": true,
-      "iterations": 4,
-      "final_loss": -1.177778,
+      "iterations": 7,
+      "final_loss": -1.166886,
       "message": "Optimization terminated successfully."
     }
-  },
-  "logistic_regression": {
-    "method": "logistic_regression_sgd",
-    "coefficients": {
-      "source_exact": 0.5458,
-      "source_synonym": 0.7564,
-      "source_fuzzy": -1.352,
-      "source_vector": 0.1266,
-      "raw_score": 1.2002,
-      "similarity": 1.1909,
-      "rank": 0.1148,
-      "bias": -0.315
-    },
-    "train_accuracy": 0.8278,
-    "feature_importance": [
-      [
-        "source_fuzzy",
-        1.3520167076927707
-      ],
-      [
-        "raw_score",
-        1.2001536857643549
-      ],
-      [
-        "similarity",
-        1.1908878436812314
-      ],
-      [
-        "source_synonym",
-        0.7563749760627125
-      ],
-      [
-        "source_exact",
-        0.5458097043999017
-      ],
-      [
-        "source_vector",
-        0.12657819815524934
-      ],
-      [
-        "rank",
-        0.11484229532893245
-      ]
-    ],
-    "note": "LR权重不可直接部署到Java公式，仅用于特征重要性参考"
   }
 }

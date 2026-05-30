@@ -259,7 +259,26 @@
       "Bash(java -cp \"target/super-biz-agent-1.0-SNAPSHOT.jar;target/super-biz-agent-1.0-SNAPSHOT.jar!/BOOT-INF/lib/*\" -Dloader.main=org.example.tool.DropCollection org.springframework.boot.loader.PropertiesLauncher)",
       "Bash(./mvnw -pl ../super-biz-agent exec:java -Dexec.mainClass=\"org.example.tool.DropCollection\" -Dexec.args=\"faq\" -q)",
       "Bash(java -cp \"target/super-biz-agent-1.0-SNAPSHOT.jar\" -Dloader.path=\"BOOT-INF/lib\" org.springframework.boot.loader.JarLauncher --drop-collection=faq)",
-      "Bash(jar xf *)"
+      "Bash(jar xf *)",
+      "Bash(where node *)",
+      "Bash(where npm *)",
+      "Bash(tasklist *)",
+      "Bash(tasklist.exe *)",
+      "Bash(python run_faq_test.py --base-url http://localhost:9900 --test-type hybrid)",
+      "Bash(npx --version)",
+      "Bash(npx cross-env *)",
+      "Bash(\"mall-master/mvnw.cmd\" -f super-biz-agent/pom.xml clean package -DskipTests)",
+      "Bash(echo \"PID=$!\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'override: {d[\\\\\"totalMatches\\\\\"]} matches'\\); [print\\(f'  {m[\\\\\"keyword\\\\\"][:30]} src={m[\\\\\"source\\\\\"]} score={m[\\\\\"score\\\\\"]:.3f}'\\) for m in d['matches'][:3]]\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'default: {d[\\\\\"totalMatches\\\\\"]} matches'\\); [print\\(f'  {m[\\\\\"keyword\\\\\"][:30]} src={m[\\\\\"source\\\\\"]} score={m[\\\\\"score\\\\\"]:.3f}'\\) for m in d['matches'][:3]]\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'default: {d.get\\(\\\\\"totalMatches\\\\\",\\\\\"?\\\\\"\\)} matches'\\)\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'override\\(vw=0.5\\): {d.get\\(\\\\\"totalMatches\\\\\",\\\\\"?\\\\\"\\)} matches'\\)\")",
+      "Bash(\"mall-master/mvnw.cmd\" -f super-biz-agent/pom.xml compile -DskipTests)",
+      "Bash(\"D:\\\\DownLoad\\\\malldemo-main\\\\mall-master\\\\mvnw.cmd\" -f pom.xml package -DskipTests)",
+      "Bash(python -c ' *.)",
+      "Bash(winget install *)",
+      "Read(//c/Users/JD-MY/AppData/Local/nvm/**)",
+      "Bash(./nvm install *)"
     ]
   },
   "enabledMcpjsonServers": [

@@ -96,10 +96,10 @@ rule:
   rag:
     enabled: true
     hybrid:
-      vector-top-k: 6         # 向量路返回 top K（差分进化优化: 5→6）
-      vector-threshold: 0.30   # 语义相似度最低阈值 similarity<此值丢弃（优化: 0.4→0.30）
-      keyword-weight: 0.65     # 精确路得分乘数（优化: 1.0→0.65）
-      vector-weight: 1.31      # 向量路得分乘数（优化: 0.8→1.31）
+      vector-top-k: 6         # 向量路返回 top K
+      vector-threshold: 0.26   # 语义相似度最低阈值
+      keyword-weight: 0.30     # 精确路得分乘数（HTTP扫描优化: 0.65→0.30, 降低精确路绝对分）
+      vector-weight: 0.65      # 向量路得分乘数（HTTP扫描优化: 1.31→0.65, 平衡双路贡献）
     fuzzy:
       max-edit-distance: 2     # 编辑距离上限
       max-word-length: 4       # 仅对 ≤4 字的词做模糊匹配

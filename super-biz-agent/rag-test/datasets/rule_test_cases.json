@@ -111,7 +111,31 @@
 
     {"id":"R240","category":"电话场景","text":"喂你好我要投诉","expectedKeywords":["投诉"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.6,"description":"电话开场白"},
     {"id":"R241","category":"电话场景","text":"喂你们这什么东西啊收到就坏了","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"电话抱怨"},
-    {"id":"R242","category":"电话场景","text":"喂你给我查一下退款怎么还没到","expectedKeywords":["退款"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"电话退款查询"}
+    {"id":"R242","category":"电话场景","text":"喂你给我查一下退款怎么还没到","expectedKeywords":["退款"],"expectedRuleTypes":["escalation"],"expectedMinScore":0.35,"description":"电话退款查询"},
+
+    {"id":"R250","category":"时间-7天窗口内","text":"收到货才3天，不想要了想退货","expectedKeywords":["不想要了"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"3天+不想要→AA-001 窗口内"},
+    {"id":"R251","category":"时间-7天窗口内","text":"昨天刚收到的，发现不喜欢可以退吗","expectedKeywords":["不想要了","不喜欢"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"1天+不喜欢→AA-001"},
+    {"id":"R252","category":"时间-7天窗口内","text":"才用了两天觉得不太合适，能退不","expectedKeywords":["不想要了"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"2天+不太合适→AA-001"},
+    {"id":"R253","category":"时间-7天窗口临界","text":"收到刚好7天了，还能无理由退吗","expectedKeywords":["不想要了"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"7天临界点→AA-001 应匹配"},
+    {"id":"R254","category":"时间-7天超时","text":"收到都10天了，不想要了还能退吗","expectedKeywords":["不想要了"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"10天超出7天窗口→关键词仍应命中"},
+    {"id":"R255","category":"时间-7天超时","text":"买了半个月了，冲动消费后悔了想退","expectedKeywords":["不想要了"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"半个月+冲动消费→关键词命中但规则不适用"},
+
+    {"id":"R260","category":"时间-15天窗口内","text":"用了5天屏幕就不亮了，这算质量问题吧","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"5天+质量问题→AA-002 窗口内"},
+    {"id":"R261","category":"时间-15天窗口内","text":"收到第3天，发现衣服掉色严重","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"3天+掉色→AA-002"},
+    {"id":"R262","category":"时间-15天窗口内","text":"才一周就开线了，做工太差","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"一周+开线→AA-002"},
+    {"id":"R263","category":"时间-15天窗口临界","text":"收到第15天，发现实物颜色和网页差太多了","expectedKeywords":["与描述不符"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"15天临界+色差→AA-003 应匹配"},
+    {"id":"R264","category":"时间-15天超时","text":"买了20天了才发现拉链是坏的，能退吗","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"20天超出15天→关键词命中但规则不适用"},
+    {"id":"R265","category":"时间-15天超时","text":"过了一个月才穿发现做工粗糙线头多","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"一个月+做工粗糙→关键词命中但超30天硬限制"},
+
+    {"id":"R270","category":"时间-物流3天窗口","text":"刚收到2天，拆开发现快递把东西摔坏了","expectedKeywords":["物流损坏"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"2天+摔坏→AA-004 窗口内"},
+    {"id":"R271","category":"时间-物流3天窗口","text":"昨天签收的，今天打开盒子完全烂了","expectedKeywords":["物流损坏"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"1天+盒子烂了→AA-004"},
+    {"id":"R272","category":"时间-物流超时","text":"收到5天了，才发现快递运输中屏幕摔裂了","expectedKeywords":["物流损坏"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"5天超出3天物流窗口→关键词命中但规则不适用"},
+
+    {"id":"R280","category":"时间-30天硬限制","text":"买了一个多月了，现在才发现有问题想退","expectedKeywords":[],"expectedRuleTypes":[],"expectedMinScore":0,"description":"超过30天→不匹配任何通过规则"},
+    {"id":"R281","category":"时间-30天硬限制","text":"两个月前买的，穿了才发现不合适","expectedKeywords":[],"expectedRuleTypes":[],"expectedMinScore":0,"description":"两个月→超硬限制"},
+
+    {"id":"R290","category":"时间-模糊表达","text":"前几天买的，现在想退，感觉不太适合我","expectedKeywords":["不想要了"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"前几天+不太适合→模糊时间+不想要"},
+    {"id":"R291","category":"时间-模糊表达","text":"买了一星期左右，发现做工不太好","expectedKeywords":["质量问题"],"expectedRuleTypes":["auto_approve"],"expectedMinScore":0.35,"description":"一星期左右+做工不好→模糊时间+质量"}
   ],
   "metrics": {
     "primary": ["Recall@K", "Precision@K", "MRR", "Hit@K", "F1@K"],
